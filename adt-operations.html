@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ADT Operations — 9618 A Level CS</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blue:#5865F2;--blue-light:#EEF0FF;--blue-mid:#C5CAF6;
+  --green:#059669;--green-light:#ECFDF5;
+  --amber:#D97706;--amber-light:#FFFBEB;
+  --red:#DC2626;--red-light:#FEF2F2;
+  --purple:#7C3AED;--purple-light:#F5F3FF;
+  --pink:#DB2777;--pink-light:#FDF2F8;
+  --teal:#0D9488;--teal-light:#F0FDFA;
+  --gray:#6B7280;--gray-light:#F8FAFC;
+  --ink:#0F172A;--ink2:#475569;--ink3:#94A3B8;
+  --border:#E2E8F0;--bg:#F1F5F9;--white:#FFFFFF;
+  --shadow:0 1px 3px rgba(15,23,42,.07),0 4px 16px rgba(15,23,42,.04);
+  --shadow-md:0 4px 10px rgba(15,23,42,.08),0 16px 40px rgba(15,23,42,.06);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--ink);padding:32px 16px 80px;max-width:1120px;margin:0 auto;line-height:1.72}
+code,kbd,.mono{font-family:'JetBrains Mono',monospace}
+code{background:#EEF2FF;border:1px solid var(--blue-mid);padding:2px 6px;border-radius:6px;font-size:12px;color:var(--blue)}
+kbd{font-size:11px;background:#1E293B;color:#fff;padding:2px 7px;border-radius:6px}
+h1{font-size:26px;font-weight:800;letter-spacing:-.01em;margin-bottom:6px}
+h2{font-size:20px;font-weight:800;margin:0 0 10px}
+h3{font-size:15px;font-weight:800;margin:0 0 8px}
+p{font-size:13.5px;color:var(--ink2)}
+a{color:var(--blue);text-decoration:none}
+.hl{background:linear-gradient(transparent 60%,rgba(250,210,0,.7) 60%);padding-bottom:1px}
+.hl-s{background:linear-gradient(transparent 54%,rgba(250,195,0,.85) 54%);font-weight:800;padding-bottom:1px}
+.subtitle{font-size:13px;color:var(--ink3);margin-bottom:22px;line-height:1.9}
+.topbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:10px 0 22px}
+.badge{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--border);background:var(--white);border-radius:999px;padding:5px 11px;font-size:11.5px;font-weight:700;color:var(--ink2)}
+.badge .dot{width:8px;height:8px;border-radius:50%}
+.dot{width:8px;height:8px;border-radius:50%;display:inline-block}
+
+/* ── NAV ── */
+.nav{position:sticky;top:0;z-index:10;margin:0 0 28px;padding:10px 14px;background:rgba(255,255,255,.88);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-radius:0 0 18px 18px;border-bottom:1px solid rgba(226,232,240,.9);box-shadow:0 2px 14px rgba(15,23,42,.05)}
+.nav-inner{display:flex;gap:6px;flex-wrap:wrap}
+.nav a{font-size:11.5px;font-weight:700;background:transparent;border:1.5px solid var(--border);border-radius:999px;padding:5px 12px;color:var(--ink2);transition:all .18s}
+.nav a:hover{background:var(--blue-light);color:var(--blue);border-color:var(--blue-mid)}
+.nav a.active-page{background:var(--blue);color:#fff;border-color:var(--blue)}
+
+/* ── SECTION LABEL ── */
+.sec{font-size:10.5px;font-weight:800;color:var(--ink3);letter-spacing:.1em;text-transform:uppercase;margin:8px 0 10px;display:flex;align-items:center;gap:8px}
+.sec::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* ── LAYOUT ── */
+.unit-wrap{display:grid;grid-template-columns:1fr 220px;gap:18px;align-items:start;margin-bottom:12px}
+@media(max-width:780px){.unit-wrap{grid-template-columns:1fr}.unit-terms{position:static}.nav{position:static;border-radius:0}.hero-grid,.grid2,.grid3,.branch{grid-template-columns:1fr!important}}
+
+/* ── SIDEBAR ── */
+.unit-terms{position:sticky;top:64px;background:var(--white);border:1.5px solid var(--border);border-radius:18px;padding:15px 15px 11px;box-shadow:var(--shadow)}
+.unit-terms-hd{font-size:10px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:5px}
+.ut-item{margin-bottom:10px;padding-bottom:10px;border-bottom:.5px solid var(--border)}
+.ut-item:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none}
+.ut-sym{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:800;margin-bottom:2px}
+.ut-en{font-size:10px;color:var(--ink3);font-style:italic;margin-bottom:3px}
+.ut-def{font-size:11px;color:var(--ink2);line-height:1.55;margin-top:2px}
+.ut-ja{font-size:10.5px;color:var(--ink3);margin-top:2px}
+
+/* ── FLOW / STEPS ── */
+.flow{display:flex;flex-direction:column;gap:0}
+.step-wrap{display:flex;align-items:stretch;gap:14px}
+.step-line{display:flex;flex-direction:column;align-items:center}
+.num{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;flex-shrink:0;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+.vline{width:2px;flex:1;min-height:20px;background:var(--border);margin:5px 0}
+.step-wrap:last-child .vline{background:transparent}
+.step-box{flex:1;border:1.5px solid var(--border);border-radius:18px;padding:17px 19px;background:var(--white);margin-bottom:12px;box-shadow:var(--shadow);transition:box-shadow .2s,transform .2s}
+.step-box:hover{box-shadow:var(--shadow-md);transform:translateY(-1px)}
+.step-title{font-size:15px;font-weight:800;margin-bottom:9px}
+.step-desc{font-size:13px;color:var(--ink2);line-height:1.9}
+.step-desc ul{padding-left:20px;margin-top:8px}
+.step-desc li{margin:3px 0}
+
+/* ── GRIDS ── */
+.hero-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:12px;margin:12px 0}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:10px 0}
+
+/* ── CARDS ── */
+.card{border:1.5px solid var(--border);border-radius:14px;padding:12px 14px;background:var(--white);box-shadow:var(--shadow)}
+.card-label{font-size:10.5px;color:var(--ink3);margin-bottom:4px;font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+.card-val{font-size:16px;font-weight:800;margin-bottom:3px;font-family:'JetBrains Mono',monospace}
+.card-sub{font-size:11.5px;color:var(--ink2);line-height:1.55;margin-top:4px}
+.b-green{border-color:#6EE7B7;background:#ECFDF5}
+.b-red{border-color:#FCA5A5;background:#FEF2F2}
+.b-blue{border-color:var(--blue-mid);background:var(--blue-light)}
+.b-amber{border-color:#FCD34D;background:#FFFBEB}
+.b-purple{border-color:#C4B5FD;background:#F5F3FF}
+.b-teal{border-color:#99F6E4;background:#F0FDFA}
+
+/* ── NOTE & CALLOUT ── */
+.note-box{border:1.5px solid var(--border);border-radius:14px;background:var(--white);padding:13px 15px;margin-top:10px}
+.note-title{font-size:12px;font-weight:800;margin-bottom:5px}
+.note-text{font-size:12.5px;color:var(--ink2);line-height:1.65}
+.callout{padding:13px 16px;border-radius:14px;border:1.5px solid var(--border);margin-top:10px;background:var(--white)}
+.callout-title{font-size:12px;font-weight:800;margin-bottom:5px}
+.kids-box{background:#FFFBEB;border:1.5px solid #FCD34D;border-radius:14px;padding:13px 15px;margin-top:12px}
+.kids-title{font-size:12px;font-weight:800;color:#92400E;margin-bottom:5px}
+.kids-text{font-size:12.5px;color:#78350F;line-height:1.65}
+
+/* ── COMPARE TABLE ── */
+.compare-table{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:12px;border-radius:12px;overflow:hidden;border:1.5px solid var(--border)}
+.compare-table th{background:var(--gray-light);padding:9px 13px;text-align:left;font-weight:700;font-size:11.5px;color:var(--ink2);border-bottom:1.5px solid var(--border)}
+.compare-table td{padding:9px 13px;border-bottom:1px solid var(--border);color:var(--ink2);background:var(--white)}
+.compare-table tr:last-child td{border-bottom:none}
+
+/* ── BRANCH ── */
+.branch{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+.branch-cell{border:1.5px solid var(--border);border-radius:14px;padding:12px 14px;background:var(--white)}
+.branch-lbl{font-size:11px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px}
+.branch-val{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink)}
+
+/* ── PIPELINE ── */
+.pipeline{display:flex;align-items:center;gap:6px;margin:10px 0;flex-wrap:wrap}
+.pipe-box{background:var(--blue-light);border:1.5px solid var(--blue-mid);border-radius:10px;padding:6px 12px;font-size:12px;font-weight:700;color:var(--blue)}
+.pipe-arr{color:var(--ink3);font-size:16px;font-weight:700}
+
+/* ── CODE BLOCKS — LIGHT THEME ── */
+.r-console{margin-top:12px;background:#0f172a;color:#e5e7eb;border-radius:14px;border:1px solid #1e293b;overflow:hidden;box-shadow:0 2px 10px rgba(2,6,23,.15)}
+.r-topbar{display:flex;align-items:center;justify-content:space-between;background:#111827;padding:9px 14px;border-bottom:1px solid #1f2937}
+.r-dots{display:flex;gap:7px}
+.r-dot{width:10px;height:10px;border-radius:50%}
+.r-title{font-size:11px;color:#94a3b8;font-family:'JetBrains Mono',monospace;font-weight:600}
+.r-body{font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.8;padding:14px 16px;white-space:pre-wrap;overflow-x:auto;background:#0f172a;color:#e5e7eb}
+.r-cmd{color:#e5e7eb}
+.r-out{color:#86efac;font-style:italic}
+.r-prompt{color:#94A3B8;font-weight:700;user-select:none}
+.r-red{color:#f87171}
+/* Syntax colours — light IDE theme */
+.r-green{color:#86efac}
+.r-yellow{color:#fde68a}
+.r-gray{color:#64748b;font-style:italic}
+.r-cyan{color:#67e8f9}
+.r-string{color:#fca5a5}
+.r-purple{color:#c4b5fd}
+
+/* ── PRACTICE BLOCK ── */
+.practice-block{margin-top:14px;background:var(--white);border:1.5px solid var(--border);border-radius:20px;overflow:hidden;box-shadow:var(--shadow-md)}
+.practice-header{padding:13px 19px;display:flex;align-items:center;gap:8px}
+.practice-header-title{color:#fff;font-size:12px;font-weight:800;letter-spacing:.06em}
+.practice-tabs{display:flex;gap:0;border-bottom:1.5px solid var(--border);background:var(--gray-light);overflow-x:auto}
+.ptab{padding:9px 16px;font-size:11.5px;font-weight:700;cursor:pointer;border:none;background:transparent;color:var(--ink3);border-bottom:2.5px solid transparent;white-space:nowrap;transition:all .18s}
+.ptab.active{color:var(--blue);border-bottom-color:var(--blue);background:var(--white)}
+.ptab:hover:not(.active){color:var(--ink2);background:rgba(255,255,255,.7)}
+.practice-body{padding:17px 19px}
+.practice-panel{display:block}
+.practice-panel+.practice-panel{border-top:1.5px solid var(--border);margin-top:18px;padding-top:18px}
+
+/* ── LEVEL BADGES ── */
+.level-badge{display:inline-flex;align-items:center;gap:5px;border-radius:8px;padding:4px 10px;font-size:11px;font-weight:800;margin-bottom:10px;letter-spacing:.02em}
+.l1-badge{background:#ECFDF5;color:#059669;border:1.5px solid #A7F3D0}
+.l2-badge{background:#EEF0FF;color:#4F46E5;border:1.5px solid #C5CAF6}
+.l3-badge{background:#F5F3FF;color:#7C3AED;border:1.5px solid #DDD6FE}
+.l4-badge{background:#FFFBEB;color:#D97706;border:1.5px solid #FDE68A}
+
+.practice-goal{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:10px;line-height:1.75}
+.practice-hint{background:#FFFBEB;border:1.5px solid #FDE68A;border-radius:10px;padding:9px 13px;font-size:12px;color:#92400E;margin-top:8px;line-height:1.65}
+
+/* ── ANSWER BUTTON ── */
+.practice-answer{margin-top:12px}
+.show-answer-btn{font-size:11.5px;font-weight:700;background:var(--white);border:1.5px solid var(--border);border-radius:999px;padding:6px 15px;cursor:pointer;color:var(--ink2);transition:all .2s;display:inline-flex;align-items:center;gap:5px}
+.show-answer-btn:hover{background:var(--blue-light);color:var(--blue);border-color:var(--blue-mid);transform:translateY(-1px);box-shadow:0 3px 10px rgba(88,101,242,.15)}
+.answer-content{display:none;margin-top:8px}
+.answer-content.visible{display:block}
+
+/* ── SCENARIO ── */
+.scenario-box{background:var(--gray-light);border:1.5px solid var(--border);border-radius:12px;padding:13px 15px;margin-bottom:10px}
+.scenario-label{font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin-bottom:5px}
+.scenario-text{font-size:13px;color:var(--ink2);line-height:1.8}
+.task-list{margin-top:10px;padding-left:0;list-style:none}
+.task-list li{font-size:12.5px;color:var(--ink2);padding:5px 0;display:flex;align-items:flex-start;gap:7px}
+.task-list li::before{content:"▶";color:var(--blue);font-size:10px;margin-top:3px;flex-shrink:0}
+
+/* ── MCQ ── */
+.mcq-block{background:var(--white);border:1.5px solid var(--border);border-radius:18px;overflow:hidden;box-shadow:var(--shadow-md);margin-bottom:12px}
+.mcq-header{padding:12px 18px;display:flex;align-items:center;justify-content:space-between}
+.mcq-header-title{color:#fff;font-size:12px;font-weight:800;letter-spacing:.06em}
+.mcq-score-badge{font-size:12px;font-weight:800;color:#fff;background:rgba(255,255,255,.2);border-radius:999px;padding:3px 10px}
+.mcq-progress{background:rgba(255,255,255,.25);height:4px}
+.mcq-progress-bar{height:4px;background:rgba(255,255,255,.7);transition:width .4s}
+.mcq-body{padding:16px 18px}
+.mcq-q{margin-bottom:18px;padding-bottom:18px;border-bottom:1px solid var(--border)}
+.mcq-q:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none}
+.mcq-qnum{font-size:10px;font-weight:800;color:var(--ink3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+.mcq-qtext{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:10px;line-height:1.65}
+.mcq-stem{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:8px;line-height:1.65}
+.mcq-opts{display:flex;flex-direction:column;gap:6px}
+.mcq-opt{text-align:left;padding:9px 14px;border:1.5px solid var(--border);border-radius:12px;background:var(--white);font-size:12.5px;cursor:pointer;transition:all .18s;color:var(--ink2);font-family:'Inter',sans-serif;font-weight:500}
+.mcq-opt:hover:not(:disabled){background:var(--blue-light);border-color:var(--blue-mid);color:var(--blue);transform:translateX(2px)}
+.mcq-opt.correct{background:#ECFDF5;border-color:#6EE7B7;color:#065F46;font-weight:700}
+.mcq-opt.wrong{background:#FEF2F2;border-color:#FCA5A5;color:#991B1B}
+.mcq-opt:disabled{cursor:not-allowed;opacity:.7}
+.mcq-fb{font-size:12px;margin-top:7px;padding:7px 11px;border-radius:9px;display:none;font-weight:600}
+.mcq-fb.show{display:block}
+.mcq-fb.ok{background:#ECFDF5;color:#065F46;border:1px solid #A7F3D0}
+.mcq-fb.ng{background:#FEF2F2;color:#991B1B;border:1px solid #FCA5A5}
+
+/* ── FILL BLANK ── */
+.fill-blank{background:#EEF2FF;border:1.5px solid var(--blue-mid);border-radius:6px;padding:1px 5px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--blue);font-weight:700}
+
+/* ── MISC ── */
+.div{height:1px;background:var(--border);margin:24px 0}
+.mini-pill{display:inline-flex;align-items:center;gap:4px;background:var(--gray-light);border:1px solid var(--border);border-radius:999px;padding:2px 8px;font-size:11px;font-weight:700;color:var(--ink2)}
+.pill-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.opt-label{font-size:11px;font-weight:700;color:var(--ink3);margin-right:4px}
+.small{font-size:11px;color:var(--ink3)}
+.active{display:block}
+
+/* Score bar */
+.score-bar-wrap{background:var(--border);border-radius:999px;height:5px;overflow:hidden;margin-top:4px}
+.score-bar{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--green),var(--teal));transition:width .4s}
+
+/* MCQ states (compat) */
+.correct{background:#ECFDF5!important;border-color:#6EE7B7!important;color:#065F46!important}
+.wrong{background:#FEF2F2!important;border-color:#FCA5A5!important;color:#991B1B!important}
+.reveal-correct{background:#FFFBEB!important;border-color:#FDE68A!important;color:#92400E!important}
+.show{display:block!important}
+.fb-ok{background:#ECFDF5;color:#065F46;border:1px solid #A7F3D0;border-radius:9px;padding:6px 10px;font-size:12px;font-weight:600}
+.fb-ng{background:#FEF2F2;color:#991B1B;border:1px solid #FCA5A5;border-radius:9px;padding:6px 10px;font-size:12px;font-weight:600}
+
+/* ── FOOTER ── */
+.footer{font-size:11.5px;color:var(--ink3);margin-top:36px;text-align:center;padding-top:20px;border-top:1px solid var(--border)}
+
+</style>
+</head>
+<body>
+
+<h1>9618 A Level — Algorithms &amp; Data Structures <span style="font-size:14px;font-weight:500;color:var(--ink3)">/ Practice &amp; Reference</span></h1>
+
+<div class="nav">
+  <div class="nav-inner">
+    <a href="index.html">← Home</a>
+    <a href="linear-search.html">Linear Search</a>
+    <a href="binary-search.html">Binary Search</a>
+    <a href="insertion-sort.html">Insertion Sort</a>
+    <a href="bubble-sort.html">Bubble Sort</a>
+    <a href="adt-operations.html" class="active-page">ADT Operations</a>
+    <a href="recursion.html">Recursion</a>
+    <a href="oop.html">OOP</a>
+    <a href="oop-games.html">OOP Games 🎮</a>
+    <a href="files-exceptions.html">Files &amp; Exceptions</a>
+    <a href="final-quiz.html">Final Quiz</a>
+  </div>
+</div>
+
+<!-- ============================================================ ADT OPERATIONS ============================================================ -->
+<div id="adtops" class="sec">ADT Operations — Linked List, Stack, Queue, Binary Tree</div>
+<div class="unit-wrap">
+  <div class="flow">
+    <div class="step-wrap">
+      <div class="step-line"><div class="num" style="background:var(--amber-light);color:var(--amber)">①</div><div class="vline"></div></div>
+      <div class="step-box">
+        <div class="step-title" style="color:var(--amber)">🧱 Overview of ADT Operations Required</div>
+        <div class="step-desc">The syllabus requires you to write algorithms for find, insert, and delete across multiple data structures. The table below summarises what is required for each.</div>
+        <table class="compare-table">
+          <tr><th>ADT</th><th>Find</th><th>Insert</th><th>Delete</th></tr>
+          <tr class="b-blue"><td class="mono">Linked List</td><td>✅</td><td>✅</td><td>✅</td></tr>
+          <tr class="b-green"><td class="mono">Binary Tree</td><td>✅</td><td>✅</td><td>—</td></tr>
+          <tr class="b-amber"><td class="mono">Stack</td><td>—</td><td>✅ (push)</td><td>✅ (pop)</td></tr>
+          <tr class="b-purple"><td class="mono">Queue</td><td>—</td><td>✅ (enqueue)</td><td>✅ (dequeue)</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="step-wrap">
+      <div class="step-line"><div class="num" style="background:var(--green-light);color:var(--green)">②</div><div class="vline"></div></div>
+      <div class="step-box">
+        <div class="step-title" style="color:var(--green)">🔗 Linked List — Insert &amp; Find</div>
+        <div class="r-console">
+          <div class="r-topbar"><div class="r-dots"><div class="r-dot" style="background:#ef4444"></div><div class="r-dot" style="background:#f59e0b"></div><div class="r-dot" style="background:#22c55e"></div></div><div class="r-title">Python — Linked List Node + Operations</div></div>
+          <div class="r-body"><span class="r-green">class</span> <span class="r-cyan">Node</span>:
+    <span class="r-green">def</span> <span class="r-cyan">__init__</span>(self, data):
+        self.data = data
+        self.next = <span class="r-yellow">None</span>
+
+<span class="r-green">class</span> <span class="r-cyan">LinkedList</span>:
+    <span class="r-green">def</span> <span class="r-cyan">__init__</span>(self):
+        self.head = <span class="r-yellow">None</span>
+
+    <span class="r-green">def</span> <span class="r-cyan">insert</span>(self, data):           <span class="r-gray"># insert at end</span>
+        new_node = Node(data)
+        <span class="r-green">if</span> self.head <span class="r-green">is</span> <span class="r-yellow">None</span>:
+            self.head = new_node
+            <span class="r-green">return</span>
+        current = self.head
+        <span class="r-green">while</span> current.next <span class="r-green">is not</span> <span class="r-yellow">None</span>:
+            current = current.next
+        current.next = new_node
+
+    <span class="r-green">def</span> <span class="r-cyan">find</span>(self, target):
+        current = self.head
+        <span class="r-green">while</span> current <span class="r-green">is not</span> <span class="r-yellow">None</span>:
+            <span class="r-green">if</span> current.data == target:
+                <span class="r-green">return</span> <span class="r-yellow">True</span>
+            current = current.next
+        <span class="r-green">return</span> <span class="r-yellow">False</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="step-wrap">
+      <div class="step-line"><div class="num" style="background:var(--blue-light);color:var(--blue)">③</div><div class="vline"></div></div>
+      <div class="step-box">
+        <div class="step-title" style="color:var(--blue)">📚 Stack (push / pop) &amp; Queue (enqueue / dequeue)</div>
+        <div class="r-console">
+          <div class="r-topbar"><div class="r-dots"><div class="r-dot" style="background:#ef4444"></div><div class="r-dot" style="background:#f59e0b"></div><div class="r-dot" style="background:#22c55e"></div></div><div class="r-title">Python — Stack and Queue</div></div>
+          <div class="r-body"><span class="r-gray"># ─── STACK (LIFO) ───────────────────────</span>
+<span class="r-green">class</span> <span class="r-cyan">Stack</span>:
+    <span class="r-green">def</span> <span class="r-cyan">__init__</span>(self): self.items = []
+    <span class="r-green">def</span> <span class="r-cyan">push</span>(self, item): self.items.append(item)
+    <span class="r-green">def</span> <span class="r-cyan">pop</span>(self):
+        <span class="r-green">if not</span> self.is_empty(): <span class="r-green">return</span> self.items.pop()
+    <span class="r-green">def</span> <span class="r-cyan">is_empty</span>(self): <span class="r-green">return</span> <span class="r-yellow">len</span>(self.items) == <span class="r-yellow">0</span>
+
+<span class="r-gray"># ─── QUEUE (FIFO) ───────────────────────</span>
+<span class="r-green">class</span> <span class="r-cyan">Queue</span>:
+    <span class="r-green">def</span> <span class="r-cyan">__init__</span>(self): self.items = []
+    <span class="r-green">def</span> <span class="r-cyan">enqueue</span>(self, item): self.items.append(item)
+    <span class="r-green">def</span> <span class="r-cyan">dequeue</span>(self):
+        <span class="r-green">if not</span> self.is_empty(): <span class="r-green">return</span> self.items.pop(<span class="r-yellow">0</span>)
+    <span class="r-green">def</span> <span class="r-cyan">is_empty</span>(self): <span class="r-green">return</span> <span class="r-yellow">len</span>(self.items) == <span class="r-yellow">0</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRACTICE BLOCK: ADT -->
+    <div class="practice-block">
+      <div class="practice-header" style="background:var(--amber)">
+        <span class="practice-header-title">✏️ PRACTICE — ADT Operations (4 Levels)</span>
+      </div>
+<div class="practice-body">
+        <div class="practice-panel" id="adt-l1">
+          <div class="level-badge l1-badge">✅ L1 — Reference</div>
+          <p class="practice-goal">Create a LinkedList, push 5 values, call find() for a value that exists and one that doesn't. For the Stack: push 3 items, then pop twice and print the result.</p>
+        </div>
+        <div class="practice-panel" id="adt-l2">
+          <div class="level-badge l2-badge">📝 L2 — Fill-in: Complete the delete method for LinkedList</div>
+          <div class="r-console">
+            <div class="r-topbar"><div class="r-dots"><div class="r-dot" style="background:#ef4444"></div><div class="r-dot" style="background:#f59e0b"></div><div class="r-dot" style="background:#22c55e"></div></div><div class="r-title">Fill in the blanks — Linked List delete</div></div>
+            <div class="r-body"><span class="r-green">def</span> <span class="r-cyan">delete</span>(self, target):
+    <span class="r-green">if</span> self.head <span class="r-green">is</span> <span class="r-yellow">None</span>: <span class="r-green">return</span>
+    <span class="r-green">if</span> self.head.data == target:
+        self.head = ___      <span class="r-gray"># move head to next node</span>
+        <span class="r-green">return</span>
+    current = ___            <span class="r-gray"># start from head</span>
+    <span class="r-green">while</span> current.___ <span class="r-green">is not</span> <span class="r-yellow">None</span>:
+        <span class="r-green">if</span> current.next.___ == target:
+            current.next = ___  <span class="r-gray"># skip the deleted node</span>
+            <span class="r-green">return</span>
+        current = ___</div>
+          </div>
+          <div class="practice-answer">
+            <button class="show-answer-btn" onclick="toggleAnswer(this)">👁 Show Answer</button>
+            <div class="answer-content">
+              <div class="r-console">
+                <div class="r-topbar"><div class="r-dots"><div class="r-dot" style="background:#ef4444"></div><div class="r-dot" style="background:#f59e0b"></div><div class="r-dot" style="background:#22c55e"></div></div><div class="r-title">Answer</div></div>
+                <div class="r-body">self.head = <span class="r-yellow">self.head.next</span>
+current = <span class="r-yellow">self.head</span>
+<span class="r-green">while</span> current.<span class="r-yellow">next</span> is not None:
+    <span class="r-green">if</span> current.next.<span class="r-yellow">data</span> == target:
+        current.next = <span class="r-yellow">current.next.next</span>
+        return
+    current = <span class="r-yellow">current.next</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="practice-panel" id="adt-l3">
+          <div class="level-badge l3-badge">🆓 L3 — Free Style</div>
+          <p class="practice-goal">Build a complete <code>BinarySearchTree</code> class from scratch with <code>insert()</code> and <code>find()</code> methods. Then insert: 50, 30, 70, 20, 40, 60, 80. Find 40 and 99 and print results.</p>
+          <div class="practice-hint">💡 Hint: For insert — if value &lt; node go left, if value &gt; node go right. For find — same logic.</div>
+        
+        <div class="practice-answer">
+  <button class="show-answer-btn" onclick="this.nextElementSibling.classList.toggle('visible');this.textContent=this.nextElementSibling.classList.contains('visible')?'Hide Answer':'Show Answer'">Show Answer</button>
+  <div class="answer-content">
+    <div class="r-console">
+      <div class="r-topbar"><span class="r-dot" style="background:#ff5f56"></span><span class="r-dot" style="background:#ffbd2e"></span><span class="r-dot" style="background:#27c93f"></span><span style="margin-left:8px;font-size:11px;color:#888">answer.py</span></div>
+      <div class="r-body"><pre style="margin:0;white-space:pre-wrap;word-break:break-word"><span class="r-gray"># Binary Search Tree — insert() and find()</span>
+
+<span class="r-green">class</span> <span class="r-cyan">Node</span>:
+    <span class="r-green">def</span> <span class="r-cyan">__init__</span>(self, value):
+        self.value = value
+        self.left = <span class="r-green">None</span>
+        self.right = <span class="r-green">None</span>
+
+<span class="r-green">class</span> <span class="r-cyan">BinarySearchTree</span>:
+    <span class="r-green">def</span> <span class="r-cyan">__init__</span>(self):
+        self.root = <span class="r-green">None</span>
+
+    <span class="r-green">def</span> <span class="r-cyan">insert</span>(self, value):
+        <span class="r-green">if</span> self.root <span class="r-green">is</span> <span class="r-green">None</span>:
+            self.root = Node(value)
+        <span class="r-green">else</span>:
+            self._insert(self.root, value)
+
+    <span class="r-green">def</span> <span class="r-cyan">_insert</span>(self, node, value):
+        <span class="r-green">if</span> value &lt; node.value:
+            <span class="r-green">if</span> node.left <span class="r-green">is</span> <span class="r-green">None</span>:
+                node.left = Node(value)
+            <span class="r-green">else</span>:
+                self._insert(node.left, value)
+        <span class="r-green">elif</span> value &gt; node.value:
+            <span class="r-green">if</span> node.right <span class="r-green">is</span> <span class="r-green">None</span>:
+                node.right = Node(value)
+            <span class="r-green">else</span>:
+                self._insert(node.right, value)
+        <span class="r-gray"># equal values: ignore (no duplicates)</span>
+
+    <span class="r-green">def</span> <span class="r-cyan">find</span>(self, value):
+        <span class="r-green">return</span> self._find(self.root, value)
+
+    <span class="r-green">def</span> <span class="r-cyan">_find</span>(self, node, value):
+        <span class="r-green">if</span> node <span class="r-green">is</span> <span class="r-green">None</span>:
+            <span class="r-green">return</span> <span class="r-green">False</span>
+        <span class="r-green">if</span> value == node.value:
+            <span class="r-green">return</span> <span class="r-green">True</span>
+        <span class="r-green">elif</span> value &lt; node.value:
+            <span class="r-green">return</span> self._find(node.left, value)
+        <span class="r-green">else</span>:
+            <span class="r-green">return</span> self._find(node.right, value)
+
+<span class="r-gray"># Insert: 50, 30, 70, 20, 40, 60, 80</span>
+bst = BinarySearchTree()
+<span class="r-green">for</span> val <span class="r-green">in</span> [<span class="r-yellow">50</span>, <span class="r-yellow">30</span>, <span class="r-yellow">70</span>, <span class="r-yellow">20</span>, <span class="r-yellow">40</span>, <span class="r-yellow">60</span>, <span class="r-yellow">80</span>]:
+    bst.<span class="r-yellow">insert</span>(val)
+
+<span class="r-gray"># Tree structure:</span>
+<span class="r-gray">#          50</span>
+<span class="r-gray">#         /  \</span>
+<span class="r-gray">#       30    70</span>
+<span class="r-gray">#      / \   / \</span>
+<span class="r-gray">#    20  40 60  80</span>
+
+<span class="r-yellow">print</span>(bst.find(<span class="r-yellow">40</span>))   <span class="r-gray"># True</span>
+<span class="r-yellow">print</span>(bst.find(<span class="r-yellow">99</span>))   <span class="r-gray"># False</span>
+<span class="r-yellow">print</span>(bst.find(<span class="r-yellow">60</span>))   <span class="r-gray"># True</span>
+</pre></div>
+    </div>
+  </div>
+</div>
+        </div>
+        <div class="practice-panel" id="adt-l4">
+          <div class="level-badge l4-badge">🎯 L4 — Scenario</div>
+          <div class="scenario-box">
+            <div class="scenario-label">Situation</div>
+            <div class="scenario-text">A hospital uses a queue to manage patient appointments and a stack to manage the history of operations performed (so the last operation can be undone). Implement both, then simulate: 5 patients arrive, 2 are seen, 3 operations are performed, 1 is undone.</div>
+          </div>
+          <ul class="task-list">
+            <li>Implement Queue (enqueue/dequeue) and Stack (push/pop) classes</li>
+            <li>Simulate arrival of 5 patients into the queue</li>
+            <li>Dequeue 2 patients (they are being seen)</li>
+            <li>Push 3 operations onto the stack</li>
+            <li>Pop 1 to "undo" and print what was undone</li>
+            <li>Print final state of queue and stack</li>
+          </ul>
+        
+        <div class="practice-answer">
+  <button class="show-answer-btn" onclick="this.nextElementSibling.classList.toggle('visible');this.textContent=this.nextElementSibling.classList.contains('visible')?'Hide Answer':'Show Answer'">Show Answer</button>
+  <div class="answer-content">
+    <div class="r-console">
+      <div class="r-topbar"><span class="r-dot" style="background:#ff5f56"></span><span class="r-dot" style="background:#ffbd2e"></span><span class="r-dot" style="background:#27c93f"></span><span style="margin-left:8px;font-size:11px;color:#888">answer.py</span></div>
+      <div class="r-body"><pre style="margin:0;white-space:pre-wrap;word-break:break-word"><span class="r-gray"># Hospital Queue + Operation Stack simulation</span>
+
+<span class="r-green">class</span> <span class="r-cyan">Queue</span>:
+    <span class="r-green">def</span> <span class="r-cyan">__init__</span>(self):
+        self.__items = []
+
+    <span class="r-green">def</span> <span class="r-cyan">enqueue</span>(self, item):
+        self.__items.<span class="r-yellow">append</span>(item)
+
+    <span class="r-green">def</span> <span class="r-cyan">dequeue</span>(self):
+        <span class="r-green">if</span> self.is_empty():
+            <span class="r-green">raise</span> IndexError(<span class="r-string">&quot;Queue is empty — no patients waiting&quot;</span>)
+        <span class="r-green">return</span> self.__items.<span class="r-yellow">pop</span>(<span class="r-yellow">0</span>)
+
+    <span class="r-green">def</span> <span class="r-cyan">is_empty</span>(self):
+        <span class="r-green">return</span> <span class="r-yellow">len</span>(self.__items) == <span class="r-yellow">0</span>
+
+    <span class="r-green">def</span> <span class="r-cyan">size</span>(self):
+        <span class="r-green">return</span> <span class="r-yellow">len</span>(self.__items)
+
+    <span class="r-green">def</span> <span class="r-cyan">display</span>(self):
+        <span class="r-yellow">print</span>(<span class="r-string">f&quot;  Waiting queue ({self.size()}): {self.__items}&quot;</span>)
+
+
+<span class="r-green">class</span> <span class="r-cyan">Stack</span>:
+    <span class="r-green">def</span> <span class="r-cyan">__init__</span>(self):
+        self.__items = []
+
+    <span class="r-green">def</span> <span class="r-cyan">push</span>(self, item):
+        self.__items.<span class="r-yellow">append</span>(item)
+
+    <span class="r-green">def</span> <span class="r-cyan">pop</span>(self):
+        <span class="r-green">if</span> self.is_empty():
+            <span class="r-green">raise</span> IndexError(<span class="r-string">&quot;Stack is empty — nothing to undo&quot;</span>)
+        <span class="r-green">return</span> self.__items.<span class="r-yellow">pop</span>()
+
+    <span class="r-green">def</span> <span class="r-cyan">is_empty</span>(self):
+        <span class="r-green">return</span> <span class="r-yellow">len</span>(self.__items) == <span class="r-yellow">0</span>
+
+    <span class="r-green">def</span> <span class="r-cyan">peek</span>(self):
+        <span class="r-green">return</span> self.__items[-<span class="r-yellow">1</span>] <span class="r-green">if</span> <span class="r-green">not</span> self.is_empty() <span class="r-green">else</span> <span class="r-green">None</span>
+
+
+<span class="r-gray"># ── Simulation ──</span>
+queue   = Queue()     <span class="r-gray"># patients waiting</span>
+history = Stack()     <span class="r-gray"># completed operations (undo-able)</span>
+
+<span class="r-yellow">print</span>(<span class="r-string">&quot;=== 5 patients arrive ===&quot;</span>)
+<span class="r-green">for</span> p <span class="r-green">in</span> [<span class="r-string">&quot;Alice&quot;</span>, <span class="r-string">&quot;Bob&quot;</span>, <span class="r-string">&quot;Carol&quot;</span>, <span class="r-string">&quot;Dave&quot;</span>, <span class="r-string">&quot;Eve&quot;</span>]:
+    queue.enqueue(p)
+    <span class="r-yellow">print</span>(<span class="r-string">f&quot;  Arrived: {p}&quot;</span>)
+queue.display()
+
+<span class="r-yellow">print</span>(<span class="r-string">&quot;\n=== 2 patients are seen ===&quot;</span>)
+p1 = queue.dequeue()
+<span class="r-yellow">print</span>(<span class="r-string">f&quot;  Now seeing: {p1}&quot;</span>)
+p2 = queue.dequeue()
+<span class="r-yellow">print</span>(<span class="r-string">f&quot;  Now seeing: {p2}&quot;</span>)
+queue.display()
+
+<span class="r-yellow">print</span>(<span class="r-string">&quot;\n=== 3 operations recorded ===&quot;</span>)
+ops = [
+    <span class="r-string">f&quot;Blood test for {p1}&quot;</span>,
+    <span class="r-string">f&quot;X-ray for {p2}&quot;</span>,
+    <span class="r-string">&quot;Prescription for Carol&quot;</span>,
+]
+<span class="r-green">for</span> op <span class="r-green">in</span> ops:
+    history.push(op)
+    <span class="r-yellow">print</span>(<span class="r-string">f&quot;  Recorded: {op}&quot;</span>)
+<span class="r-yellow">print</span>(<span class="r-string">f&quot;  Last op: {history.peek()}&quot;</span>)
+
+<span class="r-yellow">print</span>(<span class="r-string">&quot;\n=== Undo last operation ===&quot;</span>)
+undone = history.<span class="r-yellow">pop</span>()
+<span class="r-yellow">print</span>(<span class="r-string">f&quot;  Undone: {undone}&quot;</span>)
+
+<span class="r-gray"># Output:</span>
+<span class="r-gray"># === 5 patients arrive ===</span>
+<span class="r-gray">#   Arrived: Alice  ...  Arrived: Eve</span>
+<span class="r-gray">#   Waiting queue (5): [&#x27;Alice&#x27;, &#x27;Bob&#x27;, &#x27;Carol&#x27;, &#x27;Dave&#x27;, &#x27;Eve&#x27;]</span>
+<span class="r-gray"># === 2 patients are seen ===</span>
+<span class="r-gray">#   Now seeing: Alice</span>
+<span class="r-gray">#   Now seeing: Bob</span>
+<span class="r-gray">#   Waiting queue (3): [&#x27;Carol&#x27;, &#x27;Dave&#x27;, &#x27;Eve&#x27;]</span>
+<span class="r-gray"># === 3 operations recorded ===</span>
+<span class="r-gray">#   Recorded: Blood test for Alice</span>
+<span class="r-gray">#   Recorded: X-ray for Bob</span>
+<span class="r-gray">#   Recorded: Prescription for Carol</span>
+<span class="r-gray">#   Last op: Prescription for Carol</span>
+<span class="r-gray"># === Undo last operation ===</span>
+<span class="r-gray">#   Undone: Prescription for Carol</span>
+</pre></div>
+    </div>
+  </div>
+</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="unit-terms">
+    <div class="unit-terms-hd">📝 Key Terms</div>
+    <div class="ut-item"><div class="ut-sym" style="color:var(--amber)">LIFO</div><div class="ut-en">Last In First Out</div><div class="ut-def">Stack — most recently added item is removed first</div></div>
+    <div class="ut-item"><div class="ut-sym" style="color:var(--blue)">FIFO</div><div class="ut-en">First In First Out</div><div class="ut-def">Queue — first item added is removed first</div></div>
+    <div class="ut-item"><div class="ut-sym" style="color:var(--green)">pointer / next</div><div class="ut-en">reference</div><div class="ut-def">Each node holds a reference to the next node</div></div>
+    <div class="ut-item"><div class="ut-sym">head</div><div class="ut-en">first node</div><div class="ut-def">Entry point of a linked list</div></div>
+  </div>
+</div>
+
+<div class="footer">9618 A Level — Algorithms &amp; Data Structures Practice Page · Cambridge International AS &amp; A Level Computer Science</div>
+
+<script>
+function switchTab(btn, panelId) {
+  const container = btn.closest('.practice-block');
+  container.querySelectorAll('.ptab').forEach(t => t.classList.remove('active'));
+  container.querySelectorAll('.practice-panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  const panel = document.getElementById(panelId);
+  if (panel) panel.classList.add('active');
+}
+function toggleAnswer(btn) {
+  const content = btn.nextElementSibling;
+  if (content.classList.contains('visible')) { content.classList.remove('visible'); btn.textContent = '👁 Show Answer'; } else { content.classList.add('visible'); btn.textContent = '🙈 Hide Answer'; }
+}
+</script>
+</body>
+</html>

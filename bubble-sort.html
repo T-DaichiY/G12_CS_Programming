@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bubble Sort — 9618 A Level CS</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blue:#5865F2;--blue-light:#EEF0FF;--blue-mid:#C5CAF6;
+  --green:#059669;--green-light:#ECFDF5;
+  --amber:#D97706;--amber-light:#FFFBEB;
+  --red:#DC2626;--red-light:#FEF2F2;
+  --purple:#7C3AED;--purple-light:#F5F3FF;
+  --pink:#DB2777;--pink-light:#FDF2F8;
+  --teal:#0D9488;--teal-light:#F0FDFA;
+  --gray:#6B7280;--gray-light:#F8FAFC;
+  --ink:#0F172A;--ink2:#475569;--ink3:#94A3B8;
+  --border:#E2E8F0;--bg:#F1F5F9;--white:#FFFFFF;
+  --shadow:0 1px 3px rgba(15,23,42,.07),0 4px 16px rgba(15,23,42,.04);
+  --shadow-md:0 4px 10px rgba(15,23,42,.08),0 16px 40px rgba(15,23,42,.06);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--ink);padding:32px 16px 80px;max-width:1120px;margin:0 auto;line-height:1.72}
+code,kbd,.mono{font-family:'JetBrains Mono',monospace}
+code{background:#EEF2FF;border:1px solid var(--blue-mid);padding:2px 6px;border-radius:6px;font-size:12px;color:var(--blue)}
+kbd{font-size:11px;background:#1E293B;color:#fff;padding:2px 7px;border-radius:6px}
+h1{font-size:26px;font-weight:800;letter-spacing:-.01em;margin-bottom:6px}
+h2{font-size:20px;font-weight:800;margin:0 0 10px}
+h3{font-size:15px;font-weight:800;margin:0 0 8px}
+p{font-size:13.5px;color:var(--ink2)}
+a{color:var(--blue);text-decoration:none}
+.hl{background:linear-gradient(transparent 60%,rgba(250,210,0,.7) 60%);padding-bottom:1px}
+.hl-s{background:linear-gradient(transparent 54%,rgba(250,195,0,.85) 54%);font-weight:800;padding-bottom:1px}
+.subtitle{font-size:13px;color:var(--ink3);margin-bottom:22px;line-height:1.9}
+.topbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:10px 0 22px}
+.badge{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--border);background:var(--white);border-radius:999px;padding:5px 11px;font-size:11.5px;font-weight:700;color:var(--ink2)}
+.badge .dot{width:8px;height:8px;border-radius:50%}
+.dot{width:8px;height:8px;border-radius:50%;display:inline-block}
+
+/* ── NAV ── */
+.nav{position:sticky;top:0;z-index:10;margin:0 0 28px;padding:10px 14px;background:rgba(255,255,255,.88);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-radius:0 0 18px 18px;border-bottom:1px solid rgba(226,232,240,.9);box-shadow:0 2px 14px rgba(15,23,42,.05)}
+.nav-inner{display:flex;gap:6px;flex-wrap:wrap}
+.nav a{font-size:11.5px;font-weight:700;background:transparent;border:1.5px solid var(--border);border-radius:999px;padding:5px 12px;color:var(--ink2);transition:all .18s}
+.nav a:hover{background:var(--blue-light);color:var(--blue);border-color:var(--blue-mid)}
+.nav a.active-page{background:var(--blue);color:#fff;border-color:var(--blue)}
+
+/* ── SECTION LABEL ── */
+.sec{font-size:10.5px;font-weight:800;color:var(--ink3);letter-spacing:.1em;text-transform:uppercase;margin:8px 0 10px;display:flex;align-items:center;gap:8px}
+.sec::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* ── LAYOUT ── */
+.unit-wrap{display:grid;grid-template-columns:1fr 220px;gap:18px;align-items:start;margin-bottom:12px}
+@media(max-width:780px){.unit-wrap{grid-template-columns:1fr}.unit-terms{position:static}.nav{position:static;border-radius:0}.hero-grid,.grid2,.grid3,.branch{grid-template-columns:1fr!important}}
+
+/* ── SIDEBAR ── */
+.unit-terms{position:sticky;top:64px;background:var(--white);border:1.5px solid var(--border);border-radius:18px;padding:15px 15px 11px;box-shadow:var(--shadow)}
+.unit-terms-hd{font-size:10px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:5px}
+.ut-item{margin-bottom:10px;padding-bottom:10px;border-bottom:.5px solid var(--border)}
+.ut-item:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none}
+.ut-sym{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:800;margin-bottom:2px}
+.ut-en{font-size:10px;color:var(--ink3);font-style:italic;margin-bottom:3px}
+.ut-def{font-size:11px;color:var(--ink2);line-height:1.55;margin-top:2px}
+.ut-ja{font-size:10.5px;color:var(--ink3);margin-top:2px}
+
+/* ── FLOW / STEPS ── */
+.flow{display:flex;flex-direction:column;gap:0}
+.step-wrap{display:flex;align-items:stretch;gap:14px}
+.step-line{display:flex;flex-direction:column;align-items:center}
+.num{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;flex-shrink:0;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+.vline{width:2px;flex:1;min-height:20px;background:var(--border);margin:5px 0}
+.step-wrap:last-child .vline{background:transparent}
+.step-box{flex:1;border:1.5px solid var(--border);border-radius:18px;padding:17px 19px;background:var(--white);margin-bottom:12px;box-shadow:var(--shadow);transition:box-shadow .2s,transform .2s}
+.step-box:hover{box-shadow:var(--shadow-md);transform:translateY(-1px)}
+.step-title{font-size:15px;font-weight:800;margin-bottom:9px}
+.step-desc{font-size:13px;color:var(--ink2);line-height:1.9}
+.step-desc ul{padding-left:20px;margin-top:8px}
+.step-desc li{margin:3px 0}
+
+/* ── GRIDS ── */
+.hero-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:12px;margin:12px 0}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:10px 0}
+
+/* ── CARDS ── */
+.card{border:1.5px solid var(--border);border-radius:14px;padding:12px 14px;background:var(--white);box-shadow:var(--shadow)}
+.card-label{font-size:10.5px;color:var(--ink3);margin-bottom:4px;font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+.card-val{font-size:16px;font-weight:800;margin-bottom:3px;font-family:'JetBrains Mono',monospace}
+.card-sub{font-size:11.5px;color:var(--ink2);line-height:1.55;margin-top:4px}
+.b-green{border-color:#6EE7B7;background:#ECFDF5}
+.b-red{border-color:#FCA5A5;background:#FEF2F2}
+.b-blue{border-color:var(--blue-mid);background:var(--blue-light)}
+.b-amber{border-color:#FCD34D;background:#FFFBEB}
+.b-purple{border-color:#C4B5FD;background:#F5F3FF}
+.b-teal{border-color:#99F6E4;background:#F0FDFA}
+
+/* ── NOTE & CALLOUT ── */
+.note-box{border:1.5px solid var(--border);border-radius:14px;background:var(--white);padding:13px 15px;margin-top:10px}
+.note-title{font-size:12px;font-weight:800;margin-bottom:5px}
+.note-text{font-size:12.5px;color:var(--ink2);line-height:1.65}
+.callout{padding:13px 16px;border-radius:14px;border:1.5px solid var(--border);margin-top:10px;background:var(--white)}
+.callout-title{font-size:12px;font-weight:800;margin-bottom:5px}
+.kids-box{background:#FFFBEB;border:1.5px solid #FCD34D;border-radius:14px;padding:13px 15px;margin-top:12px}
+.kids-title{font-size:12px;font-weight:800;color:#92400E;margin-bottom:5px}
+.kids-text{font-size:12.5px;color:#78350F;line-height:1.65}
+
+/* ── COMPARE TABLE ── */
+.compare-table{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:12px;border-radius:12px;overflow:hidden;border:1.5px solid var(--border)}
+.compare-table th{background:var(--gray-light);padding:9px 13px;text-align:left;font-weight:700;font-size:11.5px;color:var(--ink2);border-bottom:1.5px solid var(--border)}
+.compare-table td{padding:9px 13px;border-bottom:1px solid var(--border);color:var(--ink2);background:var(--white)}
+.compare-table tr:last-child td{border-bottom:none}
+
+/* ── BRANCH ── */
+.branch{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+.branch-cell{border:1.5px solid var(--border);border-radius:14px;padding:12px 14px;background:var(--white)}
+.branch-lbl{font-size:11px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px}
+.branch-val{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink)}
+
+/* ── PIPELINE ── */
+.pipeline{display:flex;align-items:center;gap:6px;margin:10px 0;flex-wrap:wrap}
+.pipe-box{background:var(--blue-light);border:1.5px solid var(--blue-mid);border-radius:10px;padding:6px 12px;font-size:12px;font-weight:700;color:var(--blue)}
+.pipe-arr{color:var(--ink3);font-size:16px;font-weight:700}
+
+/* ── CODE BLOCKS — LIGHT THEME ── */
+.r-console{margin-top:12px;background:#0f172a;color:#e5e7eb;border-radius:14px;border:1px solid #1e293b;overflow:hidden;box-shadow:0 2px 10px rgba(2,6,23,.15)}
+.r-topbar{display:flex;align-items:center;justify-content:space-between;background:#111827;padding:9px 14px;border-bottom:1px solid #1f2937}
+.r-dots{display:flex;gap:7px}
+.r-dot{width:10px;height:10px;border-radius:50%}
+.r-title{font-size:11px;color:#94a3b8;font-family:'JetBrains Mono',monospace;font-weight:600}
+.r-body{font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.8;padding:14px 16px;white-space:pre-wrap;overflow-x:auto;background:#0f172a;color:#e5e7eb}
+.r-cmd{color:#e5e7eb}
+.r-out{color:#86efac;font-style:italic}
+.r-prompt{color:#94A3B8;font-weight:700;user-select:none}
+.r-red{color:#f87171}
+/* Syntax colours — light IDE theme */
+.r-green{color:#86efac}
+.r-yellow{color:#fde68a}
+.r-gray{color:#64748b;font-style:italic}
+.r-cyan{color:#67e8f9}
+.r-string{color:#fca5a5}
+.r-purple{color:#c4b5fd}
+
+/* ── PRACTICE BLOCK ── */
+.practice-block{margin-top:14px;background:var(--white);border:1.5px solid var(--border);border-radius:20px;overflow:hidden;box-shadow:var(--shadow-md)}
+.practice-header{padding:13px 19px;display:flex;align-items:center;gap:8px}
+.practice-header-title{color:#fff;font-size:12px;font-weight:800;letter-spacing:.06em}
+.practice-tabs{display:flex;gap:0;border-bottom:1.5px solid var(--border);background:var(--gray-light);overflow-x:auto}
+.ptab{padding:9px 16px;font-size:11.5px;font-weight:700;cursor:pointer;border:none;background:transparent;color:var(--ink3);border-bottom:2.5px solid transparent;white-space:nowrap;transition:all .18s}
+.ptab.active{color:var(--blue);border-bottom-color:var(--blue);background:var(--white)}
+.ptab:hover:not(.active){color:var(--ink2);background:rgba(255,255,255,.7)}
+.practice-body{padding:17px 19px}
+.practice-panel{display:block}
+.practice-panel+.practice-panel{border-top:1.5px solid var(--border);margin-top:18px;padding-top:18px}
+
+/* ── LEVEL BADGES ── */
+.level-badge{display:inline-flex;align-items:center;gap:5px;border-radius:8px;padding:4px 10px;font-size:11px;font-weight:800;margin-bottom:10px;letter-spacing:.02em}
+.l1-badge{background:#ECFDF5;color:#059669;border:1.5px solid #A7F3D0}
+.l2-badge{background:#EEF0FF;color:#4F46E5;border:1.5px solid #C5CAF6}
+.l3-badge{background:#F5F3FF;color:#7C3AED;border:1.5px solid #DDD6FE}
+.l4-badge{background:#FFFBEB;color:#D97706;border:1.5px solid #FDE68A}
+
+.practice-goal{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:10px;line-height:1.75}
+.practice-hint{background:#FFFBEB;border:1.5px solid #FDE68A;border-radius:10px;padding:9px 13px;font-size:12px;color:#92400E;margin-top:8px;line-height:1.65}
+
+/* ── ANSWER BUTTON ── */
+.practice-answer{margin-top:12px}
+.show-answer-btn{font-size:11.5px;font-weight:700;background:var(--white);border:1.5px solid var(--border);border-radius:999px;padding:6px 15px;cursor:pointer;color:var(--ink2);transition:all .2s;display:inline-flex;align-items:center;gap:5px}
+.show-answer-btn:hover{background:var(--blue-light);color:var(--blue);border-color:var(--blue-mid);transform:translateY(-1px);box-shadow:0 3px 10px rgba(88,101,242,.15)}
+.answer-content{display:none;margin-top:8px}
+.answer-content.visible{display:block}
+
+/* ── SCENARIO ── */
+.scenario-box{background:var(--gray-light);border:1.5px solid var(--border);border-radius:12px;padding:13px 15px;margin-bottom:10px}
+.scenario-label{font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin-bottom:5px}
+.scenario-text{font-size:13px;color:var(--ink2);line-height:1.8}
+.task-list{margin-top:10px;padding-left:0;list-style:none}
+.task-list li{font-size:12.5px;color:var(--ink2);padding:5px 0;display:flex;align-items:flex-start;gap:7px}
+.task-list li::before{content:"▶";color:var(--blue);font-size:10px;margin-top:3px;flex-shrink:0}
+
+/* ── MCQ ── */
+.mcq-block{background:var(--white);border:1.5px solid var(--border);border-radius:18px;overflow:hidden;box-shadow:var(--shadow-md);margin-bottom:12px}
+.mcq-header{padding:12px 18px;display:flex;align-items:center;justify-content:space-between}
+.mcq-header-title{color:#fff;font-size:12px;font-weight:800;letter-spacing:.06em}
+.mcq-score-badge{font-size:12px;font-weight:800;color:#fff;background:rgba(255,255,255,.2);border-radius:999px;padding:3px 10px}
+.mcq-progress{background:rgba(255,255,255,.25);height:4px}
+.mcq-progress-bar{height:4px;background:rgba(255,255,255,.7);transition:width .4s}
+.mcq-body{padding:16px 18px}
+.mcq-q{margin-bottom:18px;padding-bottom:18px;border-bottom:1px solid var(--border)}
+.mcq-q:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none}
+.mcq-qnum{font-size:10px;font-weight:800;color:var(--ink3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+.mcq-qtext{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:10px;line-height:1.65}
+.mcq-stem{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:8px;line-height:1.65}
+.mcq-opts{display:flex;flex-direction:column;gap:6px}
+.mcq-opt{text-align:left;padding:9px 14px;border:1.5px solid var(--border);border-radius:12px;background:var(--white);font-size:12.5px;cursor:pointer;transition:all .18s;color:var(--ink2);font-family:'Inter',sans-serif;font-weight:500}
+.mcq-opt:hover:not(:disabled){background:var(--blue-light);border-color:var(--blue-mid);color:var(--blue);transform:translateX(2px)}
+.mcq-opt.correct{background:#ECFDF5;border-color:#6EE7B7;color:#065F46;font-weight:700}
+.mcq-opt.wrong{background:#FEF2F2;border-color:#FCA5A5;color:#991B1B}
+.mcq-opt:disabled{cursor:not-allowed;opacity:.7}
+.mcq-fb{font-size:12px;margin-top:7px;padding:7px 11px;border-radius:9px;display:none;font-weight:600}
+.mcq-fb.show{display:block}
+.mcq-fb.ok{background:#ECFDF5;color:#065F46;border:1px solid #A7F3D0}
+.mcq-fb.ng{background:#FEF2F2;color:#991B1B;border:1px solid #FCA5A5}
+
+/* ── FILL BLANK ── */
+.fill-blank{background:#EEF2FF;border:1.5px solid var(--blue-mid);border-radius:6px;padding:1px 5px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--blue);font-weight:700}
+
+/* ── MISC ── */
+.div{height:1px;background:var(--border);margin:24px 0}
+.mini-pill{display:inline-flex;align-items:center;gap:4px;background:var(--gray-light);border:1px solid var(--border);border-radius:999px;padding:2px 8px;font-size:11px;font-weight:700;color:var(--ink2)}
+.pill-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.opt-label{font-size:11px;font-weight:700;color:var(--ink3);margin-right:4px}
+.small{font-size:11px;color:var(--ink3)}
+.active{display:block}
+
+/* Score bar */
+.score-bar-wrap{background:var(--border);border-radius:999px;height:5px;overflow:hidden;margin-top:4px}
+.score-bar{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--green),var(--teal));transition:width .4s}
+
+/* MCQ states (compat) */
+.correct{background:#ECFDF5!important;border-color:#6EE7B7!important;color:#065F46!important}
+.wrong{background:#FEF2F2!important;border-color:#FCA5A5!important;color:#991B1B!important}
+.reveal-correct{background:#FFFBEB!important;border-color:#FDE68A!important;color:#92400E!important}
+.show{display:block!important}
+.fb-ok{background:#ECFDF5;color:#065F46;border:1px solid #A7F3D0;border-radius:9px;padding:6px 10px;font-size:12px;font-weight:600}
+.fb-ng{background:#FEF2F2;color:#991B1B;border:1px solid #FCA5A5;border-radius:9px;padding:6px 10px;font-size:12px;font-weight:600}
+
+/* ── FOOTER ── */
+.footer{font-size:11.5px;color:var(--ink3);margin-top:36px;text-align:center;padding-top:20px;border-top:1px solid var(--border)}
+
+</style>
+</head>
+<body>
+
+<h1>9618 A Level — Algorithms &amp; Data Structures <span style="font-size:14px;font-weight:500;color:var(--ink3)">/ Practice &amp; Reference</span></h1>
+
+<div class="nav">
+  <div class="nav-inner">
+    <a href="index.html">← Home</a>
+    <a href="linear-search.html">Linear Search</a>
+    <a href="binary-search.html">Binary Search</a>
+    <a href="insertion-sort.html">Insertion Sort</a>
+    <a href="bubble-sort.html" class="active-page">Bubble Sort</a>
+    <a href="adt-operations.html">ADT Operations</a>
+    <a href="recursion.html">Recursion</a>
+    <a href="oop.html">OOP</a>
+    <a href="oop-games.html">OOP Games 🎮</a>
+    <a href="files-exceptions.html">Files &amp; Exceptions</a>
+    <a href="final-quiz.html">Final Quiz</a>
+  </div>
+</div>
+
+<!-- ============================================================ BUBBLE SORT ============================================================ -->
+<div id="bubble" class="sec">Sorting — Bubble Sort</div>
+<div class="unit-wrap">
+  <div class="flow">
+    <div class="step-wrap">
+      <div class="step-line"><div class="num" style="background:var(--teal-light);color:var(--teal)">①</div><div class="vline"></div></div>
+      <div class="step-box">
+        <div class="step-title" style="color:var(--teal)">🫧 What is Bubble Sort?</div>
+        <div class="step-desc">
+          Bubble sort repeatedly <span class="hl-s">compares adjacent pairs</span> and swaps them if they are in the wrong order. After each full pass, the largest unsorted element "bubbles up" to its correct position at the end.
+        </div>
+        <table class="compare-table">
+          <tr><th>Case</th><th>Comparisons</th><th>When</th></tr>
+          <tr class="b-green"><td>Best</td><td class="mono">O(n)</td><td>Already sorted (with optimisation flag)</td></tr>
+          <tr class="b-red"><td>Worst / Average</td><td class="mono">O(n²)</td><td>Reverse sorted or random data</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="step-wrap">
+      <div class="step-line"><div class="num" style="background:var(--green-light);color:var(--green)">②</div><div class="vline"></div></div>
+      <div class="step-box">
+        <div class="step-title" style="color:var(--green)">🐍 Python — with optimisation flag</div>
+        <div class="r-console">
+          <div class="r-topbar"><div class="r-dots"><div class="r-dot" style="background:#ef4444"></div><div class="r-dot" style="background:#f59e0b"></div><div class="r-dot" style="background:#22c55e"></div></div><div class="r-title">Python — bubble_sort.py</div></div>
+          <div class="r-body"><span class="r-green">def</span> <span class="r-cyan">bubble_sort</span>(arr):
+    n = <span class="r-yellow">len</span>(arr)
+    <span class="r-green">for</span> i <span class="r-green">in</span> <span class="r-yellow">range</span>(n - <span class="r-yellow">1</span>):
+        swapped = <span class="r-yellow">False</span>            <span class="r-gray"># optimisation flag</span>
+        <span class="r-green">for</span> j <span class="r-green">in</span> <span class="r-yellow">range</span>(<span class="r-yellow">0</span>, n - i - <span class="r-yellow">1</span>):
+            <span class="r-green">if</span> arr[j] &gt; arr[j + <span class="r-yellow">1</span>]:
+                arr[j], arr[j + <span class="r-yellow">1</span>] = arr[j + <span class="r-yellow">1</span>], arr[j]
+                swapped = <span class="r-yellow">True</span>
+        <span class="r-green">if not</span> swapped:         <span class="r-gray"># no swaps = already sorted</span>
+            <span class="r-green">break</span>
+    <span class="r-green">return</span> arr
+
+data = [<span class="r-yellow">64</span>, <span class="r-yellow">34</span>, <span class="r-yellow">25</span>, <span class="r-yellow">12</span>, <span class="r-yellow">22</span>, <span class="r-yellow">11</span>, <span class="r-yellow">90</span>]
+<span class="r-yellow">print</span>(bubble_sort(data))
+<span class="r-gray"># Output: [11, 12, 22, 25, 34, 64, 90]</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRACTICE BLOCK: BUBBLE SORT -->
+    <div class="practice-block">
+      <div class="practice-header" style="background:var(--teal)">
+        <span class="practice-header-title">✏️ PRACTICE — Bubble Sort (4 Levels)</span>
+      </div>
+<div class="practice-body">
+        <div class="practice-panel" id="bub-l1">
+          <div class="level-badge l1-badge">✅ L1 — Reference</div>
+          <p class="practice-goal">Run the example. Trace [5, 1, 4, 2, 8] manually. Draw the array after each <em>inner</em> loop pass on the first outer iteration (i=0). Count how many swaps happen.</p>
+        
+        <div class="practice-answer">
+  <button class="show-answer-btn" onclick="this.nextElementSibling.classList.toggle('visible');this.textContent=this.nextElementSibling.classList.contains('visible')?'Hide Answer':'Show Answer'">Show Answer</button>
+  <div class="answer-content">
+    <div class="r-console">
+      <div class="r-topbar"><span class="r-dot" style="background:#ff5f56"></span><span class="r-dot" style="background:#ffbd2e"></span><span class="r-dot" style="background:#27c93f"></span><span style="margin-left:8px;font-size:11px;color:#888">trace</span></div>
+      <div class="r-body"><pre style="margin:0;white-space:pre-wrap;word-break:break-word;font-family:monospace">Trace: bubble_sort([5, 1, 4, 2, 8])
+
+Pass i=0 (inner j: 0..3):
+  j=0: compare  5, 1 → swap → [1, 5, 4, 2, 8]
+  j=1: compare  5, 4 → swap → [1, 4, 5, 2, 8]
+  j=2: compare  5, 2 → swap → [1, 4, 2, 5, 8]
+  j=3: compare  5, 8 → no swap
+  After pass 0: [1, 4, 2, 5, 8]  ← 8 is in final position
+
+Pass i=1 (inner j: 0..2):
+  j=0: compare  1, 4 → no swap
+  j=1: compare  4, 2 → swap → [1, 2, 4, 5, 8]
+  j=2: compare  4, 5 → no swap
+  After pass 1: [1, 2, 4, 5, 8]  ← 5 is in final position
+
+Pass i=2 (inner j: 0..1):
+  j=0: compare  1, 2 → no swap
+  j=1: compare  2, 4 → no swap
+  After pass 2: [1, 2, 4, 5, 8]  ← already sorted
+
+Pass i=3 (inner j: 0..0):
+  j=0: compare  1, 2 → no swap
+
+Final: [1, 2, 4, 5, 8]
+Total swaps in i=0: 3
+</pre></div>
+    </div>
+  </div>
+</div>
+        </div>
+        <div class="practice-panel" id="bub-l2">
+          <div class="level-badge l2-badge">📝 L2 — Fill-in</div>
+          <div class="r-console">
+            <div class="r-topbar"><div class="r-dots"><div class="r-dot" style="background:#ef4444"></div><div class="r-dot" style="background:#f59e0b"></div><div class="r-dot" style="background:#22c55e"></div></div><div class="r-title">Fill in the blanks</div></div>
+            <div class="r-body"><span class="r-green">def</span> <span class="r-cyan">bubble_sort</span>(arr):
+    n = <span class="r-yellow">len</span>(arr)
+    <span class="r-green">for</span> i <span class="r-green">in</span> <span class="r-yellow">range</span>(n - <span class="r-yellow">1</span>):
+        swapped = ___                     <span class="r-gray"># initial flag value</span>
+        <span class="r-green">for</span> j <span class="r-green">in</span> <span class="r-yellow">range</span>(<span class="r-yellow">0</span>, n - ___ - <span class="r-yellow">1</span>):   <span class="r-gray"># what reduces the range?</span>
+            <span class="r-green">if</span> arr[j] ___ arr[j + <span class="r-yellow">1</span>]:      <span class="r-gray"># swap condition</span>
+                arr[j], arr[j+<span class="r-yellow">1</span>] = ___, ___ <span class="r-gray"># swap</span>
+                swapped = ___
+        <span class="r-green">if not</span> ___:
+            <span class="r-green">break</span>
+    <span class="r-green">return</span> arr</div>
+          </div>
+          <div class="practice-answer">
+            <button class="show-answer-btn" onclick="toggleAnswer(this)">👁 Show Answer</button>
+            <div class="answer-content">
+              <div class="r-console">
+                <div class="r-topbar"><div class="r-dots"><div class="r-dot" style="background:#ef4444"></div><div class="r-dot" style="background:#f59e0b"></div><div class="r-dot" style="background:#22c55e"></div></div><div class="r-title">Answer</div></div>
+                <div class="r-body">swapped = <span class="r-yellow">False</span>
+range(0, n - <span class="r-yellow">i</span> - 1)
+arr[j] <span class="r-yellow">&gt;</span> arr[j+1]
+arr[j], arr[j+1] = <span class="r-yellow">arr[j+1], arr[j]</span>
+swapped = <span class="r-yellow">True</span>
+<span class="r-green">if not</span> <span class="r-yellow">swapped</span>: break</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="practice-panel" id="bub-l3">
+          <div class="level-badge l3-badge">🆓 L3 — Free Style</div>
+          <p class="practice-goal">Write bubble sort that also returns the <strong>number of passes made</strong> and the <strong>total number of swaps</strong>. Return all three: sorted array, pass count, swap count.</p>
+          <div class="practice-hint">💡 Hint: Use the optimisation flag — it stops early if no swaps occur in a pass.</div>
+        
+                    <div class="practice-answer">
+            <button class="show-answer-btn" onclick="toggleAnswer(this)">👁 Show Answer</button>
+            <div class="answer-content">
+              <div class="r-console">
+                <div class="r-topbar"><div class="r-dots"><div class="r-dot" style="background:#ef4444"></div><div class="r-dot" style="background:#f59e0b"></div><div class="r-dot" style="background:#22c55e"></div></div><div class="r-title">Answer</div></div>
+                <div class="r-body"><span class="r-green">def</span> <span class="r-cyan">bubble_sort_tracked</span>(arr):
+    arr = arr.<span class="r-yellow">copy</span>()
+    n = <span class="r-yellow">len</span>(arr)
+    passes = <span class="r-yellow">0</span>
+    swaps = <span class="r-yellow">0</span>
+    <span class="r-green">for</span> i <span class="r-green">in</span> <span class="r-yellow">range</span>(n - <span class="r-yellow">1</span>):
+        swapped = <span class="r-green">False</span>
+        <span class="r-green">for</span> j <span class="r-green">in</span> <span class="r-yellow">range</span>(<span class="r-yellow">0</span>, n - i - <span class="r-yellow">1</span>):
+            <span class="r-green">if</span> arr[j] &gt; arr[j + <span class="r-yellow">1</span>]:
+                arr[j], arr[j+<span class="r-yellow">1</span>] = arr[j+<span class="r-yellow">1</span>], arr[j]
+                swapped = <span class="r-green">True</span>
+                swaps += <span class="r-yellow">1</span>
+        passes += <span class="r-yellow">1</span>
+        <span class="r-green">if</span> <span class="r-green">not</span> swapped:
+            <span class="r-green">break</span>
+    <span class="r-green">return</span> arr, passes, swaps
+
+result, p, s = bubble_sort_tracked([<span class="r-yellow">5</span>, <span class="r-yellow">1</span>, <span class="r-yellow">4</span>, <span class="r-yellow">2</span>, <span class="r-yellow">8</span>])
+<span class="r-yellow">print</span>(<span class="r-string">f&quot;Sorted: {result}, Passes: {p}, Swaps: {s}&quot;</span>)
+<span class="r-gray"># Output: Sorted: [1, 2, 4, 5, 8], Passes: 3, Swaps: 4</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="practice-panel" id="bub-l4">
+          <div class="level-badge l4-badge">🎯 L4 — Scenario</div>
+          <div class="scenario-box">
+            <div class="scenario-label">Situation</div>
+            <div class="scenario-text">A leaderboard for a school quiz competition needs to sort 20 students by score after every round. Scores change slightly each round (nearly sorted). Compare bubble sort vs insertion sort for this use case.</div>
+          </div>
+          <ul class="task-list">
+            <li>Create a list of 20 scores (mostly sorted, a few out of place)</li>
+            <li>Implement both bubble sort and insertion sort with swap/shift counters</li>
+            <li>Print the sorted result and comparison counts for each algorithm</li>
+            <li>Write a conclusion: which algorithm is better for nearly-sorted data and why?</li>
+          </ul>
+        
+                  <div class="practice-answer">
+            <button class="show-answer-btn" onclick="toggleAnswer(this)">👁 Show Answer</button>
+            <div class="answer-content">
+              <div class="r-console">
+                <div class="r-topbar"><div class="r-dots"><div class="r-dot" style="background:#ef4444"></div><div class="r-dot" style="background:#f59e0b"></div><div class="r-dot" style="background:#22c55e"></div></div><div class="r-title">Answer</div></div>
+                <div class="r-body"><span class="r-green">def</span> <span class="r-cyan">bubble_sort_count</span>(arr):
+    arr = arr.<span class="r-yellow">copy</span>()
+    n = <span class="r-yellow">len</span>(arr)
+    swaps = <span class="r-yellow">0</span>
+    passes = <span class="r-yellow">0</span>
+    <span class="r-green">for</span> i <span class="r-green">in</span> <span class="r-yellow">range</span>(n - <span class="r-yellow">1</span>):
+        swapped = <span class="r-green">False</span>
+        <span class="r-green">for</span> j <span class="r-green">in</span> <span class="r-yellow">range</span>(<span class="r-yellow">0</span>, n - i - <span class="r-yellow">1</span>):
+            <span class="r-green">if</span> arr[j] &gt; arr[j + <span class="r-yellow">1</span>]:
+                arr[j], arr[j+<span class="r-yellow">1</span>] = arr[j+<span class="r-yellow">1</span>], arr[j]
+                swapped = <span class="r-green">True</span>
+                swaps += <span class="r-yellow">1</span>
+        passes += <span class="r-yellow">1</span>
+        <span class="r-green">if</span> <span class="r-green">not</span> swapped:
+            <span class="r-green">break</span>
+    <span class="r-green">return</span> arr, passes, swaps
+
+<span class="r-green">def</span> <span class="r-cyan">insertion_sort_count</span>(arr):
+    arr = arr.<span class="r-yellow">copy</span>()
+    shifts = <span class="r-yellow">0</span>
+    <span class="r-green">for</span> i <span class="r-green">in</span> <span class="r-yellow">range</span>(<span class="r-yellow">1</span>, <span class="r-yellow">len</span>(arr)):
+        key = arr[i]
+        j = i - <span class="r-yellow">1</span>
+        <span class="r-green">while</span> j &gt;= <span class="r-yellow">0</span> <span class="r-green">and</span> arr[j] &gt; key:
+            arr[j+<span class="r-yellow">1</span>] = arr[j]
+            j -= <span class="r-yellow">1</span>
+            shifts += <span class="r-yellow">1</span>
+        arr[j+<span class="r-yellow">1</span>] = key
+    <span class="r-green">return</span> arr, shifts
+
+scores = [<span class="r-yellow">85</span>, <span class="r-yellow">82</span>, <span class="r-yellow">88</span>, <span class="r-yellow">87</span>, <span class="r-yellow">84</span>, <span class="r-yellow">90</span>, <span class="r-yellow">91</span>, <span class="r-yellow">89</span>, <span class="r-yellow">86</span>, <span class="r-yellow">83</span>,
+          <span class="r-yellow">92</span>, <span class="r-yellow">93</span>, <span class="r-yellow">78</span>, <span class="r-yellow">95</span>, <span class="r-yellow">94</span>, <span class="r-yellow">79</span>, <span class="r-yellow">97</span>, <span class="r-yellow">96</span>, <span class="r-yellow">80</span>, <span class="r-yellow">81</span>]
+
+b_sorted, b_passes, b_swaps = bubble_sort_count(scores)
+i_sorted, i_shifts = insertion_sort_count(scores)
+
+<span class="r-yellow">print</span>(<span class="r-string">f&quot;Bubble   — passes: {b_passes}, swaps: {b_swaps}&quot;</span>)
+<span class="r-yellow">print</span>(<span class="r-string">f&quot;Insertion — shifts: {i_shifts}&quot;</span>)
+<span class="r-gray"># Insertion sort wins on nearly-sorted data.</span>
+<span class="r-gray"># It only shifts items that are out of place.</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="unit-terms">
+    <div class="unit-terms-hd">📝 Key Terms</div>
+    <div class="ut-item"><div class="ut-sym" style="color:var(--teal)">swap</div><div class="ut-en">exchange positions</div><div class="ut-def">Swap arr[j] and arr[j+1] when out of order</div></div>
+    <div class="ut-item"><div class="ut-sym">pass / iteration</div><div class="ut-en">one full loop</div><div class="ut-def">One complete run of the inner loop bubbles one value up</div></div>
+    <div class="ut-item"><div class="ut-sym" style="color:var(--green)">swapped flag</div><div class="ut-en">optimisation</div><div class="ut-def">Stop early if no swaps occurred — list is already sorted</div></div>
+        </div>
+</div>
+
+<div class="footer">9618 A Level — Algorithms &amp; Data Structures Practice Page · Cambridge International AS &amp; A Level Computer Science</div>
+
+<script>
+function switchTab(btn, panelId) {
+  const container = btn.closest('.practice-block');
+  container.querySelectorAll('.ptab').forEach(t => t.classList.remove('active'));
+  container.querySelectorAll('.practice-panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  const panel = document.getElementById(panelId);
+  if (panel) panel.classList.add('active');
+}
+function toggleAnswer(btn) {
+  const content = btn.nextElementSibling;
+  if (content.classList.contains('visible')) { content.classList.remove('visible'); btn.textContent = '👁 Show Answer'; } else { content.classList.add('visible'); btn.textContent = '🙈 Hide Answer'; }
+}
+</script>
+</body>
+</html>

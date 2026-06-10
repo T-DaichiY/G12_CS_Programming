@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Final Quiz — 9618 A Level CS</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blue:#5865F2;--blue-light:#EEF0FF;--blue-mid:#C5CAF6;
+  --green:#059669;--green-light:#ECFDF5;
+  --amber:#D97706;--amber-light:#FFFBEB;
+  --red:#DC2626;--red-light:#FEF2F2;
+  --purple:#7C3AED;--purple-light:#F5F3FF;
+  --pink:#DB2777;--pink-light:#FDF2F8;
+  --teal:#0D9488;--teal-light:#F0FDFA;
+  --gray:#6B7280;--gray-light:#F8FAFC;
+  --ink:#0F172A;--ink2:#475569;--ink3:#94A3B8;
+  --border:#E2E8F0;--bg:#F1F5F9;--white:#FFFFFF;
+  --shadow:0 1px 3px rgba(15,23,42,.07),0 4px 16px rgba(15,23,42,.04);
+  --shadow-md:0 4px 10px rgba(15,23,42,.08),0 16px 40px rgba(15,23,42,.06);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--ink);padding:32px 16px 80px;max-width:1120px;margin:0 auto;line-height:1.72}
+code,kbd,.mono{font-family:'JetBrains Mono',monospace}
+code{background:#EEF2FF;border:1px solid var(--blue-mid);padding:2px 6px;border-radius:6px;font-size:12px;color:var(--blue)}
+kbd{font-size:11px;background:#1E293B;color:#fff;padding:2px 7px;border-radius:6px}
+h1{font-size:26px;font-weight:800;letter-spacing:-.01em;margin-bottom:6px}
+h2{font-size:20px;font-weight:800;margin:0 0 10px}
+h3{font-size:15px;font-weight:800;margin:0 0 8px}
+p{font-size:13.5px;color:var(--ink2)}
+a{color:var(--blue);text-decoration:none}
+.hl{background:linear-gradient(transparent 60%,rgba(250,210,0,.7) 60%);padding-bottom:1px}
+.hl-s{background:linear-gradient(transparent 54%,rgba(250,195,0,.85) 54%);font-weight:800;padding-bottom:1px}
+.subtitle{font-size:13px;color:var(--ink3);margin-bottom:22px;line-height:1.9}
+.topbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:10px 0 22px}
+.badge{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--border);background:var(--white);border-radius:999px;padding:5px 11px;font-size:11.5px;font-weight:700;color:var(--ink2)}
+.badge .dot{width:8px;height:8px;border-radius:50%}
+.dot{width:8px;height:8px;border-radius:50%;display:inline-block}
+
+/* ── NAV ── */
+.nav{position:sticky;top:0;z-index:10;margin:0 0 28px;padding:10px 14px;background:rgba(255,255,255,.88);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-radius:0 0 18px 18px;border-bottom:1px solid rgba(226,232,240,.9);box-shadow:0 2px 14px rgba(15,23,42,.05)}
+.nav-inner{display:flex;gap:6px;flex-wrap:wrap}
+.nav a{font-size:11.5px;font-weight:700;background:transparent;border:1.5px solid var(--border);border-radius:999px;padding:5px 12px;color:var(--ink2);transition:all .18s}
+.nav a:hover{background:var(--blue-light);color:var(--blue);border-color:var(--blue-mid)}
+.nav a.active-page{background:var(--blue);color:#fff;border-color:var(--blue)}
+
+/* ── SECTION LABEL ── */
+.sec{font-size:10.5px;font-weight:800;color:var(--ink3);letter-spacing:.1em;text-transform:uppercase;margin:8px 0 10px;display:flex;align-items:center;gap:8px}
+.sec::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* ── LAYOUT ── */
+.unit-wrap{display:grid;grid-template-columns:1fr 220px;gap:18px;align-items:start;margin-bottom:12px}
+@media(max-width:780px){.unit-wrap{grid-template-columns:1fr}.unit-terms{position:static}.nav{position:static;border-radius:0}.hero-grid,.grid2,.grid3,.branch{grid-template-columns:1fr!important}}
+
+/* ── SIDEBAR ── */
+.unit-terms{position:sticky;top:64px;background:var(--white);border:1.5px solid var(--border);border-radius:18px;padding:15px 15px 11px;box-shadow:var(--shadow)}
+.unit-terms-hd{font-size:10px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:5px}
+.ut-item{margin-bottom:10px;padding-bottom:10px;border-bottom:.5px solid var(--border)}
+.ut-item:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none}
+.ut-sym{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:800;margin-bottom:2px}
+.ut-en{font-size:10px;color:var(--ink3);font-style:italic;margin-bottom:3px}
+.ut-def{font-size:11px;color:var(--ink2);line-height:1.55;margin-top:2px}
+.ut-ja{font-size:10.5px;color:var(--ink3);margin-top:2px}
+
+/* ── FLOW / STEPS ── */
+.flow{display:flex;flex-direction:column;gap:0}
+.step-wrap{display:flex;align-items:stretch;gap:14px}
+.step-line{display:flex;flex-direction:column;align-items:center}
+.num{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;flex-shrink:0;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+.vline{width:2px;flex:1;min-height:20px;background:var(--border);margin:5px 0}
+.step-wrap:last-child .vline{background:transparent}
+.step-box{flex:1;border:1.5px solid var(--border);border-radius:18px;padding:17px 19px;background:var(--white);margin-bottom:12px;box-shadow:var(--shadow);transition:box-shadow .2s,transform .2s}
+.step-box:hover{box-shadow:var(--shadow-md);transform:translateY(-1px)}
+.step-title{font-size:15px;font-weight:800;margin-bottom:9px}
+.step-desc{font-size:13px;color:var(--ink2);line-height:1.9}
+.step-desc ul{padding-left:20px;margin-top:8px}
+.step-desc li{margin:3px 0}
+
+/* ── GRIDS ── */
+.hero-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:12px;margin:12px 0}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:10px 0}
+
+/* ── CARDS ── */
+.card{border:1.5px solid var(--border);border-radius:14px;padding:12px 14px;background:var(--white);box-shadow:var(--shadow)}
+.card-label{font-size:10.5px;color:var(--ink3);margin-bottom:4px;font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+.card-val{font-size:16px;font-weight:800;margin-bottom:3px;font-family:'JetBrains Mono',monospace}
+.card-sub{font-size:11.5px;color:var(--ink2);line-height:1.55;margin-top:4px}
+.b-green{border-color:#6EE7B7;background:#ECFDF5}
+.b-red{border-color:#FCA5A5;background:#FEF2F2}
+.b-blue{border-color:var(--blue-mid);background:var(--blue-light)}
+.b-amber{border-color:#FCD34D;background:#FFFBEB}
+.b-purple{border-color:#C4B5FD;background:#F5F3FF}
+.b-teal{border-color:#99F6E4;background:#F0FDFA}
+
+/* ── NOTE & CALLOUT ── */
+.note-box{border:1.5px solid var(--border);border-radius:14px;background:var(--white);padding:13px 15px;margin-top:10px}
+.note-title{font-size:12px;font-weight:800;margin-bottom:5px}
+.note-text{font-size:12.5px;color:var(--ink2);line-height:1.65}
+.callout{padding:13px 16px;border-radius:14px;border:1.5px solid var(--border);margin-top:10px;background:var(--white)}
+.callout-title{font-size:12px;font-weight:800;margin-bottom:5px}
+.kids-box{background:#FFFBEB;border:1.5px solid #FCD34D;border-radius:14px;padding:13px 15px;margin-top:12px}
+.kids-title{font-size:12px;font-weight:800;color:#92400E;margin-bottom:5px}
+.kids-text{font-size:12.5px;color:#78350F;line-height:1.65}
+
+/* ── COMPARE TABLE ── */
+.compare-table{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:12px;border-radius:12px;overflow:hidden;border:1.5px solid var(--border)}
+.compare-table th{background:var(--gray-light);padding:9px 13px;text-align:left;font-weight:700;font-size:11.5px;color:var(--ink2);border-bottom:1.5px solid var(--border)}
+.compare-table td{padding:9px 13px;border-bottom:1px solid var(--border);color:var(--ink2);background:var(--white)}
+.compare-table tr:last-child td{border-bottom:none}
+
+/* ── BRANCH ── */
+.branch{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+.branch-cell{border:1.5px solid var(--border);border-radius:14px;padding:12px 14px;background:var(--white)}
+.branch-lbl{font-size:11px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px}
+.branch-val{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink)}
+
+/* ── PIPELINE ── */
+.pipeline{display:flex;align-items:center;gap:6px;margin:10px 0;flex-wrap:wrap}
+.pipe-box{background:var(--blue-light);border:1.5px solid var(--blue-mid);border-radius:10px;padding:6px 12px;font-size:12px;font-weight:700;color:var(--blue)}
+.pipe-arr{color:var(--ink3);font-size:16px;font-weight:700}
+
+/* ── CODE BLOCKS — LIGHT THEME ── */
+.r-console{margin-top:12px;background:#0f172a;color:#e5e7eb;border-radius:14px;border:1px solid #1e293b;overflow:hidden;box-shadow:0 2px 10px rgba(2,6,23,.15)}
+.r-topbar{display:flex;align-items:center;justify-content:space-between;background:#111827;padding:9px 14px;border-bottom:1px solid #1f2937}
+.r-dots{display:flex;gap:7px}
+.r-dot{width:10px;height:10px;border-radius:50%}
+.r-title{font-size:11px;color:#94a3b8;font-family:'JetBrains Mono',monospace;font-weight:600}
+.r-body{font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.8;padding:14px 16px;white-space:pre-wrap;overflow-x:auto;background:#0f172a;color:#e5e7eb}
+.r-cmd{color:#e5e7eb}
+.r-out{color:#86efac;font-style:italic}
+.r-prompt{color:#94A3B8;font-weight:700;user-select:none}
+.r-red{color:#f87171}
+/* Syntax colours — light IDE theme */
+.r-green{color:#86efac}
+.r-yellow{color:#fde68a}
+.r-gray{color:#64748b;font-style:italic}
+.r-cyan{color:#67e8f9}
+.r-string{color:#fca5a5}
+.r-purple{color:#c4b5fd}
+
+/* ── PRACTICE BLOCK ── */
+.practice-block{margin-top:14px;background:var(--white);border:1.5px solid var(--border);border-radius:20px;overflow:hidden;box-shadow:var(--shadow-md)}
+.practice-header{padding:13px 19px;display:flex;align-items:center;gap:8px}
+.practice-header-title{color:#fff;font-size:12px;font-weight:800;letter-spacing:.06em}
+.practice-tabs{display:flex;gap:0;border-bottom:1.5px solid var(--border);background:var(--gray-light);overflow-x:auto}
+.ptab{padding:9px 16px;font-size:11.5px;font-weight:700;cursor:pointer;border:none;background:transparent;color:var(--ink3);border-bottom:2.5px solid transparent;white-space:nowrap;transition:all .18s}
+.ptab.active{color:var(--blue);border-bottom-color:var(--blue);background:var(--white)}
+.ptab:hover:not(.active){color:var(--ink2);background:rgba(255,255,255,.7)}
+.practice-body{padding:17px 19px}
+.practice-panel{display:block}
+.practice-panel+.practice-panel{border-top:1.5px solid var(--border);margin-top:18px;padding-top:18px}
+
+/* ── LEVEL BADGES ── */
+.level-badge{display:inline-flex;align-items:center;gap:5px;border-radius:8px;padding:4px 10px;font-size:11px;font-weight:800;margin-bottom:10px;letter-spacing:.02em}
+.l1-badge{background:#ECFDF5;color:#059669;border:1.5px solid #A7F3D0}
+.l2-badge{background:#EEF0FF;color:#4F46E5;border:1.5px solid #C5CAF6}
+.l3-badge{background:#F5F3FF;color:#7C3AED;border:1.5px solid #DDD6FE}
+.l4-badge{background:#FFFBEB;color:#D97706;border:1.5px solid #FDE68A}
+
+.practice-goal{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:10px;line-height:1.75}
+.practice-hint{background:#FFFBEB;border:1.5px solid #FDE68A;border-radius:10px;padding:9px 13px;font-size:12px;color:#92400E;margin-top:8px;line-height:1.65}
+
+/* ── ANSWER BUTTON ── */
+.practice-answer{margin-top:12px}
+.show-answer-btn{font-size:11.5px;font-weight:700;background:var(--white);border:1.5px solid var(--border);border-radius:999px;padding:6px 15px;cursor:pointer;color:var(--ink2);transition:all .2s;display:inline-flex;align-items:center;gap:5px}
+.show-answer-btn:hover{background:var(--blue-light);color:var(--blue);border-color:var(--blue-mid);transform:translateY(-1px);box-shadow:0 3px 10px rgba(88,101,242,.15)}
+.answer-content{display:none;margin-top:8px}
+.answer-content.visible{display:block}
+
+/* ── SCENARIO ── */
+.scenario-box{background:var(--gray-light);border:1.5px solid var(--border);border-radius:12px;padding:13px 15px;margin-bottom:10px}
+.scenario-label{font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin-bottom:5px}
+.scenario-text{font-size:13px;color:var(--ink2);line-height:1.8}
+.task-list{margin-top:10px;padding-left:0;list-style:none}
+.task-list li{font-size:12.5px;color:var(--ink2);padding:5px 0;display:flex;align-items:flex-start;gap:7px}
+.task-list li::before{content:"▶";color:var(--blue);font-size:10px;margin-top:3px;flex-shrink:0}
+
+/* ── MCQ ── */
+.mcq-block{background:var(--white);border:1.5px solid var(--border);border-radius:18px;overflow:hidden;box-shadow:var(--shadow-md);margin-bottom:12px}
+.mcq-header{padding:12px 18px;display:flex;align-items:center;justify-content:space-between}
+.mcq-header-title{color:#fff;font-size:12px;font-weight:800;letter-spacing:.06em}
+.mcq-score-badge{font-size:12px;font-weight:800;color:#fff;background:rgba(255,255,255,.2);border-radius:999px;padding:3px 10px}
+.mcq-progress{background:rgba(255,255,255,.25);height:4px}
+.mcq-progress-bar{height:4px;background:rgba(255,255,255,.7);transition:width .4s}
+.mcq-body{padding:16px 18px}
+.mcq-q{margin-bottom:18px;padding-bottom:18px;border-bottom:1px solid var(--border)}
+.mcq-q:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none}
+.mcq-qnum{font-size:10px;font-weight:800;color:var(--ink3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+.mcq-qtext{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:10px;line-height:1.65}
+.mcq-stem{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:8px;line-height:1.65}
+.mcq-opts{display:flex;flex-direction:column;gap:6px}
+.mcq-opt{text-align:left;padding:9px 14px;border:1.5px solid var(--border);border-radius:12px;background:var(--white);font-size:12.5px;cursor:pointer;transition:all .18s;color:var(--ink2);font-family:'Inter',sans-serif;font-weight:500}
+.mcq-opt:hover:not(:disabled){background:var(--blue-light);border-color:var(--blue-mid);color:var(--blue);transform:translateX(2px)}
+.mcq-opt.correct{background:#ECFDF5;border-color:#6EE7B7;color:#065F46;font-weight:700}
+.mcq-opt.wrong{background:#FEF2F2;border-color:#FCA5A5;color:#991B1B}
+.mcq-opt:disabled{cursor:not-allowed;opacity:.7}
+.mcq-fb{font-size:12px;margin-top:7px;padding:7px 11px;border-radius:9px;display:none;font-weight:600}
+.mcq-fb.show{display:block}
+.mcq-fb.ok{background:#ECFDF5;color:#065F46;border:1px solid #A7F3D0}
+.mcq-fb.ng{background:#FEF2F2;color:#991B1B;border:1px solid #FCA5A5}
+
+/* ── FILL BLANK ── */
+.fill-blank{background:#EEF2FF;border:1.5px solid var(--blue-mid);border-radius:6px;padding:1px 5px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--blue);font-weight:700}
+
+/* ── MISC ── */
+.div{height:1px;background:var(--border);margin:24px 0}
+.mini-pill{display:inline-flex;align-items:center;gap:4px;background:var(--gray-light);border:1px solid var(--border);border-radius:999px;padding:2px 8px;font-size:11px;font-weight:700;color:var(--ink2)}
+.pill-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.opt-label{font-size:11px;font-weight:700;color:var(--ink3);margin-right:4px}
+.small{font-size:11px;color:var(--ink3)}
+.active{display:block}
+
+/* Score bar */
+.score-bar-wrap{background:var(--border);border-radius:999px;height:5px;overflow:hidden;margin-top:4px}
+.score-bar{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--green),var(--teal));transition:width .4s}
+
+/* MCQ states (compat) */
+.correct{background:#ECFDF5!important;border-color:#6EE7B7!important;color:#065F46!important}
+.wrong{background:#FEF2F2!important;border-color:#FCA5A5!important;color:#991B1B!important}
+.reveal-correct{background:#FFFBEB!important;border-color:#FDE68A!important;color:#92400E!important}
+.show{display:block!important}
+.fb-ok{background:#ECFDF5;color:#065F46;border:1px solid #A7F3D0;border-radius:9px;padding:6px 10px;font-size:12px;font-weight:600}
+.fb-ng{background:#FEF2F2;color:#991B1B;border:1px solid #FCA5A5;border-radius:9px;padding:6px 10px;font-size:12px;font-weight:600}
+
+/* ── FOOTER ── */
+.footer{font-size:11.5px;color:var(--ink3);margin-top:36px;text-align:center;padding-top:20px;border-top:1px solid var(--border)}
+
+</style>
+</head>
+<body>
+
+<h1>9618 A Level — Algorithms &amp; Data Structures <span style="font-size:14px;font-weight:500;color:var(--ink3)">/ Practice &amp; Reference</span></h1>
+
+<div class="nav">
+  <div class="nav-inner">
+    <a href="index.html">← Home</a>
+    <a href="linear-search.html">Linear Search</a>
+    <a href="binary-search.html">Binary Search</a>
+    <a href="insertion-sort.html">Insertion Sort</a>
+    <a href="bubble-sort.html">Bubble Sort</a>
+    <a href="adt-operations.html">ADT Operations</a>
+    <a href="recursion.html">Recursion</a>
+    <a href="oop.html">OOP</a>
+    <a href="oop-games.html">OOP Games 🎮</a>
+    <a href="files-exceptions.html">Files &amp; Exceptions</a>
+    <a href="final-quiz.html" class="active-page">Final Quiz</a>
+  </div>
+</div>
+
+<!-- ============================================================ FINAL QUIZ ============================================================ -->
+<div id="finalquiz" class="sec">Final Check — Algorithms &amp; Data Structures</div>
+<div class="callout">
+  <div class="callout-title" style="color:var(--blue)">🎯 Quick Knowledge Check</div>
+  <p>Test your understanding of all the algorithms and data structures covered. These are typical exam-style questions for Cambridge 9618.</p>
+</div>
+
+<div class="mcq-block" id="quiz99">
+  <div class="mcq-header"><span class="mcq-header-title">🧠 Final Quiz — 9618 Algorithms</span><span class="mcq-score-badge" id="score99">0 / 8</span></div>
+  <div class="mcq-body">
+
+    <div class="mcq-q"><div class="mcq-qnum">Q1</div><div class="mcq-qtext">Which condition MUST be true before using binary search?</div><div class="mcq-opts"><button class="mcq-opt" onclick="check(this,'wrong','99-1')"><span class="opt-label">A</span> The list must contain only integers</button><button class="mcq-opt" onclick="check(this,'correct','99-1')"><span class="opt-label">B</span> The list must be sorted</button><button class="mcq-opt" onclick="check(this,'wrong','99-1')"><span class="opt-label">C</span> The list must have an even number of elements</button><button class="mcq-opt" onclick="check(this,'wrong','99-1')"><span class="opt-label">D</span> The list must be stored as a linked list</button></div><div class="mcq-fb fb-ok" id="fb-99-1-ok">✅ Correct. Binary search only works on sorted data. It relies on eliminating half the list each step based on order.</div><div class="mcq-fb fb-ng" id="fb-99-1-ng">❌ Binary search requires sorted data. Without sorting, the "eliminate half" logic breaks down.</div></div>
+
+    <div class="mcq-q"><div class="mcq-qnum">Q2</div><div class="mcq-qtext">What is the time complexity of binary search in the worst case?</div><div class="mcq-opts"><button class="mcq-opt" onclick="check(this,'wrong','99-2')"><span class="opt-label">A</span> O(1)</button><button class="mcq-opt" onclick="check(this,'wrong','99-2')"><span class="opt-label">B</span> O(n)</button><button class="mcq-opt" onclick="check(this,'correct','99-2')"><span class="opt-label">C</span> O(log n)</button><button class="mcq-opt" onclick="check(this,'wrong','99-2')"><span class="opt-label">D</span> O(n²)</button></div><div class="mcq-fb fb-ok" id="fb-99-2-ok">✅ Correct. Binary search is O(log n) — halving the search space each step means 1000 elements need at most ~10 comparisons.</div><div class="mcq-fb fb-ng" id="fb-99-2-ng">❌ Binary search is O(log n) — much faster than O(n) linear search for large datasets.</div></div>
+
+    <div class="mcq-q"><div class="mcq-qnum">Q3</div><div class="mcq-qtext">In bubble sort, what does the <code>swapped</code> flag optimisation do?</div><div class="mcq-opts"><button class="mcq-opt" onclick="check(this,'wrong','99-3')"><span class="opt-label">A</span> It counts the number of swaps made</button><button class="mcq-opt" onclick="check(this,'correct','99-3')"><span class="opt-label">B</span> It stops the algorithm early if no swaps occurred in a pass</button><button class="mcq-opt" onclick="check(this,'wrong','99-3')"><span class="opt-label">C</span> It prevents swapping equal elements</button><button class="mcq-opt" onclick="check(this,'wrong','99-3')"><span class="opt-label">D</span> It makes bubble sort O(n log n)</button></div><div class="mcq-fb fb-ok" id="fb-99-3-ok">✅ Correct. If no swaps occur in a full pass, the list is already sorted. The flag stops unnecessary further passes.</div><div class="mcq-fb fb-ng" id="fb-99-3-ng">❌ The swapped flag is an early-exit optimisation. No swaps = sorted. It doesn't change the worst-case complexity.</div></div>
+
+    <div class="mcq-q"><div class="mcq-qnum">Q4</div><div class="mcq-qtext">What are the TWO essential parts of every recursive function?</div><div class="mcq-opts"><button class="mcq-opt" onclick="check(this,'wrong','99-4')"><span class="opt-label">A</span> A loop and a return statement</button><button class="mcq-opt" onclick="check(this,'correct','99-4')"><span class="opt-label">B</span> A base case and a recursive case</button><button class="mcq-opt" onclick="check(this,'wrong','99-4')"><span class="opt-label">C</span> A class and an object</button><button class="mcq-opt" onclick="check(this,'wrong','99-4')"><span class="opt-label">D</span> A try block and an except block</button></div><div class="mcq-fb fb-ok" id="fb-99-4-ok">✅ Correct. The base case stops recursion; the recursive case reduces the problem size each call.</div><div class="mcq-fb fb-ng" id="fb-99-4-ng">❌ Every recursive function needs a base case (stop condition) and a recursive case (self-call with smaller input).</div></div>
+
+    <div class="mcq-q"><div class="mcq-qnum">Q5</div><div class="mcq-qtext">A Stack uses which access principle?</div><div class="mcq-opts"><button class="mcq-opt" onclick="check(this,'wrong','99-5')"><span class="opt-label">A</span> FIFO — First In First Out</button><button class="mcq-opt" onclick="check(this,'correct','99-5')"><span class="opt-label">B</span> LIFO — Last In First Out</button><button class="mcq-opt" onclick="check(this,'wrong','99-5')"><span class="opt-label">C</span> Random access</button><button class="mcq-opt" onclick="check(this,'wrong','99-5')"><span class="opt-label">D</span> Sorted order</button></div><div class="mcq-fb fb-ok" id="fb-99-5-ok">✅ Correct. A Stack is LIFO — the last item pushed is the first item popped. Think of a stack of trays.</div><div class="mcq-fb fb-ng" id="fb-99-5-ng">❌ Stacks are LIFO. Queues are FIFO. Remember: Stack = pile of plates; Queue = queue at a bus stop.</div></div>
+
+    <div class="mcq-q"><div class="mcq-qnum">Q6</div><div class="mcq-qtext">In OOP, what is encapsulation?</div><div class="mcq-opts"><button class="mcq-opt" onclick="check(this,'wrong','99-6')"><span class="opt-label">A</span> A child class inheriting from a parent class</button><button class="mcq-opt" onclick="check(this,'wrong','99-6')"><span class="opt-label">B</span> Calling the same method on different object types</button><button class="mcq-opt" onclick="check(this,'correct','99-6')"><span class="opt-label">C</span> Hiding internal data and providing controlled access through methods</button><button class="mcq-opt" onclick="check(this,'wrong','99-6')"><span class="opt-label">D</span> Using recursion inside a class</button></div><div class="mcq-fb fb-ok" id="fb-99-6-ok">✅ Correct. Encapsulation protects data by making attributes private and providing getters/setters for controlled access.</div><div class="mcq-fb fb-ng" id="fb-99-6-ng">❌ Encapsulation = hiding data. Inheritance = parent/child. Polymorphism = same method, different behaviour.</div></div>
+
+    <div class="mcq-q"><div class="mcq-qnum">Q7</div><div class="mcq-qtext">What is the best case time complexity for insertion sort?</div><div class="mcq-opts"><button class="mcq-opt" onclick="check(this,'correct','99-7')"><span class="opt-label">A</span> O(n) — when the list is already sorted</button><button class="mcq-opt" onclick="check(this,'wrong','99-7')"><span class="opt-label">B</span> O(n²) — always the same</button><button class="mcq-opt" onclick="check(this,'wrong','99-7')"><span class="opt-label">C</span> O(log n) — same as binary search</button><button class="mcq-opt" onclick="check(this,'wrong','99-7')"><span class="opt-label">D</span> O(1) — constant time</button></div><div class="mcq-fb fb-ok" id="fb-99-7-ok">✅ Correct. When already sorted, insertion sort only needs one comparison per element → O(n). This makes it great for nearly-sorted data.</div><div class="mcq-fb fb-ng" id="fb-99-7-ng">❌ Best case for insertion sort is O(n) — when the list is already sorted, no shifting is needed.</div></div>
+
+    <div class="mcq-q"><div class="mcq-qnum">Q8</div><div class="mcq-qtext">Which file mode in Python will ADD data to the end of an existing file without deleting its contents?</div><div class="mcq-opts"><button class="mcq-opt" onclick="check(this,'wrong','99-8')"><span class="opt-label">A</span> "r"</button><button class="mcq-opt" onclick="check(this,'wrong','99-8')"><span class="opt-label">B</span> "w"</button><button class="mcq-opt" onclick="check(this,'correct','99-8')"><span class="opt-label">C</span> "a"</button><button class="mcq-opt" onclick="check(this,'wrong','99-8')"><span class="opt-label">D</span> "x"</button></div><div class="mcq-fb fb-ok" id="fb-99-8-ok">✅ Correct. "a" = append mode. It opens the file and writes at the end. "w" would overwrite everything.</div><div class="mcq-fb fb-ng" id="fb-99-8-ng">❌ "a" is append mode. "r" = read only. "w" = write (overwrites). Use "a" when you want to keep existing data.</div></div>
+
+  </div>
+  <div class="mcq-progress"><div class="mcq-progress-bar" id="prog99" style="width:0%"></div></div>
+</div>
+
+<div class="footer">9618 A Level — Algorithms &amp; Data Structures Practice Page · Cambridge International AS &amp; A Level Computer Science</div>
+
+<script>
+// ─── QUIZ LOGIC ───────────────────────────────────────────────────
+const answered = {};
+const totals = {99: 8};
+const scores = {99: 0};
+
+function check(btn, result, qid) {
+  if (answered[qid]) return;
+  answered[qid] = true;
+  const unit = qid.split('-')[0];
+  const q = btn.closest('.mcq-q');
+  const buttons = q.querySelectorAll('.mcq-opt');
+  buttons.forEach(b => {
+    b.disabled = true;
+    if (b.getAttribute('onclick') && b.getAttribute('onclick').includes("'correct'")) {
+      b.classList.add('reveal-correct');
+    }
+  });
+  const ok = document.getElementById('fb-' + qid + '-ok');
+  const ng = document.getElementById('fb-' + qid + '-ng');
+  if (result === 'correct') {
+    btn.classList.add('correct');
+    if (ok) ok.classList.add('show');
+    scores[unit]++;
+  } else {
+    btn.classList.add('wrong');
+    if (ng) ng.classList.add('show');
+  }
+  updateScore(unit);
+}
+
+function updateScore(unit) {
+  const scoreEl = document.getElementById('score' + unit);
+  const prog = document.getElementById('prog' + unit);
+  const total = totals[unit];
+  if (scoreEl) scoreEl.textContent = scores[unit] + ' / ' + total;
+  if (prog) prog.style.width = ((scores[unit] / total) * 100) + '%';
+}
+
+// ─── PRACTICE TABS ────────────────────────────────────────────────
+function switchTab(btn, panelId) {
+  const container = btn.closest('.practice-block');
+  container.querySelectorAll('.ptab').forEach(t => t.classList.remove('active'));
+  container.querySelectorAll('.practice-panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  const panel = document.getElementById(panelId);
+  if (panel) panel.classList.add('active');
+}
+
+// ─── SHOW ANSWER ──────────────────────────────────────────────────
+function toggleAnswer(btn) {
+  const content = btn.nextElementSibling;
+  if (content.classList.contains('visible')) {
+    content.classList.remove('visible');
+    btn.textContent = '👁 Show Answer';
+  } else {
+    content.classList.add('visible');
+    btn.textContent = '🙈 Hide Answer';
+  }
+}
+</script>
+</body>
+</html>

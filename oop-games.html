@@ -1,0 +1,1288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OOP Games — 9618 A Level CS</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blue:#5865F2;--blue-light:#EEF0FF;--blue-mid:#C5CAF6;
+  --green:#059669;--green-light:#ECFDF5;
+  --amber:#D97706;--amber-light:#FFFBEB;
+  --red:#DC2626;--red-light:#FEF2F2;
+  --purple:#7C3AED;--purple-light:#F5F3FF;
+  --pink:#DB2777;--pink-light:#FDF2F8;
+  --teal:#0D9488;--teal-light:#F0FDFA;
+  --gray:#6B7280;--gray-light:#F8FAFC;
+  --ink:#0F172A;--ink2:#475569;--ink3:#94A3B8;
+  --border:#E2E8F0;--bg:#F1F5F9;--white:#FFFFFF;
+  --shadow:0 1px 3px rgba(15,23,42,.07),0 4px 16px rgba(15,23,42,.04);
+  --shadow-md:0 4px 10px rgba(15,23,42,.08),0 16px 40px rgba(15,23,42,.06);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--ink);padding:32px 16px 80px;max-width:1120px;margin:0 auto;line-height:1.72}
+code,kbd,.mono{font-family:'JetBrains Mono',monospace}
+code{background:#EEF2FF;border:1px solid var(--blue-mid);padding:2px 6px;border-radius:6px;font-size:12px;color:var(--blue)}
+kbd{font-size:11px;background:#1E293B;color:#fff;padding:2px 7px;border-radius:6px}
+h1{font-size:26px;font-weight:800;letter-spacing:-.01em;margin-bottom:6px}
+h2{font-size:20px;font-weight:800;margin:0 0 10px}
+h3{font-size:15px;font-weight:800;margin:0 0 8px}
+p{font-size:13.5px;color:var(--ink2)}
+a{color:var(--blue);text-decoration:none}
+.hl{background:linear-gradient(transparent 60%,rgba(250,210,0,.7) 60%);padding-bottom:1px}
+.hl-s{background:linear-gradient(transparent 54%,rgba(250,195,0,.85) 54%);font-weight:800;padding-bottom:1px}
+.subtitle{font-size:13px;color:var(--ink3);margin-bottom:22px;line-height:1.9}
+.topbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:10px 0 22px}
+.badge{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--border);background:var(--white);border-radius:999px;padding:5px 11px;font-size:11.5px;font-weight:700;color:var(--ink2)}
+.badge .dot{width:8px;height:8px;border-radius:50%}
+.dot{width:8px;height:8px;border-radius:50%;display:inline-block}
+
+/* ── NAV ── */
+.nav{position:sticky;top:0;z-index:10;margin:0 0 28px;padding:10px 14px;background:rgba(255,255,255,.88);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-radius:0 0 18px 18px;border-bottom:1px solid rgba(226,232,240,.9);box-shadow:0 2px 14px rgba(15,23,42,.05)}
+.nav-inner{display:flex;gap:6px;flex-wrap:wrap}
+.nav a{font-size:11.5px;font-weight:700;background:transparent;border:1.5px solid var(--border);border-radius:999px;padding:5px 12px;color:var(--ink2);transition:all .18s}
+.nav a:hover{background:var(--blue-light);color:var(--blue);border-color:var(--blue-mid)}
+.nav a.active-page{background:var(--blue);color:#fff;border-color:var(--blue)}
+
+/* ── SECTION LABEL ── */
+.sec{font-size:10.5px;font-weight:800;color:var(--ink3);letter-spacing:.1em;text-transform:uppercase;margin:8px 0 10px;display:flex;align-items:center;gap:8px}
+.sec::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* ── LAYOUT ── */
+.unit-wrap{display:grid;grid-template-columns:1fr 220px;gap:18px;align-items:start;margin-bottom:12px}
+@media(max-width:780px){.unit-wrap{grid-template-columns:1fr}.unit-terms{position:static}.nav{position:static;border-radius:0}.hero-grid,.grid2,.grid3,.branch{grid-template-columns:1fr!important}}
+
+/* ── SIDEBAR ── */
+.unit-terms{position:sticky;top:64px;background:var(--white);border:1.5px solid var(--border);border-radius:18px;padding:15px 15px 11px;box-shadow:var(--shadow)}
+.unit-terms-hd{font-size:10px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:5px}
+.ut-item{margin-bottom:10px;padding-bottom:10px;border-bottom:.5px solid var(--border)}
+.ut-item:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none}
+.ut-sym{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:800;margin-bottom:2px}
+.ut-en{font-size:10px;color:var(--ink3);font-style:italic;margin-bottom:3px}
+.ut-def{font-size:11px;color:var(--ink2);line-height:1.55;margin-top:2px}
+.ut-ja{font-size:10.5px;color:var(--ink3);margin-top:2px}
+
+/* ── FLOW / STEPS ── */
+.flow{display:flex;flex-direction:column;gap:0}
+.step-wrap{display:flex;align-items:stretch;gap:14px}
+.step-line{display:flex;flex-direction:column;align-items:center}
+.num{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;flex-shrink:0;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+.vline{width:2px;flex:1;min-height:20px;background:var(--border);margin:5px 0}
+.step-wrap:last-child .vline{background:transparent}
+.step-box{flex:1;border:1.5px solid var(--border);border-radius:18px;padding:17px 19px;background:var(--white);margin-bottom:12px;box-shadow:var(--shadow);transition:box-shadow .2s,transform .2s}
+.step-box:hover{box-shadow:var(--shadow-md);transform:translateY(-1px)}
+.step-title{font-size:15px;font-weight:800;margin-bottom:9px}
+.step-desc{font-size:13px;color:var(--ink2);line-height:1.9}
+.step-desc ul{padding-left:20px;margin-top:8px}
+.step-desc li{margin:3px 0}
+
+/* ── GRIDS ── */
+.hero-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:12px;margin:12px 0}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:10px 0}
+
+/* ── CARDS ── */
+.card{border:1.5px solid var(--border);border-radius:14px;padding:12px 14px;background:var(--white);box-shadow:var(--shadow)}
+.card-label{font-size:10.5px;color:var(--ink3);margin-bottom:4px;font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+.card-val{font-size:16px;font-weight:800;margin-bottom:3px;font-family:'JetBrains Mono',monospace}
+.card-sub{font-size:11.5px;color:var(--ink2);line-height:1.55;margin-top:4px}
+.b-green{border-color:#6EE7B7;background:#ECFDF5}
+.b-red{border-color:#FCA5A5;background:#FEF2F2}
+.b-blue{border-color:var(--blue-mid);background:var(--blue-light)}
+.b-amber{border-color:#FCD34D;background:#FFFBEB}
+.b-purple{border-color:#C4B5FD;background:#F5F3FF}
+.b-teal{border-color:#99F6E4;background:#F0FDFA}
+
+/* ── NOTE & CALLOUT ── */
+.note-box{border:1.5px solid var(--border);border-radius:14px;background:var(--white);padding:13px 15px;margin-top:10px}
+.note-title{font-size:12px;font-weight:800;margin-bottom:5px}
+.note-text{font-size:12.5px;color:var(--ink2);line-height:1.65}
+.callout{padding:13px 16px;border-radius:14px;border:1.5px solid var(--border);margin-top:10px;background:var(--white)}
+.callout-title{font-size:12px;font-weight:800;margin-bottom:5px}
+.kids-box{background:#FFFBEB;border:1.5px solid #FCD34D;border-radius:14px;padding:13px 15px;margin-top:12px}
+.kids-title{font-size:12px;font-weight:800;color:#92400E;margin-bottom:5px}
+.kids-text{font-size:12.5px;color:#78350F;line-height:1.65}
+
+/* ── COMPARE TABLE ── */
+.compare-table{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:12px;border-radius:12px;overflow:hidden;border:1.5px solid var(--border)}
+.compare-table th{background:var(--gray-light);padding:9px 13px;text-align:left;font-weight:700;font-size:11.5px;color:var(--ink2);border-bottom:1.5px solid var(--border)}
+.compare-table td{padding:9px 13px;border-bottom:1px solid var(--border);color:var(--ink2);background:var(--white)}
+.compare-table tr:last-child td{border-bottom:none}
+
+/* ── BRANCH ── */
+.branch{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+.branch-cell{border:1.5px solid var(--border);border-radius:14px;padding:12px 14px;background:var(--white)}
+.branch-lbl{font-size:11px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px}
+.branch-val{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink)}
+
+/* ── PIPELINE ── */
+.pipeline{display:flex;align-items:center;gap:6px;margin:10px 0;flex-wrap:wrap}
+.pipe-box{background:var(--blue-light);border:1.5px solid var(--blue-mid);border-radius:10px;padding:6px 12px;font-size:12px;font-weight:700;color:var(--blue)}
+.pipe-arr{color:var(--ink3);font-size:16px;font-weight:700}
+
+/* ── CODE BLOCKS — LIGHT THEME ── */
+.r-console{margin-top:12px;background:#0f172a;color:#e5e7eb;border-radius:14px;border:1px solid #1e293b;overflow:hidden;box-shadow:0 2px 10px rgba(2,6,23,.15)}
+.r-topbar{display:flex;align-items:center;justify-content:space-between;background:#111827;padding:9px 14px;border-bottom:1px solid #1f2937}
+.r-dots{display:flex;gap:7px}
+.r-dot{width:10px;height:10px;border-radius:50%}
+.r-title{font-size:11px;color:#94a3b8;font-family:'JetBrains Mono',monospace;font-weight:600}
+.r-body{font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.8;padding:14px 16px;white-space:pre-wrap;overflow-x:auto;background:#0f172a;color:#e5e7eb}
+.r-cmd{color:#e5e7eb}
+.r-out{color:#86efac;font-style:italic}
+.r-prompt{color:#94A3B8;font-weight:700;user-select:none}
+.r-red{color:#f87171}
+/* Syntax colours — light IDE theme */
+.r-green{color:#86efac}
+.r-yellow{color:#fde68a}
+.r-gray{color:#64748b;font-style:italic}
+.r-cyan{color:#67e8f9}
+.r-string{color:#fca5a5}
+.r-purple{color:#c4b5fd}
+
+/* ── PRACTICE BLOCK ── */
+.practice-block{margin-top:14px;background:var(--white);border:1.5px solid var(--border);border-radius:20px;overflow:hidden;box-shadow:var(--shadow-md)}
+.practice-header{padding:13px 19px;display:flex;align-items:center;gap:8px}
+.practice-header-title{color:#fff;font-size:12px;font-weight:800;letter-spacing:.06em}
+.practice-tabs{display:flex;gap:0;border-bottom:1.5px solid var(--border);background:var(--gray-light);overflow-x:auto}
+.ptab{padding:9px 16px;font-size:11.5px;font-weight:700;cursor:pointer;border:none;background:transparent;color:var(--ink3);border-bottom:2.5px solid transparent;white-space:nowrap;transition:all .18s}
+.ptab.active{color:var(--blue);border-bottom-color:var(--blue);background:var(--white)}
+.ptab:hover:not(.active){color:var(--ink2);background:rgba(255,255,255,.7)}
+.practice-body{padding:17px 19px}
+.practice-panel{display:block}
+.practice-panel+.practice-panel{border-top:1.5px solid var(--border);margin-top:18px;padding-top:18px}
+
+/* ── LEVEL BADGES ── */
+.level-badge{display:inline-flex;align-items:center;gap:5px;border-radius:8px;padding:4px 10px;font-size:11px;font-weight:800;margin-bottom:10px;letter-spacing:.02em}
+.l1-badge{background:#ECFDF5;color:#059669;border:1.5px solid #A7F3D0}
+.l2-badge{background:#EEF0FF;color:#4F46E5;border:1.5px solid #C5CAF6}
+.l3-badge{background:#F5F3FF;color:#7C3AED;border:1.5px solid #DDD6FE}
+.l4-badge{background:#FFFBEB;color:#D97706;border:1.5px solid #FDE68A}
+
+.practice-goal{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:10px;line-height:1.75}
+.practice-hint{background:#FFFBEB;border:1.5px solid #FDE68A;border-radius:10px;padding:9px 13px;font-size:12px;color:#92400E;margin-top:8px;line-height:1.65}
+
+/* ── ANSWER BUTTON ── */
+.practice-answer{margin-top:12px}
+.show-answer-btn{font-size:11.5px;font-weight:700;background:var(--white);border:1.5px solid var(--border);border-radius:999px;padding:6px 15px;cursor:pointer;color:var(--ink2);transition:all .2s;display:inline-flex;align-items:center;gap:5px}
+.show-answer-btn:hover{background:var(--blue-light);color:var(--blue);border-color:var(--blue-mid);transform:translateY(-1px);box-shadow:0 3px 10px rgba(88,101,242,.15)}
+.answer-content{display:none;margin-top:8px}
+.answer-content.visible{display:block}
+
+/* ── SCENARIO ── */
+.scenario-box{background:var(--gray-light);border:1.5px solid var(--border);border-radius:12px;padding:13px 15px;margin-bottom:10px}
+.scenario-label{font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin-bottom:5px}
+.scenario-text{font-size:13px;color:var(--ink2);line-height:1.8}
+.task-list{margin-top:10px;padding-left:0;list-style:none}
+.task-list li{font-size:12.5px;color:var(--ink2);padding:5px 0;display:flex;align-items:flex-start;gap:7px}
+.task-list li::before{content:"▶";color:var(--blue);font-size:10px;margin-top:3px;flex-shrink:0}
+
+/* ── MCQ ── */
+.mcq-block{background:var(--white);border:1.5px solid var(--border);border-radius:18px;overflow:hidden;box-shadow:var(--shadow-md);margin-bottom:12px}
+.mcq-header{padding:12px 18px;display:flex;align-items:center;justify-content:space-between}
+.mcq-header-title{color:#fff;font-size:12px;font-weight:800;letter-spacing:.06em}
+.mcq-score-badge{font-size:12px;font-weight:800;color:#fff;background:rgba(255,255,255,.2);border-radius:999px;padding:3px 10px}
+.mcq-progress{background:rgba(255,255,255,.25);height:4px}
+.mcq-progress-bar{height:4px;background:rgba(255,255,255,.7);transition:width .4s}
+.mcq-body{padding:16px 18px}
+.mcq-q{margin-bottom:18px;padding-bottom:18px;border-bottom:1px solid var(--border)}
+.mcq-q:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none}
+.mcq-qnum{font-size:10px;font-weight:800;color:var(--ink3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+.mcq-qtext{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:10px;line-height:1.65}
+.mcq-stem{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:8px;line-height:1.65}
+.mcq-opts{display:flex;flex-direction:column;gap:6px}
+.mcq-opt{text-align:left;padding:9px 14px;border:1.5px solid var(--border);border-radius:12px;background:var(--white);font-size:12.5px;cursor:pointer;transition:all .18s;color:var(--ink2);font-family:'Inter',sans-serif;font-weight:500}
+.mcq-opt:hover:not(:disabled){background:var(--blue-light);border-color:var(--blue-mid);color:var(--blue);transform:translateX(2px)}
+.mcq-opt.correct{background:#ECFDF5;border-color:#6EE7B7;color:#065F46;font-weight:700}
+.mcq-opt.wrong{background:#FEF2F2;border-color:#FCA5A5;color:#991B1B}
+.mcq-opt:disabled{cursor:not-allowed;opacity:.7}
+.mcq-fb{font-size:12px;margin-top:7px;padding:7px 11px;border-radius:9px;display:none;font-weight:600}
+.mcq-fb.show{display:block}
+.mcq-fb.ok{background:#ECFDF5;color:#065F46;border:1px solid #A7F3D0}
+.mcq-fb.ng{background:#FEF2F2;color:#991B1B;border:1px solid #FCA5A5}
+
+/* ── FILL BLANK ── */
+.fill-blank{background:#EEF2FF;border:1.5px solid var(--blue-mid);border-radius:6px;padding:1px 5px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--blue);font-weight:700}
+
+/* ── MISC ── */
+.div{height:1px;background:var(--border);margin:24px 0}
+.mini-pill{display:inline-flex;align-items:center;gap:4px;background:var(--gray-light);border:1px solid var(--border);border-radius:999px;padding:2px 8px;font-size:11px;font-weight:700;color:var(--ink2)}
+.pill-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.opt-label{font-size:11px;font-weight:700;color:var(--ink3);margin-right:4px}
+.small{font-size:11px;color:var(--ink3)}
+.active{display:block}
+
+/* Score bar */
+.score-bar-wrap{background:var(--border);border-radius:999px;height:5px;overflow:hidden;margin-top:4px}
+.score-bar{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--green),var(--teal));transition:width .4s}
+
+/* MCQ states (compat) */
+.correct{background:#ECFDF5!important;border-color:#6EE7B7!important;color:#065F46!important}
+.wrong{background:#FEF2F2!important;border-color:#FCA5A5!important;color:#991B1B!important}
+.reveal-correct{background:#FFFBEB!important;border-color:#FDE68A!important;color:#92400E!important}
+.show{display:block!important}
+.fb-ok{background:#ECFDF5;color:#065F46;border:1px solid #A7F3D0;border-radius:9px;padding:6px 10px;font-size:12px;font-weight:600}
+.fb-ng{background:#FEF2F2;color:#991B1B;border:1px solid #FCA5A5;border-radius:9px;padding:6px 10px;font-size:12px;font-weight:600}
+
+/* ── FOOTER ── */
+.footer{font-size:11.5px;color:var(--ink3);margin-top:36px;text-align:center;padding-top:20px;border-top:1px solid var(--border)}
+
+</style>
+</head>
+<body>
+
+<h1>9618 A Level — OOP <span style="font-size:14px;font-weight:500;color:var(--ink3)">/ Practical Examples &amp; Games</span></h1>
+<p class="subtitle">Three hands-on Python programs — each designed to show a key OOP concept in action. From basic encapsulation to full inheritance hierarchies.</p>
+
+<div class="nav">
+  <div class="nav-inner">
+    <a href="index.html">← Home</a>
+    <a href="linear-search.html">Linear Search</a>
+    <a href="binary-search.html">Binary Search</a>
+    <a href="insertion-sort.html">Insertion Sort</a>
+    <a href="bubble-sort.html">Bubble Sort</a>
+    <a href="recursion.html">Recursion</a>
+    <a href="oop.html">OOP</a>
+    <a href="oop-games.html" class="active-page">OOP Games</a>
+    <a href="files-exceptions.html">Files &amp; Exceptions</a>
+    <a href="final-quiz.html">Final Quiz</a>
+  </div>
+</div>
+
+<div id="report" class="sec">Code 1 — Student Report Card</div>
+<div class="unit-wrap">
+  <div class="flow">
+    <div class="step-wrap">
+      <div class="step-line"><div class="num" style="background:var(--purple-light);color:var(--purple)">①</div><div class="vline"></div></div>
+      <div class="step-box">
+        <div class="step-title" style="color:var(--purple)">🏛️ OOP Concepts Used</div>
+        <div class="step-desc">Demonstrates the <span class="hl-s">core pillars of OOP</span>: <strong>Encapsulation</strong> (private <code>__grades</code> dict), <strong>Abstraction</strong> (user calls <code>get_report()</code> without knowing internals). A clean real-world model — data + behaviour in one class.<div class="grid2" style="margin-top:10px"><div class="card b-green"><div class="card-label">Encapsulation</div><div class="card-val">Private data</div><div class="card-sub"><code>self.__grades</code> can't be accessed directly from outside.</div></div><div class="card b-blue"><div class="card-label">Abstraction</div><div class="card-val">Hidden logic</div><div class="card-sub">Caller uses <code>get_report()</code> — doesn't need to know how grades are stored.</div></div></div></div>
+      </div>
+    </div>
+    <div class="step-wrap">
+      <div class="step-line"><div class="num" style="background:var(--purple-light);color:var(--purple)">②</div><div class="vline"></div></div>
+      <div class="step-box">
+        <div class="step-title" style="color:var(--purple)">🐍 Student Report Card</div>
+        <div class="r-console">
+          <div class="r-topbar"><div class="r-dots"><div class="r-dot" style="background:#ef4444"></div><div class="r-dot" style="background:#f59e0b"></div><div class="r-dot" style="background:#22c55e"></div></div><div class="r-title">student_report.py</div></div>
+          <div class="r-body"><span class="r-green">class</span> <span class="r-cyan">Student</span>:
+    <span class="r-green">def</span> <span class="r-cyan">__init__</span>(self, name, student_id):
+        self.__name = name
+        self.__id = student_id
+        self.__grades = {}
+
+    <span class="r-green">def</span> <span class="r-cyan">add_grade</span>(self, subject, score):
+        <span class="r-green">if</span> <span class="r-yellow">0</span> &lt;= score &lt;= <span class="r-yellow">100</span>:
+            self.__grades[subject] = score
+        <span class="r-green">else</span>:
+            <span class="r-yellow">print</span>(<span class="r-string">&quot;Score must be 0–100&quot;</span>)
+
+    <span class="r-green">def</span> <span class="r-cyan">get_average</span>(self):
+        <span class="r-green">if</span> <span class="r-green">not</span> self.__grades:
+            <span class="r-green">return</span> <span class="r-yellow">0</span>
+        <span class="r-green">return</span> <span class="r-yellow">sum</span>(self.__grades.values()) / <span class="r-yellow">len</span>(self.__grades)
+
+    <span class="r-green">def</span> <span class="r-cyan">get_report</span>(self):
+        <span class="r-yellow">print</span>(<span class="r-string">f&quot;\n📋 Report Card — {self.__name} (ID: {self.__id})&quot;</span>)
+        <span class="r-yellow">print</span>(<span class="r-string">&quot;-&quot;</span> * <span class="r-yellow">35</span>)
+        <span class="r-green">for</span> subject, score <span class="r-green">in</span> self.__grades.items():
+            grade = <span class="r-string">&quot;A&quot;</span> <span class="r-green">if</span> score &gt;= <span class="r-yellow">80</span> <span class="r-green">else</span> <span class="r-string">&quot;B&quot;</span> <span class="r-green">if</span> score &gt;= <span class="r-yellow">70</span> <span class="r-green">else</span> <span class="r-string">&quot;C&quot;</span> <span class="r-green">if</span> score &gt;= <span class="r-yellow">60</span> <span class="r-green">else</span> <span class="r-string">&quot;F&quot;</span>
+            <span class="r-yellow">print</span>(<span class="r-string">f&quot;  {subject:&lt;15} {score:&gt;3}   [{grade}]&quot;</span>)
+        <span class="r-yellow">print</span>(<span class="r-string">f&quot;  Average         {self.get_average():&gt;5.1f}&quot;</span>)
+
+s1 = Student(<span class="r-string">&quot;Daichi&quot;</span>, <span class="r-string">&quot;S001&quot;</span>)
+s1.add_grade(<span class="r-string">&quot;Computer Science&quot;</span>, <span class="r-yellow">91</span>)
+s1.add_grade(<span class="r-string">&quot;Mathematics&quot;</span>, <span class="r-yellow">85</span>)
+s1.add_grade(<span class="r-string">&quot;Physics&quot;</span>, <span class="r-yellow">78</span>)
+s1.get_report()</div>
+        </div>
+      </div>
+    </div>
+    <div class="practice-block">
+      <div class="practice-header" style="background:var(--purple)">
+        <span class="practice-header-title">✏️ PRACTICE — 🐍 Student Report Card</span>
+      </div>
+      <div class="practice-body">
+        
+        <div class="practice-panel" id="sr-l1">
+          <div class="level-badge l1-badge">✅ L1 — Reference</div>
+          <p class="practice-goal">Run the code. Then: (1) Trace what happens when <code>add_grade("Physics", 78)</code> is called. (2) What does <code>self.__grades</code> look like after all three <code>add_grade</code> calls? (3) Why is <code>__grades</code> private?</p>
+        
+        <div class="practice-answer">
+  <button class="show-answer-btn" onclick="this.nextElementSibling.classList.toggle('visible');this.textContent=this.nextElementSibling.classList.contains('visible')?'Hide Answer':'Show Answer'">Show Answer</button>
+  <div class="answer-content">
+    <div class="r-console">
+      <div class="r-topbar"><span class="r-dot" style="background:#ff5f56"></span><span class="r-dot" style="background:#ffbd2e"></span><span class="r-dot" style="background:#27c93f"></span><span style="margin-left:8px;font-size:11px;color:#888">trace</span></div>
+      <div class="r-body"><pre style="margin:0;white-space:pre-wrap;word-break:break-word;font-family:monospace">Trace: StudentReport — add_grade() and __grades attribute
+
+s1 = StudentReport(&quot;Alice&quot;, &quot;G12A&quot;)
+  __name  = &quot;Alice&quot;
+  __class = &quot;G12A&quot;
+  __grades = {}
+
+s1.add_grade(&quot;Computer Science&quot;, 91)
+  __grades = {&quot;Computer Science&quot;: 91}
+
+s1.add_grade(&quot;Mathematics&quot;, 85)
+  __grades = {&quot;Computer Science&quot;: 91, &quot;Mathematics&quot;: 85}
+
+s1.add_grade(&quot;Physics&quot;, 78)
+  __grades = {&quot;Computer Science&quot;: 91, &quot;Mathematics&quot;: 85, &quot;Physics&quot;: 78}
+
+get_average() → (91 + 85 + 78) / 3 = 84.67
+
+Why use private (__grades) instead of public?
+  → Encapsulation: outside code cannot do s1.__grades[&quot;CS&quot;] = 999
+  → Access goes through add_grade() which can validate input
+  → Name mangling: s1.__grades becomes s1._StudentReport__grades
+</pre></div>
+    </div>
+  </div>
+</div>
+        </div>
+        <div class="practice-panel" id="sr-l2">
+          <div class="level-badge l2-badge">📝 L2 — Fill-in</div>
+          <div class="r-console">
+          <div class="r-topbar"><div class="r-dots"><div class="r-dot" style="background:#ef4444"></div><div class="r-dot" style="background:#f59e0b"></div><div class="r-dot" style="background:#22c55e"></div></div><div class="r-title">Fill in the blanks</div></div>
+          <div class="r-body">class Student:
+    def __init__(self, name, student_id):
+        self.___ = name           # private attribute
+        self.___ = student_id     # private attribute
+        self.___ = {}             # empty dict for grades
+
+    def add_grade(self, subject, score):
+        if ___ &lt;= score &lt;= ___:   # valid range check
+            self.__grades[___] = ___
+        else:
+            print(&quot;Score must be 0–100&quot;)
+
+    def get_average(self):
+        if not self.__grades:
+            return ___
+        return ___(self.__grades.values()) / ___(self.__grades)</div>
+        </div>
+          <div class="practice-answer">
+            <button class="show-answer-btn" onclick="toggleAnswer(this)">👁 Show Answer</button>
+            <div class="answer-content">
+              <div class="r-console">
+                <div class="r-topbar"><div class="r-dots"><div class="r-dot" style="background:#ef4444"></div><div class="r-dot" style="background:#f59e0b"></div><div class="r-dot" style="background:#22c55e"></div></div><div class="r-title">Answer</div></div>
+                <div class="r-body"><span class="r-gray"># Fill-in answers:</span>
+self.__name = name
+self.__id = student_id
+self.__grades = {}
+
+<span class="r-yellow">0</span> &lt;= score &lt;= <span class="r-yellow">100</span>
+self.__grades[subject] = score
+
+<span class="r-green">return</span> <span class="r-yellow">0</span>
+<span class="r-yellow">sum</span>(self.__grades.values()) / <span class="r-yellow">len</span>(self.__grades)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="practice-panel" id="sr-l3">
+          <div class="level-badge l3-badge">🆓 L3 — Free Style</div>
+          <p class="practice-goal">Add three new methods to <code>Student</code>: <code>get_best_subject()</code> (returns subject with highest score), <code>get_worst_subject()</code>, and <code>passed(pass_mark=60)</code> that returns <code>True</code> if ALL subjects are ≥ pass_mark.</p>
+          <div class="practice-hint">💡 Hint: Use <code>max(dict, key=dict.get)</code> to find the key with the highest value.</div>
+          <div class="practice-answer">
+            <button class="show-answer-btn" onclick="toggleAnswer(this)">👁 Show Answer</button>
+            <div class="answer-content">
+              <div class="r-console">
+                <div class="r-topbar"><div class="r-dots"><div class="r-dot" style="background:#ef4444"></div><div class="r-dot" style="background:#f59e0b"></div><div class="r-dot" style="background:#22c55e"></div></div><div class="r-title">Answer</div></div>
+                <div class="r-body"><span class="r-green">class</span> <span class="r-cyan">Student</span>:
+    <span class="r-green">def</span> <span class="r-cyan">__init__</span>(self, name, student_id):
+        self.__name = name
+        self.__id = student_id
+        self.__grades = {}
+
+    <span class="r-green">def</span> <span class="r-cyan">add_grade</span>(self, subject, score):
+        <span class="r-green">if</span> <span class="r-yellow">0</span> &lt;= score &lt;= <span class="r-yellow">100</span>:
+            self.__grades[subject] = score
+
+    <span class="r-green">def</span> <span class="r-cyan">get_best_subject</span>(self):
+        <span class="r-green">if</span> <span class="r-green">not</span> self.__grades:
+            <span class="r-green">return</span> <span class="r-green">None</span>
+        <span class="r-green">return</span> <span class="r-yellow">max</span>(self.__grades, key=self.__grades.get)
+
+    <span class="r-green">def</span> <span class="r-cyan">get_worst_subject</span>(self):
+        <span class="r-green">if</span> <span class="r-green">not</span> self.__grades:
+            <span class="r-green">return</span> <span class="r-green">None</span>
+        <span class="r-green">return</span> <span class="r-yellow">min</span>(self.__grades, key=self.__grades.get)
+
+    <span class="r-green">def</span> <span class="r-cyan">passed</span>(self, pass_mark=<span class="r-yellow">60</span>):
+        <span class="r-green">return</span> <span class="r-yellow">all</span>(score &gt;= pass_mark <span class="r-green">for</span> score <span class="r-green">in</span> self.__grades.values())
+
+s = Student(<span class="r-string">&quot;Daichi&quot;</span>, <span class="r-string">&quot;S001&quot;</span>)
+s.add_grade(<span class="r-string">&quot;Computer Science&quot;</span>, <span class="r-yellow">91</span>)
+s.add_grade(<span class="r-string">&quot;Mathematics&quot;</span>, <span class="r-yellow">65</span>)
+s.add_grade(<span class="r-string">&quot;Physics&quot;</span>, <span class="r-yellow">45</span>)
+<span class="r-yellow">print</span>(s.get_best_subject())   <span class="r-gray"># Computer Science</span>
+<span class="r-yellow">print</span>(s.get_worst_subject())  <span class="r-gray"># Physics</span>
+<span class="r-yellow">print</span>(s.passed())             <span class="r-gray"># False</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="practice-panel" id="sr-l4">
+          <div class="level-badge l4-badge">🎯 L4 — Scenario</div>
+          <div class="scenario-box"><div class="scenario-label">Situation</div>
+          <div class="scenario-text">A school needs a system to manage an entire classroom. Create a <code>Classroom</code> class that holds a list of <code>Student</code> objects and can report the class average, find the top student, and print a full summary.</div></div>
+          <ul class="task-list">
+            <li>Create <code>Classroom</code> with <code>add_student()</code>, <code>class_average()</code>, <code>top_student()</code>, and <code>print_summary()</code></li>
+            <li>Create at least 3 students with different grades</li>
+            <li>Print a full class summary showing each student's report</li>
+            <li>Identify which OOP concepts (encapsulation, abstraction, composition) are used</li>
+          </ul>
+          <div class="practice-answer">
+            <button class="show-answer-btn" onclick="toggleAnswer(this)">👁 Show Answer</button>
+            <div class="answer-content">
+              <div class="r-console">
+                <div class="r-topbar"><div class="r-dots"><div class="r-dot" style="background:#ef4444"></div><div class="r-dot" style="background:#f59e0b"></div><div class="r-dot" style="background:#22c55e"></div></div><div class="r-title">Answer</div></div>
+                <div class="r-body"><span class="r-green">class</span> <span class="r-cyan">Student</span>:
+    <span class="r-green">def</span> <span class="r-cyan">__init__</span>(self, name, student_id):
+        self.__name = name
+        self.__id = student_id
+        self.__grades = {}
+
+    <span class="r-green">def</span> <span class="r-cyan">add_grade</span>(self, subject, score):
+        <span class="r-green">if</span> <span class="r-yellow">0</span> &lt;= score &lt;= <span class="r-yellow">100</span>:
+            self.__grades[subject] = score
+
+    <span class="r-green">def</span> <span class="r-cyan">get_average</span>(self):
+        <span class="r-green">if</span> <span class="r-green">not</span> self.__grades:
+            <span class="r-green">return</span> <span class="r-yellow">0</span>
+        <span class="r-green">return</span> <span class="r-yellow">sum</span>(self.__grades.values()) / <span class="r-yellow">len</span>(self.__grades)
+
+    <span class="r-green">def</span> <span class="r-cyan">letter_grade</span>(self, score):
+        <span class="r-green">if</span> score &gt;= <span class="r-yellow">80</span>: <span class="r-green">return</span> <span class="r-string">&quot;A&quot;</span>
+        <span class="r-green">if</span> score &gt;= <span class="r-yellow">70</span>: <span class="r-green">return</span> <span class="r-string">&quot;B&quot;</span>
+        <span class="r-green">if</span> score &gt;= <span class="r-yellow">60</span>: <span class="r-green">return</span> <span class="r-string">&quot;C&quot;</span>
+        <span class="r-green">return</span> <span class="r-string">&quot;F&quot;</span>
+
+    <span class="r-green">def</span> <span class="r-cyan">get_report</span>(self):
+        <span class="r-yellow">print</span>(<span class="r-string">f&quot;Report Card — {self.__name} (ID: {self.__id})&quot;</span>)
+        <span class="r-green">for</span> subject, score <span class="r-green">in</span> self.__grades.items():
+            <span class="r-yellow">print</span>(<span class="r-string">f&quot;  {subject:&lt;20} {score:&gt;3}  [{self.letter_grade(score)}]&quot;</span>)
+        avg = self.get_average()
+        <span class="r-yellow">print</span>(<span class="r-string">f&quot;  {&#x27;Average&#x27;:&lt;20} {avg:&gt;5.1f}  [{self.letter_grade(avg)}]&quot;</span>)
+
+
+<span class="r-green">class</span> <span class="r-cyan">Classroom</span>:
+    <span class="r-green">def</span> <span class="r-cyan">__init__</span>(self, class_name):
+        self.__name = class_name
+        self.__students = []
+
+    <span class="r-green">def</span> <span class="r-cyan">add_student</span>(self, student):
+        self.__students.append(student)
+
+    <span class="r-green">def</span> <span class="r-cyan">class_average</span>(self):
+        <span class="r-green">if</span> <span class="r-green">not</span> self.__students:
+            <span class="r-green">return</span> <span class="r-yellow">0</span>
+        avgs = [s.get_average() <span class="r-green">for</span> s <span class="r-green">in</span> self.__students]
+        <span class="r-green">return</span> <span class="r-yellow">sum</span>(avgs) / <span class="r-yellow">len</span>(avgs)
+
+    <span class="r-green">def</span> <span class="r-cyan">top_student</span>(self):
+        <span class="r-green">return</span> <span class="r-yellow">max</span>(self.__students, key=<span class="r-green">lambda</span> s: s.get_average())
+
+    <span class="r-green">def</span> <span class="r-cyan">print_summary</span>(self):
+        <span class="r-yellow">print</span>(<span class="r-string">f&quot;\n=== {self.__name} Summary ===&quot;</span>)
+        <span class="r-green">for</span> s <span class="r-green">in</span> self.__students:
+            s.get_report()
+        <span class="r-yellow">print</span>(<span class="r-string">f&quot;Class average: {self.class_average():.1f}&quot;</span>)
+
+
+<span class="r-gray"># Build a classroom</span>
+classroom = Classroom(<span class="r-string">&quot;Grade 12 CS&quot;</span>)
+students = [
+    (<span class="r-string">&quot;Alice&quot;</span>, <span class="r-string">&quot;S001&quot;</span>, {<span class="r-string">&quot;CS&quot;</span>: <span class="r-yellow">92</span>, <span class="r-string">&quot;Math&quot;</span>: <span class="r-yellow">88</span>, <span class="r-string">&quot;Physics&quot;</span>: <span class="r-yellow">75</span>}),
+    (<span class="r-string">&quot;Bob&quot;</span>,   <span class="r-string">&quot;S002&quot;</span>, {<span class="r-string">&quot;CS&quot;</span>: <span class="r-yellow">78</span>, <span class="r-string">&quot;Math&quot;</span>: <span class="r-yellow">65</span>, <span class="r-string">&quot;Physics&quot;</span>: <span class="r-yellow">82</span>}),
+    (<span class="r-string">&quot;Carol&quot;</span>, <span class="r-string">&quot;S003&quot;</span>, {<span class="r-string">&quot;CS&quot;</span>: <span class="r-yellow">95</span>, <span class="r-string">&quot;Math&quot;</span>: <span class="r-yellow">91</span>, <span class="r-string">&quot;Physics&quot;</span>: <span class="r-yellow">89</span>}),
+]
+<span class="r-green">for</span> name, sid, grades <span class="r-green">in</span> students:
+    s = Student(name, sid)
+    <span class="r-green">for</span> subj, score <span class="r-green">in</span> grades.items():
+        s.add_grade(subj, score)
+    classroom.add_student(s)
+
+classroom.print_summary()</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="unit-terms">
+    <div class="unit-terms-hd">📝 Key Terms</div>
+    <div class="ut-item"><div class="ut-sym" style="color:var(--purple)">__init__</div><div class="ut-en">constructor</div><div class="ut-def">Runs when object is created. Sets up attributes.</div></div><div class="ut-item"><div class="ut-sym" style="color:var(--red)">self.__x</div><div class="ut-en">private attribute</div><div class="ut-def">Double underscore makes it private — only accessible inside the class.</div></div><div class="ut-item"><div class="ut-sym" style="color:var(--green)">self.x</div><div class="ut-en">public attribute</div><div class="ut-def">Accessible from anywhere — no name mangling.</div></div><div class="ut-item"><div class="ut-sym">method</div><div class="ut-en">function in a class</div><div class="ut-def">A function defined inside a class that operates on the object's data.</div></div>
+  </div>
+</div>
+
+<div id="game1" class="sec">Code 2 — Number Guessing Game 🎮</div>
+<div class="unit-wrap">
+  <div class="flow">
+    <div class="step-wrap">
+      <div class="step-line"><div class="num" style="background:var(--blue-light);color:var(--blue)">①</div><div class="vline"></div></div>
+      <div class="step-box">
+        <div class="step-title" style="color:var(--blue)">🎮 Why OOP for Games?</div>
+        <div class="step-desc">Shows how OOP is used to model <span class="hl-s">game state</span>. The <code>NumberGame</code> class <strong>encapsulates</strong> the secret number so it can't be read directly. The <code>Player</code> class tracks stats independently — demonstrating <strong>separation of concerns</strong>.<div class="grid2" style="margin-top:10px"><div class="card b-green"><div class="card-label">State Hiding</div><div class="card-val">self.__secret</div><div class="card-sub">The secret number is private — users must call <code>guess()</code>, not read it directly.</div></div><div class="card b-blue"><div class="card-label">Separation</div><div class="card-val">2 classes</div><div class="card-sub"><code>Player</code> tracks stats. <code>NumberGame</code> handles logic. Each has one job.</div></div></div></div>
+      </div>
+    </div>
+    <div class="step-wrap">
+      <div class="step-line"><div class="num" style="background:var(--blue-light);color:var(--blue)">②</div><div class="vline"></div></div>
+      <div class="step-box">
+        <div class="step-title" style="color:var(--blue)">🐍 Number Guessing Game</div>
+        <div class="r-console">
+          <div class="r-topbar"><div class="r-dots"><div class="r-dot" style="background:#ef4444"></div><div class="r-dot" style="background:#f59e0b"></div><div class="r-dot" style="background:#22c55e"></div></div><div class="r-title">number_game.py</div></div>
+          <div class="r-body"><span class="r-green">import</span> <span class="r-yellow">random</span>
+
+<span class="r-green">class</span> <span class="r-cyan">Player</span>:
+    <span class="r-green">def</span> <span class="r-cyan">__init__</span>(self, name):
+        self.name = name
+        self.attempts = <span class="r-yellow">0</span>
+        self.wins = <span class="r-yellow">0</span>
+
+    <span class="r-green">def</span> <span class="r-cyan">record_win</span>(self, attempts):
+        self.wins += <span class="r-yellow">1</span>
+        self.attempts += attempts
+
+    <span class="r-green">def</span> <span class="r-cyan">get_stats</span>(self):
+        avg = self.attempts / self.wins <span class="r-green">if</span> self.wins &gt; <span class="r-yellow">0</span> <span class="r-green">else</span> <span class="r-yellow">0</span>
+        <span class="r-green">return</span> <span class="r-string">f&quot;{self.name}: {self.wins} wins, avg {avg:.1f} attempts&quot;</span>
+
+
+<span class="r-green">class</span> <span class="r-cyan">NumberGame</span>:
+    <span class="r-green">def</span> <span class="r-cyan">__init__</span>(self, player, low=<span class="r-yellow">1</span>, high=<span class="r-yellow">100</span>):
+        self.__player = player
+        self.__low = low
+        self.__high = high
+        self.__secret = <span class="r-yellow">random</span>.randint(low, high)
+        self.__attempts = <span class="r-yellow">0</span>
+        self.__max_attempts = <span class="r-yellow">7</span>
+
+    <span class="r-green">def</span> <span class="r-cyan">guess</span>(self, number):
+        self.__attempts += <span class="r-yellow">1</span>
+        <span class="r-green">if</span> number &lt; self.__low <span class="r-green">or</span> number &gt; self.__high:
+            <span class="r-green">return</span> <span class="r-string">f&quot;Out of range! Guess between {self.__low} and {self.__high}.&quot;</span>
+        <span class="r-green">if</span> number &lt; self.__secret:
+            <span class="r-green">return</span> <span class="r-string">f&quot;Too low!  ({self.__max_attempts - self.__attempts} guesses left)&quot;</span>
+        <span class="r-green">elif</span> number &gt; self.__secret:
+            <span class="r-green">return</span> <span class="r-string">f&quot;Too high! ({self.__max_attempts - self.__attempts} guesses left)&quot;</span>
+        <span class="r-green">else</span>:
+            self.__player.record_win(self.__attempts)
+            <span class="r-green">return</span> <span class="r-string">f&quot;Correct! You got it in {self.__attempts} attempts!&quot;</span>
+
+    <span class="r-green">def</span> <span class="r-cyan">is_over</span>(self):
+        <span class="r-green">return</span> self.__attempts &gt;= self.__max_attempts
+
+    <span class="r-green">def</span> <span class="r-cyan">reveal</span>(self):
+        <span class="r-green">return</span> <span class="r-string">f&quot;The number was {self.__secret}.&quot;</span>
+
+
+<span class="r-gray"># --- Play ---</span>
+player = Player(<span class="r-string">&quot;Daichi&quot;</span>)
+game = NumberGame(player)
+
+<span class="r-green">for</span> g <span class="r-green">in</span> [<span class="r-yellow">50</span>, <span class="r-yellow">75</span>, <span class="r-yellow">60</span>, <span class="r-yellow">55</span>, <span class="r-yellow">52</span>, <span class="r-yellow">54</span>, <span class="r-yellow">53</span>]:
+    result = game.guess(g)
+    <span class="r-yellow">print</span>(<span class="r-string">f&quot;Guess {g}: {result}&quot;</span>)
+    <span class="r-green">if</span> <span class="r-string">&quot;Correct&quot;</span> <span class="r-green">in</span> result <span class="r-green">or</span> game.is_over():
+        <span class="r-green">break</span>
+
+<span class="r-green">if</span> game.is_over() <span class="r-green">and</span> <span class="r-string">&quot;Correct&quot;</span> <span class="r-green">not</span> <span class="r-green">in</span> result:
+    <span class="r-yellow">print</span>(game.reveal())
+
+<span class="r-yellow">print</span>(player.get_stats())</div>
+        </div>
+      </div>
+    </div>
+    <div class="practice-block">
+      <div class="practice-header" style="background:var(--blue)">
+        <span class="practice-header-title">✏️ PRACTICE — 🐍 Number Guessing Game</span>
+      </div>
+      <div class="practice-body">
+        
+        <div class="practice-panel" id="ng-l1">
+          <div class="level-badge l1-badge">✅ L1 — Reference</div>
+          <p class="practice-goal">Run the code with different guess sequences. Then answer: (1) Why is <code>__secret</code> private? What would happen if it were public? (2) What does <code>record_win(self.__attempts)</code> do? (3) Trace <code>player.get_stats()</code> after one win with 4 attempts.</p>
+        
+        <div class="practice-answer">
+  <button class="show-answer-btn" onclick="this.nextElementSibling.classList.toggle('visible');this.textContent=this.nextElementSibling.classList.contains('visible')?'Hide Answer':'Show Answer'">Show Answer</button>
+  <div class="answer-content">
+    <div class="r-console">
+      <div class="r-topbar"><span class="r-dot" style="background:#ff5f56"></span><span class="r-dot" style="background:#ffbd2e"></span><span class="r-dot" style="background:#27c93f"></span><span style="margin-left:8px;font-size:11px;color:#888">trace</span></div>
+      <div class="r-body"><pre style="margin:0;white-space:pre-wrap;word-break:break-word;font-family:monospace">Trace: Player and NumberGame interaction
+(assume game.__secret = 53, __max_attempts = 7)
+
+player = Player(&quot;Daichi&quot;)
+  wins=0, attempts=0
+
+game = NumberGame(player)
+  __secret=53, __attempts=0
+
+game.guess(50):  __attempts→1  50 &lt; 53  &quot;Too low! (6 guesses left)&quot;
+game.guess(75):  __attempts→2  75 &gt; 53  &quot;Too high! (5 guesses left)&quot;
+game.guess(60):  __attempts→3  60 &gt; 53  &quot;Too high! (4 guesses left)&quot;
+game.guess(55):  __attempts→4  55 &gt; 53  &quot;Too high! (3 guesses left)&quot;
+game.guess(52):  __attempts→5  52 &lt; 53  &quot;Too low! (2 guesses left)&quot;
+game.guess(53):  __attempts→6  53==53   → player.record_win(6)
+                               &quot;Correct in 6 attempts!&quot;
+
+After record_win(6):
+  player.wins=1, player.attempts=6
+  get_stats() → &quot;Daichi: 1 wins, avg 6.0 attempts&quot;
+</pre></div>
+    </div>
+  </div>
+</div>
+        </div>
+        <div class="practice-panel" id="ng-l2">
+          <div class="level-badge l2-badge">📝 L2 — Fill-in</div>
+          <div class="r-console">
+          <div class="r-topbar"><div class="r-dots"><div class="r-dot" style="background:#ef4444"></div><div class="r-dot" style="background:#f59e0b"></div><div class="r-dot" style="background:#22c55e"></div></div><div class="r-title">Fill in the blanks</div></div>
+          <div class="r-body">class NumberGame:
+    def __init__(self, player, low=1, high=100):
+        self.__player = ___
+        self.__secret = random.randint(___, ___)   # hidden number
+        self.__attempts = ___
+        self.__max_attempts = 7
+
+    def guess(self, number):
+        self.__attempts ___ 1           # increment
+        if number &lt; self.__secret:
+            return &quot;Too low!&quot;
+        elif number ___ self.__secret:
+            return &quot;Too high!&quot;
+        else:
+            self.__player.record_win(___)
+            return &quot;Correct!&quot;
+
+    def is_over(self):
+        return self.__attempts ___ self.__max_attempts</div>
+        </div>
+          <div class="practice-answer">
+            <button class="show-answer-btn" onclick="toggleAnswer(this)">👁 Show Answer</button>
+            <div class="answer-content">
+              <div class="r-console">
+                <div class="r-topbar"><div class="r-dots"><div class="r-dot" style="background:#ef4444"></div><div class="r-dot" style="background:#f59e0b"></div><div class="r-dot" style="background:#22c55e"></div></div><div class="r-title">Answer</div></div>
+                <div class="r-body"><span class="r-gray"># Fill-in answers:</span>
+self.__player = player
+<span class="r-yellow">random</span>.randint(low, high)
+self.__attempts = <span class="r-yellow">0</span>
+
+self.__attempts += <span class="r-yellow">1</span>
+
+<span class="r-green">elif</span> number &gt; self.__secret:
+
+self.__player.record_win(self.__attempts)
+
+<span class="r-green">return</span> self.__attempts &gt;= self.__max_attempts</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="practice-panel" id="ng-l3">
+          <div class="level-badge l3-badge">🆓 L3 — Free Style</div>
+          <p class="practice-goal">Extend the game: (1) Add a <code>play_again()</code> method that resets the game with a new secret number. (2) Add <code>losses</code> to <code>Player</code> and update <code>record_result(won, attempts)</code>. (3) Simulate playing 2 full games and print final stats.</p>
+          <div class="practice-hint">💡 Hint: To reset, just reassign <code>self.__secret</code> and <code>self.__attempts = 0</code>.</div>
+          <div class="practice-answer">
+            <button class="show-answer-btn" onclick="toggleAnswer(this)">👁 Show Answer</button>
+            <div class="answer-content">
+              <div class="r-console">
+                <div class="r-topbar"><div class="r-dots"><div class="r-dot" style="background:#ef4444"></div><div class="r-dot" style="background:#f59e0b"></div><div class="r-dot" style="background:#22c55e"></div></div><div class="r-title">Answer</div></div>
+                <div class="r-body"><span class="r-green">import</span> <span class="r-yellow">random</span>
+
+<span class="r-green">class</span> <span class="r-cyan">Player</span>:
+    <span class="r-green">def</span> <span class="r-cyan">__init__</span>(self, name):
+        self.name = name
+        self.wins = <span class="r-yellow">0</span>
+        self.losses = <span class="r-yellow">0</span>
+        self.total_attempts = <span class="r-yellow">0</span>
+
+    <span class="r-green">def</span> <span class="r-cyan">record_result</span>(self, won, attempts):
+        <span class="r-green">if</span> won:
+            self.wins += <span class="r-yellow">1</span>
+        <span class="r-green">else</span>:
+            self.losses += <span class="r-yellow">1</span>
+        self.total_attempts += attempts
+
+    <span class="r-green">def</span> <span class="r-cyan">get_stats</span>(self):
+        total = self.wins + self.losses
+        avg = self.total_attempts / total <span class="r-green">if</span> total &gt; <span class="r-yellow">0</span> <span class="r-green">else</span> <span class="r-yellow">0</span>
+        <span class="r-green">return</span> (<span class="r-string">f&quot;{self.name} | W:{self.wins} L:{self.losses} &quot;</span>
+                <span class="r-string">f&quot;| avg attempts: {avg:.1f}&quot;</span>)
+
+
+<span class="r-green">class</span> <span class="r-cyan">NumberGame</span>:
+    <span class="r-green">def</span> <span class="r-cyan">__init__</span>(self, player, low=<span class="r-yellow">1</span>, high=<span class="r-yellow">100</span>, max_attempts=<span class="r-yellow">7</span>):
+        self.__player = player
+        self.__low = low
+        self.__high = high
+        self.__max_attempts = max_attempts
+        self.__reset()
+
+    <span class="r-green">def</span> <span class="r-cyan">__reset</span>(self):
+        self.__secret = <span class="r-yellow">random</span>.randint(self.__low, self.__high)
+        self.__attempts = <span class="r-yellow">0</span>
+        self.__won = <span class="r-green">False</span>
+
+    <span class="r-green">def</span> <span class="r-cyan">guess</span>(self, number):
+        self.__attempts += <span class="r-yellow">1</span>
+        <span class="r-green">if</span> number &lt; self.__secret:
+            hint = <span class="r-string">&quot;Too low!&quot;</span>
+        <span class="r-green">elif</span> number &gt; self.__secret:
+            hint = <span class="r-string">&quot;Too high!&quot;</span>
+        <span class="r-green">else</span>:
+            self.__won = <span class="r-green">True</span>
+            self.__player.record_result(<span class="r-green">True</span>, self.__attempts)
+            <span class="r-green">return</span> <span class="r-string">f&quot;Correct in {self.__attempts} attempts!&quot;</span>
+        left = self.__max_attempts - self.__attempts
+        <span class="r-green">if</span> left == <span class="r-yellow">0</span>:
+            self.__player.record_result(<span class="r-green">False</span>, self.__attempts)
+            <span class="r-green">return</span> <span class="r-string">f&quot;Game over! The number was {self.__secret}.&quot;</span>
+        <span class="r-green">return</span> <span class="r-string">f&quot;{hint} ({left} left)&quot;</span>
+
+    <span class="r-green">def</span> <span class="r-cyan">play_again</span>(self):
+        self.__reset()
+
+<span class="r-gray"># Demo</span>
+p = Player(<span class="r-string">&quot;Daichi&quot;</span>)
+<span class="r-green">for</span> guesses <span class="r-green">in</span> [[<span class="r-yellow">50</span>,<span class="r-yellow">75</span>,<span class="r-yellow">62</span>,<span class="r-yellow">55</span>,<span class="r-yellow">58</span>,<span class="r-yellow">60</span>,<span class="r-yellow">61</span>], [<span class="r-yellow">50</span>,<span class="r-yellow">25</span>,<span class="r-yellow">37</span>,<span class="r-yellow">43</span>,<span class="r-yellow">40</span>,<span class="r-yellow">42</span>,<span class="r-yellow">41</span>]]:
+    game = NumberGame(p)
+    <span class="r-green">for</span> g <span class="r-green">in</span> guesses:
+        r = game.guess(g)
+        <span class="r-yellow">print</span>(<span class="r-string">f&quot;  Guess {g}: {r}&quot;</span>)
+        <span class="r-green">if</span> <span class="r-string">&quot;Correct&quot;</span> <span class="r-green">in</span> r <span class="r-green">or</span> <span class="r-string">&quot;over&quot;</span> <span class="r-green">in</span> r: <span class="r-green">break</span>
+    game.play_again()
+<span class="r-yellow">print</span>(p.get_stats())</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="practice-panel" id="ng-l4">
+          <div class="level-badge l4-badge">🎯 L4 — Scenario</div>
+          <div class="scenario-box"><div class="scenario-label">Situation</div>
+          <div class="scenario-text">Build a mini tournament: multiple players compete, each playing one game. Add a <code>Leaderboard</code> class that ranks players. Add a difficulty setting (easy/normal/hard) that changes the range and max attempts.</div></div>
+          <ul class="task-list">
+            <li>Add <code>difficulty</code> parameter to <code>NumberGame</code> — easy:(1–50, 10 guesses), normal:(1–100, 7), hard:(1–200, 6)</li>
+            <li>Create a <code>Leaderboard</code> class with <code>add_result(player)</code> and <code>show()</code></li>
+            <li>Simulate a 3-player tournament and display the leaderboard</li>
+          </ul>
+          <div class="practice-answer">
+            <button class="show-answer-btn" onclick="toggleAnswer(this)">👁 Show Answer</button>
+            <div class="answer-content">
+              <div class="r-console">
+                <div class="r-topbar"><div class="r-dots"><div class="r-dot" style="background:#ef4444"></div><div class="r-dot" style="background:#f59e0b"></div><div class="r-dot" style="background:#22c55e"></div></div><div class="r-title">Answer</div></div>
+                <div class="r-body"><span class="r-green">import</span> <span class="r-yellow">random</span>
+
+<span class="r-green">class</span> <span class="r-cyan">Player</span>:
+    <span class="r-green">def</span> <span class="r-cyan">__init__</span>(self, name):
+        self.name = name
+        self.__wins = <span class="r-yellow">0</span>
+        self.__losses = <span class="r-yellow">0</span>
+        self.__attempts_history = []
+
+    <span class="r-green">def</span> <span class="r-cyan">record_result</span>(self, won, attempts):
+        <span class="r-green">if</span> won: self.__wins += <span class="r-yellow">1</span>
+        <span class="r-green">else</span>:   self.__losses += <span class="r-yellow">1</span>
+        self.__attempts_history.append(attempts)
+
+    <span class="r-green">def</span> <span class="r-cyan">get_stats</span>(self):
+        total = self.__wins + self.__losses
+        <span class="r-green">if</span> total == <span class="r-yellow">0</span>: <span class="r-green">return</span> <span class="r-string">f&quot;{self.name}: no games played&quot;</span>
+        avg = <span class="r-yellow">sum</span>(self.__attempts_history) / total
+        best = <span class="r-yellow">min</span>(self.__attempts_history) <span class="r-green">if</span> self.__attempts_history <span class="r-green">else</span> <span class="r-yellow">0</span>
+        <span class="r-green">return</span> (<span class="r-string">f&quot;{self.name} | Wins:{self.__wins}/{total} &quot;</span>
+                <span class="r-string">f&quot;| Best:{best} | Avg:{avg:.1f}&quot;</span>)
+
+
+<span class="r-green">class</span> <span class="r-cyan">Leaderboard</span>:
+    <span class="r-green">def</span> <span class="r-cyan">__init__</span>(self):
+        self.__scores = []          <span class="r-gray"># list of (name, wins, avg)</span>
+
+    <span class="r-green">def</span> <span class="r-cyan">add_result</span>(self, player):
+        self.__scores.append(player)
+
+    <span class="r-green">def</span> <span class="r-cyan">show</span>(self):
+        <span class="r-yellow">print</span>(<span class="r-string">&quot;\n🏆 LEADERBOARD&quot;</span>)
+        ranked = <span class="r-yellow">sorted</span>(self.__scores,
+                        key=<span class="r-green">lambda</span> p: p.get_stats(), reverse=<span class="r-green">True</span>)
+        <span class="r-green">for</span> i, p <span class="r-green">in</span> <span class="r-yellow">enumerate</span>(ranked, <span class="r-yellow">1</span>):
+            <span class="r-yellow">print</span>(<span class="r-string">f&quot;  {i}. {p.get_stats()}&quot;</span>)
+
+
+<span class="r-green">class</span> <span class="r-cyan">NumberGame</span>:
+    <span class="r-green">def</span> <span class="r-cyan">__init__</span>(self, player, difficulty=<span class="r-string">&quot;normal&quot;</span>):
+        ranges = {<span class="r-string">&quot;easy&quot;</span>: (<span class="r-yellow">1</span>,<span class="r-yellow">50</span>,<span class="r-yellow">10</span>), <span class="r-string">&quot;normal&quot;</span>: (<span class="r-yellow">1</span>,<span class="r-yellow">100</span>,<span class="r-yellow">7</span>), <span class="r-string">&quot;hard&quot;</span>: (<span class="r-yellow">1</span>,<span class="r-yellow">200</span>,<span class="r-yellow">6</span>)}
+        low, high, max_att = ranges.get(difficulty, (<span class="r-yellow">1</span>,<span class="r-yellow">100</span>,<span class="r-yellow">7</span>))
+        self.__player = player
+        self.__low, self.__high = low, high
+        self.__secret = <span class="r-yellow">random</span>.randint(low, high)
+        self.__attempts = <span class="r-yellow">0</span>
+        self.__max_attempts = max_att
+
+    <span class="r-green">def</span> <span class="r-cyan">guess</span>(self, number):
+        self.__attempts += <span class="r-yellow">1</span>
+        <span class="r-green">if</span> number &lt; self.__secret:
+            result = <span class="r-string">&quot;Too low!&quot;</span>
+        <span class="r-green">elif</span> number &gt; self.__secret:
+            result = <span class="r-string">&quot;Too high!&quot;</span>
+        <span class="r-green">else</span>:
+            self.__player.record_result(<span class="r-green">True</span>, self.__attempts)
+            <span class="r-green">return</span> <span class="r-string">f&quot;Correct in {self.__attempts} attempts!&quot;</span>
+        <span class="r-green">if</span> self.__attempts &gt;= self.__max_attempts:
+            self.__player.record_result(<span class="r-green">False</span>, self.__attempts)
+            <span class="r-green">return</span> <span class="r-string">f&quot;Game over! Answer: {self.__secret}&quot;</span>
+        <span class="r-green">return</span> <span class="r-string">f&quot;{result} ({self.__max_attempts - self.__attempts} left)&quot;</span>
+
+
+<span class="r-gray"># Simulate a tournament</span>
+board = Leaderboard()
+players_data = [
+    (<span class="r-string">&quot;Alice&quot;</span>, <span class="r-string">&quot;easy&quot;</span>,   [<span class="r-yellow">25</span>, <span class="r-yellow">12</span>, <span class="r-yellow">18</span>, <span class="r-yellow">30</span>, <span class="r-yellow">22</span>, <span class="r-yellow">15</span>, <span class="r-yellow">10</span>]),
+    (<span class="r-string">&quot;Bob&quot;</span>,   <span class="r-string">&quot;normal&quot;</span>, [<span class="r-yellow">50</span>, <span class="r-yellow">75</span>, <span class="r-yellow">62</span>, <span class="r-yellow">68</span>, <span class="r-yellow">65</span>, <span class="r-yellow">67</span>, <span class="r-yellow">66</span>]),
+    (<span class="r-string">&quot;Carol&quot;</span>, <span class="r-string">&quot;hard&quot;</span>,   [<span class="r-yellow">100</span>,<span class="r-yellow">150</span>,<span class="r-yellow">125</span>,<span class="r-yellow">137</span>,<span class="r-yellow">131</span>,<span class="r-yellow">134</span>,<span class="r-yellow">132</span>]),
+]
+<span class="r-green">for</span> name, diff, guesses <span class="r-green">in</span> players_data:
+    p = Player(name)
+    g = NumberGame(p, diff)
+    <span class="r-green">for</span> guess <span class="r-green">in</span> guesses:
+        r = g.guess(guess)
+        <span class="r-green">if</span> <span class="r-string">&quot;Correct&quot;</span> <span class="r-green">in</span> r <span class="r-green">or</span> <span class="r-string">&quot;over&quot;</span> <span class="r-green">in</span> r: <span class="r-green">break</span>
+    board.add_result(p)
+
+board.show()</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="unit-terms">
+    <div class="unit-terms-hd">📝 Key Terms</div>
+    <div class="ut-item"><div class="ut-sym" style="color:var(--purple)">encapsulation</div><div class="ut-en">data hiding</div><div class="ut-def">Private <code>__secret</code> forces the user to interact through methods only.</div></div><div class="ut-item"><div class="ut-sym" style="color:var(--blue)">state</div><div class="ut-en">object memory</div><div class="ut-def">The values stored in an object's attributes at a given moment.</div></div><div class="ut-item"><div class="ut-sym">self.__attempts</div><div class="ut-en">private counter</div><div class="ut-def">Counts guesses internally — outside code can only read via <code>is_over()</code>.</div></div><div class="ut-item"><div class="ut-sym">record_win()</div><div class="ut-en">method call</div><div class="ut-def">Player updates its own state when the game calls this method.</div></div>
+  </div>
+</div>
+
+<div id="rpg" class="sec">Code 3 — RPG Battle ⚔️</div>
+<div class="unit-wrap">
+  <div class="flow">
+    <div class="step-wrap">
+      <div class="step-line"><div class="num" style="background:var(--red-light);color:var(--red)">①</div><div class="vline"></div></div>
+      <div class="step-box">
+        <div class="step-title" style="color:var(--red)">⚔️ Inheritance in Action</div>
+        <div class="step-desc">The flagship OOP example — shows all four pillars together. <code>Hero</code> and <code>Monster</code> <span class="hl-s">inherit</span> from <code>Character</code>, each <strong>overriding</strong> or <strong>extending</strong> behaviour. <code>take_damage()</code> is called polymorphically on any <code>Character</code>.<div class="grid2" style="margin-top:10px"><div class="card b-green"><div class="card-label">Inheritance</div><div class="card-val">Hero, Monster</div><div class="card-sub">Both inherit <code>attack()</code>, <code>take_damage()</code>, <code>status()</code> from <code>Character</code>.</div></div><div class="card b-blue"><div class="card-label">Polymorphism</div><div class="card-val">same method name</div><div class="card-sub"><code>target.take_damage()</code> works on both Hero and Monster — same call, different objects.</div></div></div></div>
+      </div>
+    </div>
+    <div class="step-wrap">
+      <div class="step-line"><div class="num" style="background:var(--red-light);color:var(--red)">②</div><div class="vline"></div></div>
+      <div class="step-box">
+        <div class="step-title" style="color:var(--red)">🐍 RPG Battle System</div>
+        <div class="r-console">
+          <div class="r-topbar"><div class="r-dots"><div class="r-dot" style="background:#ef4444"></div><div class="r-dot" style="background:#f59e0b"></div><div class="r-dot" style="background:#22c55e"></div></div><div class="r-title">rpg_battle.py</div></div>
+          <div class="r-body"><span class="r-green">import</span> <span class="r-yellow">random</span>
+
+<span class="r-green">class</span> <span class="r-cyan">Character</span>:
+    <span class="r-green">def</span> <span class="r-cyan">__init__</span>(self, name, hp, attack, defense):
+        self.name = name
+        self.__hp = hp
+        self.__max_hp = hp
+        self.attack_power = attack
+        self.defense = defense
+
+    <span class="r-green">def</span> <span class="r-cyan">take_damage</span>(self, amount):
+        damage = <span class="r-yellow">max</span>(<span class="r-yellow">0</span>, amount - self.defense)
+        self.__hp = <span class="r-yellow">max</span>(<span class="r-yellow">0</span>, self.__hp - damage)
+        <span class="r-green">return</span> damage
+
+    <span class="r-green">def</span> <span class="r-cyan">attack</span>(self, target):
+        dmg = <span class="r-yellow">random</span>.randint(self.attack_power - <span class="r-yellow">3</span>, self.attack_power + <span class="r-yellow">3</span>)
+        <span class="r-green">return</span> target.take_damage(dmg)
+
+    <span class="r-green">def</span> <span class="r-cyan">is_alive</span>(self):
+        <span class="r-green">return</span> self.__hp &gt; <span class="r-yellow">0</span>
+
+    <span class="r-green">def</span> <span class="r-cyan">get_hp</span>(self):
+        <span class="r-green">return</span> self.__hp
+
+    <span class="r-green">def</span> <span class="r-cyan">status</span>(self):
+        bar = <span class="r-string">&quot;█&quot;</span> * (self.__hp * <span class="r-yellow">10</span> // self.__max_hp)
+        <span class="r-green">return</span> <span class="r-string">f&quot;{self.name:&lt;12} HP: [{bar:&lt;10}] {self.__hp}/{self.__max_hp}&quot;</span>
+
+
+<span class="r-green">class</span> <span class="r-cyan">Hero</span>(Character):
+    <span class="r-green">def</span> <span class="r-cyan">__init__</span>(self, name):
+        <span class="r-yellow">super</span>().__init__(name, hp=<span class="r-yellow">100</span>, attack=<span class="r-yellow">15</span>, defense=<span class="r-yellow">5</span>)
+        self.__potions = <span class="r-yellow">2</span>
+
+    <span class="r-green">def</span> <span class="r-cyan">use_potion</span>(self):
+        <span class="r-green">if</span> self.__potions &gt; <span class="r-yellow">0</span>:
+            heal = <span class="r-yellow">random</span>.randint(<span class="r-yellow">20</span>, <span class="r-yellow">35</span>)
+            self.__potions -= <span class="r-yellow">1</span>
+            self.__dict__[<span class="r-string">&#x27;_Character__hp&#x27;</span>] = <span class="r-yellow">min</span>(
+                self.__dict__[<span class="r-string">&#x27;_Character__max_hp&#x27;</span>],
+                self.__dict__[<span class="r-string">&#x27;_Character__hp&#x27;</span>] + heal
+            )
+            <span class="r-green">return</span> <span class="r-string">f&quot;{self.name} used a potion! (+{heal} HP) [{self.__potions} left]&quot;</span>
+        <span class="r-green">return</span> <span class="r-string">&quot;No potions left!&quot;</span>
+
+
+<span class="r-green">class</span> <span class="r-cyan">Monster</span>(Character):
+    <span class="r-green">def</span> <span class="r-cyan">__init__</span>(self, name, level):
+        <span class="r-yellow">super</span>().__init__(name, hp=<span class="r-yellow">60</span> + level*<span class="r-yellow">10</span>, attack=<span class="r-yellow">10</span> + level*<span class="r-yellow">2</span>, defense=level)
+        self.level = level
+
+    <span class="r-green">def</span> <span class="r-cyan">special_attack</span>(self, target):
+        <span class="r-green">return</span> target.take_damage(self.attack_power * <span class="r-yellow">2</span>)
+
+
+<span class="r-gray"># --- Battle ---</span>
+hero    = Hero(<span class="r-string">&quot;Daichi&quot;</span>)
+monster = Monster(<span class="r-string">&quot;Dragon&quot;</span>, level=<span class="r-yellow">3</span>)
+
+<span class="r-yellow">print</span>(<span class="r-string">&quot;BATTLE START!&quot;</span>)
+round_num = <span class="r-yellow">1</span>
+<span class="r-green">while</span> hero.is_alive() <span class="r-green">and</span> monster.is_alive():
+    <span class="r-yellow">print</span>(<span class="r-string">f&quot;--- Round {round_num} ---&quot;</span>)
+    dmg = hero.attack(monster)
+    <span class="r-yellow">print</span>(<span class="r-string">f&quot;  {hero.name} hits {monster.name} for {dmg} damage!&quot;</span>)
+    <span class="r-green">if</span> hero.get_hp() &lt; <span class="r-yellow">40</span>:
+        <span class="r-yellow">print</span>(<span class="r-string">&quot; &quot;</span>, hero.use_potion())
+    <span class="r-green">if</span> round_num % <span class="r-yellow">3</span> == <span class="r-yellow">0</span>:
+        dmg = monster.special_attack(hero)
+        <span class="r-yellow">print</span>(<span class="r-string">f&quot;  {monster.name} SPECIAL ATTACKS for {dmg} damage!&quot;</span>)
+    <span class="r-green">else</span>:
+        dmg = monster.attack(hero)
+        <span class="r-yellow">print</span>(<span class="r-string">f&quot;  {monster.name} hits {hero.name} for {dmg} damage!&quot;</span>)
+    <span class="r-yellow">print</span>(<span class="r-string">f&quot;  {hero.status()}&quot;</span>)
+    <span class="r-yellow">print</span>(<span class="r-string">f&quot;  {monster.status()}&quot;</span>)
+    round_num += <span class="r-yellow">1</span>
+
+<span class="r-yellow">print</span>(<span class="r-string">&quot;Hero wins!&quot;</span> <span class="r-green">if</span> hero.is_alive() <span class="r-green">else</span> <span class="r-string">&quot;Monster wins...&quot;</span>)</div>
+        </div>
+      </div>
+    </div>
+    <div class="practice-block">
+      <div class="practice-header" style="background:var(--red)">
+        <span class="practice-header-title">✏️ PRACTICE — 🐍 RPG Battle System</span>
+      </div>
+      <div class="practice-body">
+        
+        <div class="practice-panel" id="rpg-l1">
+          <div class="level-badge l1-badge">✅ L1 — Reference</div>
+          <p class="practice-goal">Run the battle. Then: (1) List every attribute <code>Hero</code> inherits from <code>Character</code>. (2) Why does <code>Monster.__init__</code> call <code>super().__init__()</code>? (3) Draw an inheritance diagram showing Character → Hero and Character → Monster.</p>
+        
+        <div class="practice-answer">
+  <button class="show-answer-btn" onclick="this.nextElementSibling.classList.toggle('visible');this.textContent=this.nextElementSibling.classList.contains('visible')?'Hide Answer':'Show Answer'">Show Answer</button>
+  <div class="answer-content">
+    <div class="r-console">
+      <div class="r-topbar"><span class="r-dot" style="background:#ff5f56"></span><span class="r-dot" style="background:#ffbd2e"></span><span class="r-dot" style="background:#27c93f"></span><span style="margin-left:8px;font-size:11px;color:#888">trace</span></div>
+      <div class="r-body"><pre style="margin:0;white-space:pre-wrap;word-break:break-word;font-family:monospace">Trace: Hero(&quot;Daichi&quot;) — inherited attributes and methods
+
+Inheritance chain:  Hero → Character
+
+From Character.__init__:
+  self.name         = &quot;Daichi&quot;
+  self.__hp         = 100
+  self.__max_hp     = 100
+  self.attack_power = 15
+  self.defense      = 5
+
+From Hero.__init__ (added):
+  self.__potions    = 2
+
+Inherited methods from Character:
+  take_damage(amount)   → reduces __hp by (amount - self.defense)
+  attack(target)        → calls target.take_damage(self.attack_power)
+  is_alive()            → returns self.__hp &gt; 0
+  get_hp()              → returns self.__hp
+  status()              → prints hp bar + name
+
+Hero-only method:
+  use_potion()          → restores 30 hp (up to __max_hp)
+
+Inheritance diagram:
+  Character
+  ├── Hero     (adds: __potions, use_potion())
+  └── Monster  (adds: level, special_attack())
+</pre></div>
+    </div>
+  </div>
+</div>
+        </div>
+        <div class="practice-panel" id="rpg-l2">
+          <div class="level-badge l2-badge">📝 L2 — Fill-in</div>
+          <div class="r-console">
+          <div class="r-topbar"><div class="r-dots"><div class="r-dot" style="background:#ef4444"></div><div class="r-dot" style="background:#f59e0b"></div><div class="r-dot" style="background:#22c55e"></div></div><div class="r-title">Fill in the blanks</div></div>
+          <div class="r-body">class Character:
+    def __init__(self, name, hp, attack, defense):
+        self.name = ___
+        self.__hp = ___
+        self.attack_power = ___
+        self.defense = ___
+
+    def take_damage(self, amount):
+        damage = ___(0, amount - self.defense)  # can&#x27;t be negative
+        self.__hp = ___(0, self.__hp - damage)
+        return damage
+
+    def is_alive(self):
+        return self.__hp ___ 0
+
+class Hero(___):                 # inherits from Character
+    def __init__(self, name):
+        ___.__init__(name, hp=100, attack=15, defense=5)  # call parent
+
+class Monster(___):              # inherits from Character
+    def __init__(self, name, level):
+        ___.__init__(name, hp=60+level*10, attack=10+level*2, defense=level)</div>
+        </div>
+          <div class="practice-answer">
+            <button class="show-answer-btn" onclick="toggleAnswer(this)">👁 Show Answer</button>
+            <div class="answer-content">
+              <div class="r-console">
+                <div class="r-topbar"><div class="r-dots"><div class="r-dot" style="background:#ef4444"></div><div class="r-dot" style="background:#f59e0b"></div><div class="r-dot" style="background:#22c55e"></div></div><div class="r-title">Answer</div></div>
+                <div class="r-body"><span class="r-gray"># Fill-in answers:</span>
+self.name = name
+self.__hp = hp
+self.attack_power = attack
+self.defense = defense
+
+<span class="r-yellow">max</span>(<span class="r-yellow">0</span>, amount - self.defense)
+<span class="r-yellow">max</span>(<span class="r-yellow">0</span>, self.__hp - damage)
+
+<span class="r-green">return</span> self.__hp &gt; <span class="r-yellow">0</span>
+
+<span class="r-green">class</span> <span class="r-cyan">Hero</span>(Character):
+    <span class="r-yellow">super</span>().__init__(name, hp=<span class="r-yellow">100</span>, attack=<span class="r-yellow">15</span>, defense=<span class="r-yellow">5</span>)
+
+<span class="r-green">class</span> <span class="r-cyan">Monster</span>(Character):
+    <span class="r-yellow">super</span>().__init__(name, hp=<span class="r-yellow">60</span>+level*<span class="r-yellow">10</span>, ...)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="practice-panel" id="rpg-l3">
+          <div class="level-badge l3-badge">🆓 L3 — Free Style</div>
+          <p class="practice-goal">Add two new character classes: <code>Mage(Character)</code> with a <code>cast_spell(target)</code> method (costs mana, deals +10 bonus damage) and <code>Warrior(Character)</code> with a <code>shield_bash(target)</code> that deals attack + defense damage. Test both against a monster.</p>
+          <div class="practice-hint">💡 Hint: Add <code>self.__mana = 50</code> in Mage's <code>__init__</code>. Check mana before casting.</div>
+          <div class="practice-answer">
+            <button class="show-answer-btn" onclick="toggleAnswer(this)">👁 Show Answer</button>
+            <div class="answer-content">
+              <div class="r-console">
+                <div class="r-topbar"><div class="r-dots"><div class="r-dot" style="background:#ef4444"></div><div class="r-dot" style="background:#f59e0b"></div><div class="r-dot" style="background:#22c55e"></div></div><div class="r-title">Answer</div></div>
+                <div class="r-body"><span class="r-green">import</span> <span class="r-yellow">random</span>
+
+<span class="r-green">class</span> <span class="r-cyan">Character</span>:
+    <span class="r-green">def</span> <span class="r-cyan">__init__</span>(self, name, hp, attack, defense):
+        self.name = name
+        self.__hp = hp
+        self.__max_hp = hp
+        self.attack_power = attack
+        self.defense = defense
+
+    <span class="r-green">def</span> <span class="r-cyan">take_damage</span>(self, amount):
+        damage = <span class="r-yellow">max</span>(<span class="r-yellow">0</span>, amount - self.defense)
+        self.__hp = <span class="r-yellow">max</span>(<span class="r-yellow">0</span>, self.__hp - damage)
+        <span class="r-green">return</span> damage
+
+    <span class="r-green">def</span> <span class="r-cyan">heal</span>(self, amount):
+        self.__hp = <span class="r-yellow">min</span>(self.__max_hp, self.__hp + amount)
+
+    <span class="r-green">def</span> <span class="r-cyan">attack</span>(self, target):
+        dmg = <span class="r-yellow">random</span>.randint(self.attack_power - <span class="r-yellow">3</span>, self.attack_power + <span class="r-yellow">3</span>)
+        <span class="r-green">return</span> target.take_damage(dmg)
+
+    <span class="r-green">def</span> <span class="r-cyan">is_alive</span>(self):
+        <span class="r-green">return</span> self.__hp &gt; <span class="r-yellow">0</span>
+
+    <span class="r-green">def</span> <span class="r-cyan">get_hp</span>(self): <span class="r-green">return</span> self.__hp
+
+
+<span class="r-green">class</span> <span class="r-cyan">Mage</span>(Character):
+    <span class="r-green">def</span> <span class="r-cyan">__init__</span>(self, name):
+        <span class="r-yellow">super</span>().__init__(name, hp=<span class="r-yellow">70</span>, attack=<span class="r-yellow">25</span>, defense=<span class="r-yellow">2</span>)
+        self.__mana = <span class="r-yellow">50</span>
+
+    <span class="r-green">def</span> <span class="r-cyan">cast_spell</span>(self, target):
+        <span class="r-green">if</span> self.__mana &gt;= <span class="r-yellow">15</span>:
+            self.__mana -= <span class="r-yellow">15</span>
+            dmg = target.take_damage(self.attack_power + <span class="r-yellow">10</span>)
+            <span class="r-green">return</span> <span class="r-string">f&quot;{self.name} casts spell! {dmg} damage! (mana: {self.__mana})&quot;</span>
+        <span class="r-green">return</span> <span class="r-string">f&quot;{self.name} has no mana!&quot;</span>
+
+
+<span class="r-green">class</span> <span class="r-cyan">Warrior</span>(Character):
+    <span class="r-green">def</span> <span class="r-cyan">__init__</span>(self, name):
+        <span class="r-yellow">super</span>().__init__(name, hp=<span class="r-yellow">120</span>, attack=<span class="r-yellow">12</span>, defense=<span class="r-yellow">8</span>)
+
+    <span class="r-green">def</span> <span class="r-cyan">shield_bash</span>(self, target):
+        dmg = target.take_damage(self.attack_power + self.defense)
+        <span class="r-green">return</span> <span class="r-string">f&quot;{self.name} shield bashes for {dmg} damage!&quot;</span>
+
+
+<span class="r-gray"># Test new classes</span>
+mage    = Mage(<span class="r-string">&quot;Wizard&quot;</span>)
+warrior = Warrior(<span class="r-string">&quot;Knight&quot;</span>)
+monster = Character(<span class="r-string">&quot;Goblin&quot;</span>, hp=<span class="r-yellow">50</span>, attack=<span class="r-yellow">8</span>, defense=<span class="r-yellow">1</span>)
+
+<span class="r-yellow">print</span>(mage.cast_spell(monster))
+<span class="r-yellow">print</span>(warrior.shield_bash(monster))
+<span class="r-yellow">print</span>(<span class="r-string">f&quot;Goblin HP: {monster.get_hp()}&quot;</span>)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="practice-panel" id="rpg-l4">
+          <div class="level-badge l4-badge">🎯 L4 — Scenario</div>
+          <div class="scenario-box"><div class="scenario-label">Situation</div>
+          <div class="scenario-text">Refactor the battle system with a dedicated <code>Battle</code> class. Add a <code>rage</code> mechanic to Monster (damage bonus builds up). Add <code>critical_strike()</code> to Hero (double damage, usable every 4 rounds). <code>Battle</code> should log the full fight and print a summary.</div></div>
+          <ul class="task-list">
+            <li>Create <code>Battle(hero, monster)</code> with a <code>run()</code> method that returns a log list</li>
+            <li>Add <code>self.__rage</code> to <code>Monster</code> — increases each time it takes damage, resets after <code>rage_attack()</code></li>
+            <li>Add <code>critical_strike(target)</code> to <code>Hero</code> — 2× damage, used every 4th round</li>
+            <li>Print the battle log and declare the winner with round count</li>
+          </ul>
+          <div class="practice-answer">
+            <button class="show-answer-btn" onclick="toggleAnswer(this)">👁 Show Answer</button>
+            <div class="answer-content">
+              <div class="r-console">
+                <div class="r-topbar"><div class="r-dots"><div class="r-dot" style="background:#ef4444"></div><div class="r-dot" style="background:#f59e0b"></div><div class="r-dot" style="background:#22c55e"></div></div><div class="r-title">Answer</div></div>
+                <div class="r-body"><span class="r-green">import</span> <span class="r-yellow">random</span>
+
+<span class="r-green">class</span> <span class="r-cyan">Character</span>:
+    <span class="r-green">def</span> <span class="r-cyan">__init__</span>(self, name, hp, attack, defense):
+        self.name = name
+        self.__hp = hp
+        self.__max_hp = hp
+        self.attack_power = attack
+        self.defense = defense
+
+    <span class="r-green">def</span> <span class="r-cyan">take_damage</span>(self, amount):
+        damage = <span class="r-yellow">max</span>(<span class="r-yellow">0</span>, amount - self.defense)
+        self.__hp = <span class="r-yellow">max</span>(<span class="r-yellow">0</span>, self.__hp - damage)
+        <span class="r-green">return</span> damage
+
+    <span class="r-green">def</span> <span class="r-cyan">heal</span>(self, amount):
+        before = self.__hp
+        self.__hp = <span class="r-yellow">min</span>(self.__max_hp, self.__hp + amount)
+        <span class="r-green">return</span> self.__hp - before
+
+    <span class="r-green">def</span> <span class="r-cyan">attack</span>(self, target):
+        dmg = <span class="r-yellow">random</span>.randint(self.attack_power - <span class="r-yellow">3</span>, self.attack_power + <span class="r-yellow">3</span>)
+        <span class="r-green">return</span> target.take_damage(dmg)
+
+    <span class="r-green">def</span> <span class="r-cyan">is_alive</span>(self): <span class="r-green">return</span> self.__hp &gt; <span class="r-yellow">0</span>
+    <span class="r-green">def</span> <span class="r-cyan">get_hp</span>(self): <span class="r-green">return</span> self.__hp
+    <span class="r-green">def</span> <span class="r-cyan">status</span>(self):
+        bar = <span class="r-string">&quot;█&quot;</span> * (self.__hp * <span class="r-yellow">10</span> // self.__max_hp)
+        <span class="r-green">return</span> <span class="r-string">f&quot;{self.name:&lt;12} [{bar:&lt;10}] {self.__hp}/{self.__max_hp}&quot;</span>
+
+
+<span class="r-green">class</span> <span class="r-cyan">Hero</span>(Character):
+    <span class="r-green">def</span> <span class="r-cyan">__init__</span>(self, name):
+        <span class="r-yellow">super</span>().__init__(name, hp=<span class="r-yellow">100</span>, attack=<span class="r-yellow">15</span>, defense=<span class="r-yellow">5</span>)
+        self.__potions = <span class="r-yellow">2</span>
+
+    <span class="r-green">def</span> <span class="r-cyan">use_potion</span>(self):
+        <span class="r-green">if</span> self.__potions &gt; <span class="r-yellow">0</span>:
+            healed = self.heal(<span class="r-yellow">random</span>.randint(<span class="r-yellow">20</span>, <span class="r-yellow">35</span>))
+            self.__potions -= <span class="r-yellow">1</span>
+            <span class="r-green">return</span> <span class="r-string">f&quot;Potion used! +{healed} HP [{self.__potions} left]&quot;</span>
+        <span class="r-green">return</span> <span class="r-string">&quot;No potions!&quot;</span>
+
+    <span class="r-green">def</span> <span class="r-cyan">critical_strike</span>(self, target):
+        dmg = target.take_damage(self.attack_power * <span class="r-yellow">2</span>)
+        <span class="r-green">return</span> <span class="r-string">f&quot;CRITICAL! {dmg} damage!&quot;</span>
+
+
+<span class="r-green">class</span> <span class="r-cyan">Monster</span>(Character):
+    <span class="r-green">def</span> <span class="r-cyan">__init__</span>(self, name, level):
+        <span class="r-yellow">super</span>().__init__(name, hp=<span class="r-yellow">60</span>+level*<span class="r-yellow">10</span>, attack=<span class="r-yellow">10</span>+level*<span class="r-yellow">2</span>, defense=level)
+        self.level = level
+        self.__rage = <span class="r-yellow">0</span>
+
+    <span class="r-green">def</span> <span class="r-cyan">take_damage</span>(self, amount):
+        dmg = <span class="r-yellow">super</span>().take_damage(amount)
+        self.__rage = <span class="r-yellow">min</span>(<span class="r-yellow">10</span>, self.__rage + <span class="r-yellow">1</span>)  <span class="r-gray"># rage builds</span>
+        <span class="r-green">return</span> dmg
+
+    <span class="r-green">def</span> <span class="r-cyan">rage_attack</span>(self, target):
+        bonus = self.__rage * <span class="r-yellow">2</span>
+        dmg = target.take_damage(self.attack_power + bonus)
+        self.__rage = <span class="r-yellow">0</span>
+        <span class="r-green">return</span> <span class="r-string">f&quot;RAGE ATTACK (+{bonus})! {dmg} damage!&quot;</span>
+
+
+<span class="r-green">class</span> <span class="r-cyan">Battle</span>:
+    <span class="r-green">def</span> <span class="r-cyan">__init__</span>(self, hero, monster):
+        self.__hero = hero
+        self.__monster = monster
+        self.__log = []
+
+    <span class="r-green">def</span> <span class="r-cyan">run</span>(self):
+        self.__log.append(<span class="r-string">&quot;⚔️  BATTLE START&quot;</span>)
+        rnd = <span class="r-yellow">1</span>
+        <span class="r-green">while</span> self.__hero.is_alive() <span class="r-green">and</span> self.__monster.is_alive():
+            self.__log.append(<span class="r-string">f&quot;--- Round {rnd} ---&quot;</span>)
+            <span class="r-gray"># Hero turn</span>
+            <span class="r-green">if</span> rnd % <span class="r-yellow">4</span> == <span class="r-yellow">0</span>:
+                msg = self.__hero.critical_strike(self.__monster)
+            <span class="r-green">else</span>:
+                dmg = self.__hero.attack(self.__monster)
+                msg = <span class="r-string">f&quot;{self.__hero.name} attacks for {dmg}&quot;</span>
+            self.__log.append(<span class="r-string">f&quot;  {msg}&quot;</span>)
+            <span class="r-green">if</span> self.__hero.get_hp() &lt; <span class="r-yellow">35</span>:
+                self.__log.append(<span class="r-string">f&quot;  {self.__hero.use_potion()}&quot;</span>)
+            <span class="r-gray"># Monster turn</span>
+            <span class="r-green">if</span> rnd % <span class="r-yellow">3</span> == <span class="r-yellow">0</span>:
+                self.__log.append(<span class="r-string">f&quot;  {self.__monster.rage_attack(self.__hero)}&quot;</span>)
+            <span class="r-green">else</span>:
+                dmg = self.__monster.attack(self.__hero)
+                self.__log.append(<span class="r-string">f&quot;  {self.__monster.name} attacks for {dmg}&quot;</span>)
+            self.__log.append(<span class="r-string">f&quot;  {self.__hero.status()}&quot;</span>)
+            self.__log.append(<span class="r-string">f&quot;  {self.__monster.status()}&quot;</span>)
+            rnd += <span class="r-yellow">1</span>
+        winner = self.__hero.name <span class="r-green">if</span> self.__hero.is_alive() <span class="r-green">else</span> self.__monster.name
+        self.__log.append(<span class="r-string">f&quot;\n🏆 {winner} wins in {rnd-1} rounds!&quot;</span>)
+        <span class="r-green">return</span> self.__log
+
+    <span class="r-green">def</span> <span class="r-cyan">print_log</span>(self):
+        <span class="r-green">for</span> line <span class="r-green">in</span> self.__log:
+            <span class="r-yellow">print</span>(line)
+
+
+battle = Battle(Hero(<span class="r-string">&quot;Daichi&quot;</span>), Monster(<span class="r-string">&quot;Dragon&quot;</span>, level=<span class="r-yellow">3</span>))
+battle.run()
+battle.print_log()</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="unit-terms">
+    <div class="unit-terms-hd">📝 Key Terms</div>
+    <div class="ut-item"><div class="ut-sym" style="color:var(--purple)">inheritance</div><div class="ut-en">parent → child</div><div class="ut-def"><code>Hero(Character)</code> means Hero gets all of Character's methods automatically.</div></div><div class="ut-item"><div class="ut-sym" style="color:var(--blue)">super().__init__()</div><div class="ut-en">parent constructor</div><div class="ut-def">Calls the parent class's <code>__init__</code> to set up shared attributes.</div></div><div class="ut-item"><div class="ut-sym" style="color:var(--green)">polymorphism</div><div class="ut-en">many forms</div><div class="ut-def"><code>take_damage()</code> is called on both Hero and Monster objects — same interface.</div></div><div class="ut-item"><div class="ut-sym">override</div><div class="ut-en">redefine a method</div><div class="ut-def">Monster's <code>special_attack()</code> is a new method not in Character.</div></div>
+  </div>
+</div>
+
+<div class="footer">9618 A Level — OOP Practical Examples · Cambridge International AS &amp; A Level Computer Science</div>
+
+<script>
+function toggleAnswer(btn) {
+  const content = btn.nextElementSibling;
+  if (content.classList.contains('visible')) {
+    content.classList.remove('visible');
+    btn.textContent = '👁 Show Answer';
+  } else {
+    content.classList.add('visible');
+    btn.textContent = '🙈 Hide Answer';
+  }
+}
+</script>
+</body>
+</html>
