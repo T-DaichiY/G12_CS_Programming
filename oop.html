@@ -1,0 +1,1399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OOP — 9618 A Level CS</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blue:#5865F2;--blue-light:#EEF0FF;--blue-mid:#C5CAF6;
+  --green:#059669;--green-light:#ECFDF5;
+  --amber:#D97706;--amber-light:#FFFBEB;
+  --red:#DC2626;--red-light:#FEF2F2;
+  --purple:#7C3AED;--purple-light:#F5F3FF;
+  --pink:#DB2777;--pink-light:#FDF2F8;
+  --teal:#0D9488;--teal-light:#F0FDFA;
+  --gray:#6B7280;--gray-light:#F8FAFC;
+  --ink:#0F172A;--ink2:#475569;--ink3:#94A3B8;
+  --border:#E2E8F0;--bg:#F1F5F9;--white:#FFFFFF;
+  --shadow:0 1px 3px rgba(15,23,42,.07),0 4px 16px rgba(15,23,42,.04);
+  --shadow-md:0 4px 10px rgba(15,23,42,.08),0 16px 40px rgba(15,23,42,.06);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--ink);padding:32px 16px 80px;max-width:900px;margin:0 auto;line-height:1.72}
+code,kbd,.mono{font-family:'JetBrains Mono',monospace}
+code{background:#EEF2FF;border:1px solid var(--blue-mid);padding:2px 6px;border-radius:6px;font-size:12px;color:var(--blue)}
+kbd{font-size:11px;background:#1E293B;color:#fff;padding:2px 7px;border-radius:6px}
+h1{font-size:26px;font-weight:800;letter-spacing:-.01em;margin-bottom:6px}
+p{font-size:13.5px;color:var(--ink2)}
+a{color:var(--blue);text-decoration:none}
+
+/* NAV */
+.nav{position:sticky;top:0;z-index:10;margin:0 0 28px;padding:10px 14px;background:rgba(255,255,255,.88);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-radius:0 0 18px 18px;border-bottom:1px solid rgba(226,232,240,.9);box-shadow:0 2px 14px rgba(15,23,42,.05)}
+.nav-inner{display:flex;gap:6px;flex-wrap:wrap}
+.nav a{font-size:11.5px;font-weight:700;background:transparent;border:1.5px solid var(--border);border-radius:999px;padding:5px 12px;color:var(--ink2);transition:all .18s}
+.nav a:hover{background:var(--blue-light);color:var(--blue);border-color:var(--blue-mid)}
+.nav a.active-page{background:var(--blue);color:#fff;border-color:var(--blue)}
+
+/* SECTION LABEL */
+.sec{font-size:10.5px;font-weight:800;color:var(--ink3);letter-spacing:.1em;text-transform:uppercase;margin:8px 0 10px;display:flex;align-items:center;gap:8px}
+.sec::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* FLOW */
+.flow{display:flex;flex-direction:column;gap:0}
+.step-wrap{display:flex;align-items:stretch;gap:14px}
+.step-line{display:flex;flex-direction:column;align-items:center}
+.num{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;flex-shrink:0;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+.vline{width:2px;flex:1;min-height:20px;background:var(--border);margin:5px 0}
+.step-box{flex:1;border:1.5px solid var(--border);border-radius:18px;padding:17px 19px;background:var(--white);margin-bottom:12px;box-shadow:var(--shadow);transition:box-shadow .2s,transform .2s}
+.step-box:hover{box-shadow:var(--shadow-md);transform:translateY(-1px)}
+.step-title{font-size:15px;font-weight:800;margin-bottom:9px}
+.step-desc{font-size:13px;color:var(--ink2);line-height:1.9}
+
+/* OOP VISUAL */
+.oop-vis{background:#f8fafc;border:1.5px solid var(--border);border-radius:14px;padding:14px 16px;margin:12px 0}
+.oop-vis-title{font-size:10.5px;font-weight:800;color:var(--ink3);letter-spacing:.07em;text-transform:uppercase;margin-bottom:12px}
+
+/* V2 step items */
+.v2step{border:1.5px solid #94a3b8;border-radius:10px;padding:8px 12px;margin-bottom:6px;cursor:pointer;font-size:12px;transition:all .3s;user-select:none}
+.v2step:hover{background:var(--blue-light);border-color:var(--blue)}
+
+/* V4 buttons */
+.v4btn{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;border-radius:7px;padding:6px 10px;margin-bottom:5px;cursor:pointer;transition:all .25s;text-align:center;user-select:none}
+.v4btn:hover{opacity:.85}
+
+/* V7 cards */
+.v7card{background:#fff;border:2px solid var(--border);border-radius:14px;padding:12px 16px;min-width:100px;text-align:center;cursor:pointer;transition:transform .2s,box-shadow .2s;user-select:none}
+.v7card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md)}
+.v7method{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;margin-top:6px;padding:3px 8px;border-radius:6px;border:1.5px solid currentColor;display:inline-block;transition:all .2s}
+
+/* COMPARE TABLE */
+.compare-table{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:12px;border-radius:12px;overflow:hidden;border:1.5px solid var(--border)}
+.compare-table th{background:var(--gray-light);padding:9px 13px;text-align:left;font-weight:700;font-size:11.5px;color:var(--ink2);border-bottom:1.5px solid var(--border)}
+.compare-table td{padding:9px 13px;border-bottom:1px solid var(--border);color:var(--ink2);background:var(--white)}
+.compare-table tr:last-child td{border-bottom:none}
+
+/* CODE BLOCKS */
+.r-console{margin-top:12px;background:#0f172a;color:#e5e7eb;border-radius:14px;border:1px solid #1e293b;overflow:hidden;box-shadow:0 2px 10px rgba(2,6,23,.15)}
+.r-topbar{display:flex;align-items:center;justify-content:space-between;background:#111827;padding:9px 14px;border-bottom:1px solid #1f2937}
+.r-dots{display:flex;gap:7px}
+.r-dot{width:10px;height:10px;border-radius:50%}
+.r-title{font-size:11px;color:#94a3b8;font-family:'JetBrains Mono',monospace;font-weight:600}
+.r-body{font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.8;padding:14px 16px;overflow-x:auto;background:#0f172a;color:#e5e7eb}
+.r-green{color:#86efac}
+.r-yellow{color:#fde68a}
+.r-gray{color:#64748b;font-style:italic}
+.r-cyan{color:#67e8f9}
+.r-string{color:#fca5a5}
+.r-purple{color:#c4b5fd}
+
+/* PRACTICE BLOCK */
+.practice-block{margin-top:14px;background:var(--white);border:1.5px solid var(--border);border-radius:20px;overflow:hidden;box-shadow:var(--shadow-md)}
+.practice-header{padding:13px 19px;display:flex;align-items:center;gap:8px}
+.practice-header-title{color:#fff;font-size:12px;font-weight:800;letter-spacing:.06em}
+.practice-body{padding:17px 19px}
+.practice-panel{display:block}
+.practice-panel+.practice-panel{border-top:1.5px solid var(--border);margin-top:18px;padding-top:18px}
+.level-badge{display:inline-flex;align-items:center;gap:5px;border-radius:8px;padding:4px 10px;font-size:11px;font-weight:800;margin-bottom:10px;letter-spacing:.02em}
+.l1-badge{background:#ECFDF5;color:#059669;border:1.5px solid #A7F3D0}
+.l2-badge{background:#EEF0FF;color:#4F46E5;border:1.5px solid #C5CAF6}
+.l3-badge{background:#F5F3FF;color:#7C3AED;border:1.5px solid #DDD6FE}
+.l4-badge{background:#FFFBEB;color:#D97706;border:1.5px solid #FDE68A}
+.practice-goal{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:10px;line-height:1.75}
+.practice-hint{background:#FFFBEB;border:1.5px solid #FDE68A;border-radius:10px;padding:9px 13px;font-size:12px;color:#92400E;margin-top:8px;line-height:1.65}
+.practice-answer{margin-top:12px}
+.show-answer-btn{font-size:11.5px;font-weight:700;background:var(--white);border:1.5px solid var(--border);border-radius:999px;padding:6px 15px;cursor:pointer;color:var(--ink2);transition:all .2s;display:inline-flex;align-items:center;gap:5px}
+.show-answer-btn:hover{background:var(--blue-light);color:var(--blue);border-color:var(--blue-mid);transform:translateY(-1px);box-shadow:0 3px 10px rgba(88,101,242,.15)}
+.answer-content{display:none;margin-top:8px}
+.answer-content.visible{display:block}
+
+/* MINI PRACTICE */
+.mini-practice{border:1.5px solid var(--border);border-radius:14px;padding:14px 18px;margin-top:14px}
+
+/* SCENARIO */
+.scenario-box{background:var(--gray-light);border:1.5px solid var(--border);border-radius:12px;padding:13px 15px;margin-bottom:10px}
+.scenario-label{font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin-bottom:5px}
+.scenario-text{font-size:13px;color:var(--ink2);line-height:1.8}
+.task-list{margin-top:10px;padding-left:0;list-style:none}
+.task-list li{font-size:12.5px;color:var(--ink2);padding:5px 0;display:flex;align-items:flex-start;gap:7px}
+.task-list li::before{content:"▶";color:var(--blue);font-size:10px;margin-top:3px;flex-shrink:0}
+
+.footer{font-size:11.5px;color:var(--ink3);margin-top:36px;text-align:center;padding-top:20px;border-top:1px solid var(--border)}
+@media(max-width:600px){.nav{position:static;border-radius:0}.step-wrap{gap:10px}}
+</style>
+</head>
+<body>
+
+<h1>9618 A Level — Object-Oriented Programming <span style="font-size:14px;font-weight:500;color:var(--ink3)">/ Step-by-Step Guide</span></h1>
+
+<div class="nav">
+  <div class="nav-inner">
+    <a href="index.html">← Home</a>
+    <a href="linear-search.html">Linear Search</a>
+    <a href="binary-search.html">Binary Search</a>
+    <a href="insertion-sort.html">Insertion Sort</a>
+    <a href="bubble-sort.html">Bubble Sort</a>
+    <a href="adt-operations.html">ADT Operations</a>
+    <a href="recursion.html">Recursion</a>
+    <a href="oop.html" class="active-page">OOP</a>
+    <a href="oop-games.html">OOP Games 🎮</a>
+    <a href="files-exceptions.html">Files &amp; Exceptions</a>
+    <a href="final-quiz.html">Final Quiz</a>
+  </div>
+</div>
+
+<div class="sec">OOP — 8 Progressive Steps · each adds one new concept</div>
+<p style="margin-bottom:20px;font-size:13px;color:var(--ink2)">
+  Each step introduces <strong>one concept</strong> — with a visual diagram and a quick practice exercise right after.
+  By Step 8 you will have a complete OOP program using all four pillars.
+</p>
+
+<div class="flow">
+<div class="step-wrap"><div class="step-line"><div class="num" style="background:var(--blue-light);color:var(--blue)">①</div><div class="vline"></div></div><div class="step-box"><div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><div class="step-title" style="color:var(--blue);margin:0">🏗️ What is a Class?</div><span style="font-size:10.5px;font-weight:800;background:var(--blue-light);color:var(--blue);border:1.5px solid;border-radius:999px;padding:2px 9px;white-space:nowrap">Class &amp; Object</span></div><div class="step-desc">A <strong>class</strong> is a <em>blueprint</em> — like a cookie cutter shape. An <strong>object</strong> (also called an <em>instance</em>) is the real thing you make from that blueprint.<br><br>The class itself stores <em>no real data</em> — it only describes the structure.</div>
+<div class="oop-vis">
+  <div class="oop-vis-title">🎨 Visual — Class is a Blueprint, Objects are the Real Things</div>
+  <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:center">
+
+    <!-- Blueprint -->
+    <div style="background:#EEF0FF;border:2.5px dashed #5865F2;border-radius:14px;padding:14px 18px;min-width:155px;text-align:center">
+      <div style="font-size:10px;font-weight:800;color:#5865F2;letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px">📐 CLASS</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:#1e293b;margin-bottom:6px">class Animal:</div>
+      <div style="font-size:11.5px;color:#64748b">name = <span style="color:#94a3b8">???</span></div>
+      <div style="font-size:11.5px;color:#64748b">age &nbsp;= <span style="color:#94a3b8">???</span></div>
+      <div style="margin-top:8px;font-size:10px;color:#5865F2;font-weight:600">Template only — no real data</div>
+    </div>
+
+    <!-- Arrow + button -->
+    <div style="display:flex;flex-direction:column;align-items:center;gap:8px">
+      <button onclick="v1run(this)" style="background:#5865F2;color:#fff;border:none;border-radius:999px;padding:8px 18px;font-size:12px;font-weight:700;cursor:pointer;transition:opacity .2s">▶ Create Objects</button>
+      <div style="font-size:22px;color:#94a3b8">→</div>
+    </div>
+
+    <!-- Objects -->
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <div id="v1a" style="opacity:0;transform:scale(.85);transition:all .35s;background:#ECFDF5;border:2px solid #6EE7B7;border-radius:14px;padding:14px 18px;min-width:140px;text-align:center">
+        <div style="font-size:10px;font-weight:800;color:#059669;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px">📦 cat</div>
+        <div style="font-size:11.5px;color:#1e293b">name = <strong>"Luna"</strong></div>
+        <div style="font-size:11.5px;color:#1e293b">age &nbsp;= <strong>3</strong></div>
+        <div style="margin-top:6px;font-size:10px;color:#059669;font-weight:600">Real object in memory</div>
+      </div>
+      <div id="v1b" style="opacity:0;transform:scale(.85);transition:all .35s .18s;background:#ECFDF5;border:2px solid #6EE7B7;border-radius:14px;padding:14px 18px;min-width:140px;text-align:center">
+        <div style="font-size:10px;font-weight:800;color:#059669;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px">📦 dog</div>
+        <div style="font-size:11.5px;color:#1e293b">name = <strong>"Rex"</strong></div>
+        <div style="font-size:11.5px;color:#1e293b">age &nbsp;= <strong>2</strong></div>
+        <div style="margin-top:6px;font-size:10px;color:#059669;font-weight:600">Separate object in memory</div>
+      </div>
+    </div>
+  </div>
+  <div id="v1note" style="display:none;margin-top:10px;background:#fff;border-radius:10px;padding:9px 13px;border:1px solid #e2e8f0;font-size:12px;color:#475569">
+    ✅ <strong>cat</strong> and <strong>dog</strong> are <em>independent</em> objects. Changing <code>cat.name</code> does NOT affect <code>dog.name</code>.<br>
+    The class itself never stores data — it only describes the structure.
+  </div>
+</div><div class="r-console"><div class="r-topbar"><div class="r-dots"><div class="r-dot" style="background:#ef4444"></div><div class="r-dot" style="background:#f59e0b"></div><div class="r-dot" style="background:#22c55e"></div></div><div class="r-title">Step 1 — Simplest class</div></div><div class="r-body"><pre style="margin:0;white-space:pre-wrap;word-break:break-word"><span class="r-gray"># Step 1: The simplest class — just a blueprint</span>
+<span class="r-green">class</span> <span class="r-cyan">Animal</span>:
+    <span class="r-green">pass</span>            <span class="r-gray"># &quot;pass&quot; means the class is empty for now</span>
+
+<span class="r-gray"># Create objects (instances) from the class</span>
+cat = Animal()
+dog = Animal()
+
+<span class="r-yellow">print</span>(cat)         <span class="r-gray"># &lt;__main__.Animal object at 0x...&gt;</span>
+<span class="r-yellow">print</span>(dog)         <span class="r-gray"># a different object</span>
+<span class="r-yellow">print</span>(<span class="r-yellow">type</span>(cat))   <span class="r-gray"># &lt;class &#x27;__main__.Animal&#x27;&gt;</span>
+</pre></div></div><div class="practice-hint" style="margin-top:10px">💡 <code>pass</code> is a placeholder meaning "this block is intentionally empty".</div><div class="mini-practice" style="border-left:3px solid var(--blue)"><div style="font-size:10.5px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--blue);margin-bottom:6px">✏️ Quick Practice — Step 1 — Create a class</div><div style="font-size:13px;color:var(--ink2);line-height:1.8;margin-bottom:8px">Create a <code>Car</code> class (empty, just like the example). Make two Car objects and print them.</div><div class="r-console"><div class="r-topbar"><div class="r-dots"><div class="r-dot" style="background:#ef4444"></div><div class="r-dot" style="background:#f59e0b"></div><div class="r-dot" style="background:#22c55e"></div></div><div class="r-title">Your turn</div></div><div class="r-body"><pre style="margin:0;white-space:pre-wrap;word-break:break-word"><span class="r-gray"># Create a Car class (empty, just like the example).</span>
+<span class="r-gray"># Then make two Car objects and print them.</span>
+
+<span class="r-green">class</span> <span class="r-cyan">___</span>:
+    ___
+
+car1 = ___()
+car2 = ___()
+
+<span class="r-yellow">print</span>(___)
+<span class="r-yellow">print</span>(___)
+</pre></div></div><div class="practice-answer"><button class="show-answer-btn" onclick="toggleAns('mp1_ans')">▶ Show Answer</button><div class="answer-content" id="mp1_ans"><div class="r-console" style="margin-top:8px"><div class="r-topbar"><div class="r-dots"><div class="r-dot" style="background:#ef4444"></div><div class="r-dot" style="background:#f59e0b"></div><div class="r-dot" style="background:#22c55e"></div></div><div class="r-title">answer.py</div></div><div class="r-body"><pre style="margin:0;white-space:pre-wrap;word-break:break-word"><span class="r-green">class</span> <span class="r-cyan">Car</span>:
+    <span class="r-green">pass</span>
+
+car1 = Car()
+car2 = Car()
+
+<span class="r-yellow">print</span>(car1)   <span class="r-gray"># &lt;__main__.Car object at 0x...&gt;</span>
+<span class="r-yellow">print</span>(car2)   <span class="r-gray"># &lt;__main__.Car object at 0x...&gt;  (different address)</span>
+
+<span class="r-gray"># type(car1) → &lt;class &#x27;__main__.Car&#x27;&gt;</span>
+</pre></div></div></div></div></div></div></div>
+<div class="step-wrap"><div class="step-line"><div class="num" style="background:var(--green-light);color:var(--green)">②</div><div class="vline"></div></div><div class="step-box"><div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><div class="step-title" style="color:var(--green);margin:0">🔧 Constructor &amp; Attributes</div><span style="font-size:10.5px;font-weight:800;background:var(--green-light);color:var(--green);border:1.5px solid;border-radius:999px;padding:2px 9px;white-space:nowrap">__init__ / self / attribute</span></div><div class="step-desc"><code>__init__</code> is the <strong>constructor</strong> — it runs automatically when you create an object.<br><code>self</code> means "this specific object". <code>self.name</code> stores the value <em>inside</em> that object's own memory slot.</div>
+<div class="oop-vis">
+  <div class="oop-vis-title">🎨 Visual — How __init__ Fills the Object</div>
+  <div style="display:flex;align-items:flex-start;gap:16px;flex-wrap:wrap;justify-content:center">
+
+    <!-- Code steps -->
+    <div style="min-width:200px">
+      <div style="font-size:11px;font-weight:700;color:#94a3b8;margin-bottom:8px">Code runs top to bottom:</div>
+      <div id="v2s1" class="v2step" onclick="v2step(1)" style="border-color:#94a3b8">
+        <span style="font-size:10px;font-weight:800;color:#94a3b8;margin-right:6px">①</span>
+        <code>cat = Animal("Luna", 3)</code>
+      </div>
+      <div id="v2s2" class="v2step" onclick="v2step(2)" style="border-color:#94a3b8">
+        <span style="font-size:10px;font-weight:800;color:#94a3b8;margin-right:6px">②</span>
+        <code>self.name = "Luna"</code>
+      </div>
+      <div id="v2s3" class="v2step" onclick="v2step(3)" style="border-color:#94a3b8">
+        <span style="font-size:10px;font-weight:800;color:#94a3b8;margin-right:6px">③</span>
+        <code>self.age = 3</code>
+      </div>
+      <div style="margin-top:8px;font-size:11px;color:#475569">👆 Click each step to see what happens</div>
+    </div>
+
+    <!-- Object memory box -->
+    <div style="min-width:180px">
+      <div style="font-size:11px;font-weight:700;color:#94a3b8;margin-bottom:8px">Object in memory (cat):</div>
+      <div style="border:2px solid #e2e8f0;border-radius:14px;overflow:hidden;background:#fff">
+        <div style="background:#f1f5f9;padding:7px 12px;font-size:11px;font-weight:700;color:#64748b;border-bottom:1px solid #e2e8f0">📦 cat (Animal object)</div>
+        <div id="v2r1" style="padding:8px 14px;font-size:12px;color:#94a3b8;display:flex;justify-content:space-between;border-bottom:1px solid #f1f5f9;transition:all .4s">
+          <span>name</span><span>—</span>
+        </div>
+        <div id="v2r2" style="padding:8px 14px;font-size:12px;color:#94a3b8;display:flex;justify-content:space-between;transition:all .4s">
+          <span>age</span><span>—</span>
+        </div>
+      </div>
+      <div id="v2note" style="display:none;margin-top:8px;font-size:11px;color:#059669;font-weight:600">
+        ✅ Object is ready!<br>print(cat.name) → "Luna"
+      </div>
+    </div>
+  </div>
+</div><div class="r-console"><div class="r-topbar"><div class="r-dots"><div class="r-dot" style="background:#ef4444"></div><div class="r-dot" style="background:#f59e0b"></div><div class="r-dot" style="background:#22c55e"></div></div><div class="r-title">Step 2 — Constructor</div></div><div class="r-body"><pre style="margin:0;white-space:pre-wrap;word-break:break-word"><span class="r-gray"># Step 2: Constructor (__init__) stores data in the object</span>
+<span class="r-green">class</span> <span class="r-cyan">Animal</span>:
+    <span class="r-green">def</span> <span class="r-cyan">__init__</span>(self, name):
+        self.name = name    <span class="r-gray"># attribute — stored inside the object</span>
+
+<span class="r-gray"># Each object gets its OWN copy of the data</span>
+cat = Animal(<span class="r-string">&quot;Luna&quot;</span>)
+dog = Animal(<span class="r-string">&quot;Rex&quot;</span>)
+
+<span class="r-yellow">print</span>(cat.name)   <span class="r-gray"># Luna</span>
+<span class="r-yellow">print</span>(dog.name)   <span class="r-gray"># Rex</span>
+</pre></div></div><div class="practice-hint" style="margin-top:10px">💡 Every object gets its <strong>own copy</strong> of attributes. <code>cat.name</code> and <code>dog.name</code> are stored in separate memory slots.</div><div class="mini-practice" style="border-left:3px solid var(--green)"><div style="font-size:10.5px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--green);margin-bottom:6px">✏️ Quick Practice — Step 2 — Constructor</div><div style="font-size:13px;color:var(--ink2);line-height:1.8;margin-bottom:8px">Add <code>brand</code> and <code>year</code> attributes to your <code>Car</code> class. Fill in the four blanks.</div><div class="r-console"><div class="r-topbar"><div class="r-dots"><div class="r-dot" style="background:#ef4444"></div><div class="r-dot" style="background:#f59e0b"></div><div class="r-dot" style="background:#22c55e"></div></div><div class="r-title">Your turn</div></div><div class="r-body"><pre style="margin:0;white-space:pre-wrap;word-break:break-word"><span class="r-gray"># Add brand and year attributes to Car.</span>
+<span class="r-gray"># Fill in the four blanks.</span>
+
+<span class="r-green">class</span> <span class="r-cyan">Car</span>:
+    <span class="r-green">def</span> <span class="r-cyan">__init__</span>(self, brand, year):
+        ___.___ = brand    <span class="r-gray"># store brand in the object</span>
+        ___.___ = year     <span class="r-gray"># store year in the object</span>
+
+my_car = Car(<span class="r-string">&quot;Toyota&quot;</span>, <span class="r-yellow">2020</span>)
+<span class="r-yellow">print</span>(my_car.brand)   <span class="r-gray"># Toyota</span>
+<span class="r-yellow">print</span>(my_car.year)    <span class="r-gray"># 2020</span>
+</pre></div></div><div class="practice-answer"><button class="show-answer-btn" onclick="toggleAns('mp2_ans')">▶ Show Answer</button><div class="answer-content" id="mp2_ans"><div class="r-console" style="margin-top:8px"><div class="r-topbar"><div class="r-dots"><div class="r-dot" style="background:#ef4444"></div><div class="r-dot" style="background:#f59e0b"></div><div class="r-dot" style="background:#22c55e"></div></div><div class="r-title">answer.py</div></div><div class="r-body"><pre style="margin:0;white-space:pre-wrap;word-break:break-word"><span class="r-green">class</span> <span class="r-cyan">Car</span>:
+    <span class="r-green">def</span> <span class="r-cyan">__init__</span>(self, brand, year):
+        self.brand = brand    <span class="r-gray"># self refers to the object being created</span>
+        self.year  = year
+
+my_car = Car(<span class="r-string">&quot;Toyota&quot;</span>, <span class="r-yellow">2020</span>)
+<span class="r-yellow">print</span>(my_car.brand)   <span class="r-gray"># Toyota</span>
+<span class="r-yellow">print</span>(my_car.year)    <span class="r-gray"># 2020</span>
+</pre></div></div></div></div></div></div></div>
+<div class="step-wrap"><div class="step-line"><div class="num" style="background:var(--teal-light);color:var(--teal)">③</div><div class="vline"></div></div><div class="step-box"><div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><div class="step-title" style="color:var(--teal);margin:0">⚙️ Methods</div><span style="font-size:10.5px;font-weight:800;background:var(--teal-light);color:var(--teal);border:1.5px solid;border-radius:999px;padding:2px 9px;white-space:nowrap">Methods / self</span></div><div class="step-desc">A <strong>method</strong> is a function that belongs to a class.<br>Inside a method, <code>self</code> connects the function to the specific object that called it.<br>You call a method using dot notation: <code>cat.describe()</code></div>
+<div class="oop-vis">
+  <div class="oop-vis-title">🎨 Visual — How a Method Call Works</div>
+  <div style="display:flex;align-items:flex-start;gap:16px;flex-wrap:wrap;justify-content:center">
+
+    <!-- Object -->
+    <div style="text-align:center">
+      <div style="font-size:11px;font-weight:700;color:#94a3b8;margin-bottom:6px">Object</div>
+      <div id="v3obj" style="background:#ECFDF5;border:2px solid #6EE7B7;border-radius:14px;padding:12px 16px;min-width:140px;cursor:pointer;transition:all .2s" onclick="v3run()">
+        <div style="font-size:10px;font-weight:800;color:#059669;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">📦 cat</div>
+        <div style="font-size:12px;color:#1e293b">name = "Luna"</div>
+        <div style="font-size:12px;color:#1e293b">age &nbsp;= 3</div>
+        <div style="margin-top:8px;font-size:11px;font-weight:700;background:#059669;color:#fff;border-radius:6px;padding:3px 8px;display:inline-block">cat.describe()</div>
+      </div>
+      <div style="margin-top:6px;font-size:10px;color:#94a3b8">👆 Click to call describe()</div>
+    </div>
+
+    <!-- Arrow -->
+    <div id="v3arr" style="font-size:26px;color:#e2e8f0;align-self:center;transition:color .3s">→</div>
+
+    <!-- Class methods -->
+    <div style="text-align:center">
+      <div style="font-size:11px;font-weight:700;color:#94a3b8;margin-bottom:6px">Class (method lives here)</div>
+      <div style="border:2px solid #e2e8f0;border-radius:14px;padding:12px 16px;background:#fff;min-width:200px">
+        <div style="font-size:10px;font-weight:800;color:#475569;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Animal</div>
+        <div id="v3m1" style="background:#f8fafc;border-radius:8px;padding:7px 10px;font-size:11px;font-family:monospace;margin-bottom:6px;border:1.5px solid #e2e8f0;transition:all .3s">def __init__(self, name, age)</div>
+        <div id="v3m2" style="background:#f8fafc;border-radius:8px;padding:7px 10px;font-size:11px;font-family:monospace;border:1.5px solid #e2e8f0;transition:all .3s">def describe(self)</div>
+      </div>
+    </div>
+
+    <!-- Arrow 2 -->
+    <div id="v3arr2" style="font-size:26px;color:#e2e8f0;align-self:center;transition:color .3s">→</div>
+
+    <!-- Output -->
+    <div style="text-align:center">
+      <div style="font-size:11px;font-weight:700;color:#94a3b8;margin-bottom:6px">Output</div>
+      <div id="v3out" style="background:#0f172a;border-radius:12px;padding:12px 16px;font-family:monospace;font-size:12px;color:#94a3b8;min-width:140px;transition:all .4s;min-height:48px;display:flex;align-items:center;justify-content:center">
+        <span>...</span>
+      </div>
+    </div>
+  </div>
+  <div id="v3note" style="display:none;margin-top:10px;background:#fff;border-radius:10px;padding:9px 13px;border:1px solid #e2e8f0;font-size:12px;color:#475569">
+    💡 <strong>self</strong> automatically refers to <code>cat</code> — so inside <code>describe()</code>, <code>self.name</code> becomes <code>"Luna"</code>.
+  </div>
+</div><div class="r-console"><div class="r-topbar"><div class="r-dots"><div class="r-dot" style="background:#ef4444"></div><div class="r-dot" style="background:#f59e0b"></div><div class="r-dot" style="background:#22c55e"></div></div><div class="r-title">Step 3 — Methods</div></div><div class="r-body"><pre style="margin:0;white-space:pre-wrap;word-break:break-word"><span class="r-gray"># Step 3: Multiple attributes + methods</span>
+<span class="r-green">class</span> <span class="r-cyan">Animal</span>:
+    <span class="r-green">def</span> <span class="r-cyan">__init__</span>(self, name, age):
+        self.name = name
+        self.age  = age
+
+    <span class="r-green">def</span> <span class="r-cyan">describe</span>(self):                     <span class="r-gray"># method</span>
+        <span class="r-yellow">print</span>(<span class="r-string">f&quot;{self.name} is {self.age} years old.&quot;</span>)
+
+    <span class="r-green">def</span> <span class="r-cyan">speak</span>(self):
+        <span class="r-yellow">print</span>(<span class="r-string">&quot;...&quot;</span>)
+
+cat = Animal(<span class="r-string">&quot;Luna&quot;</span>, <span class="r-yellow">3</span>)
+dog = Animal(<span class="r-string">&quot;Rex&quot;</span>, <span class="r-yellow">2</span>)
+
+cat.describe()   <span class="r-gray"># Luna is 3 years old.</span>
+dog.describe()   <span class="r-gray"># Rex is 2 years old.</span>
+cat.speak()      <span class="r-gray"># ...</span>
+</pre></div></div><div class="practice-hint" style="margin-top:10px">💡 <code>self</code> is always the first parameter of a method, but you <strong>never pass it</strong> when calling — Python adds it automatically.</div><div class="mini-practice" style="border-left:3px solid var(--teal)"><div style="font-size:10.5px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--teal);margin-bottom:6px">✏️ Quick Practice — Step 3 — Methods</div><div style="font-size:13px;color:var(--ink2);line-height:1.8;margin-bottom:8px">Add a <code>describe()</code> method to <code>Car</code> that prints <code>Toyota (2020)</code>. Fill in the three blanks.</div><div class="r-console"><div class="r-topbar"><div class="r-dots"><div class="r-dot" style="background:#ef4444"></div><div class="r-dot" style="background:#f59e0b"></div><div class="r-dot" style="background:#22c55e"></div></div><div class="r-title">Your turn</div></div><div class="r-body"><pre style="margin:0;white-space:pre-wrap;word-break:break-word"><span class="r-gray"># Add a describe() method to Car.</span>
+<span class="r-gray"># It should print:  Toyota (2020)</span>
+<span class="r-gray"># Fill in the three blanks.</span>
+
+<span class="r-green">class</span> <span class="r-cyan">Car</span>:
+    <span class="r-green">def</span> <span class="r-cyan">__init__</span>(self, brand, year):
+        self.brand = brand
+        self.year  = year
+
+    <span class="r-green">def</span> <span class="r-cyan">describe</span>(___):                    <span class="r-gray"># what goes in ()?</span>
+        <span class="r-yellow">print</span>(<span class="r-string">f&quot;___ (___)&quot;</span>)               <span class="r-gray"># use self to get values</span>
+
+my_car = Car(<span class="r-string">&quot;Toyota&quot;</span>, <span class="r-yellow">2020</span>)
+my_car.describe()    <span class="r-gray"># Toyota (2020)</span>
+</pre></div></div><div class="practice-answer"><button class="show-answer-btn" onclick="toggleAns('mp3_ans')">▶ Show Answer</button><div class="answer-content" id="mp3_ans"><div class="r-console" style="margin-top:8px"><div class="r-topbar"><div class="r-dots"><div class="r-dot" style="background:#ef4444"></div><div class="r-dot" style="background:#f59e0b"></div><div class="r-dot" style="background:#22c55e"></div></div><div class="r-title">answer.py</div></div><div class="r-body"><pre style="margin:0;white-space:pre-wrap;word-break:break-word"><span class="r-green">class</span> <span class="r-cyan">Car</span>:
+    <span class="r-green">def</span> <span class="r-cyan">__init__</span>(self, brand, year):
+        self.brand = brand
+        self.year  = year
+
+    <span class="r-green">def</span> <span class="r-cyan">describe</span>(self):                   <span class="r-gray"># self is always first</span>
+        <span class="r-yellow">print</span>(<span class="r-string">f&quot;{self.brand} ({self.year})&quot;</span>)
+
+my_car = Car(<span class="r-string">&quot;Toyota&quot;</span>, <span class="r-yellow">2020</span>)
+my_car.describe()    <span class="r-gray"># Toyota (2020)</span>
+
+<span class="r-gray"># Rule: every method must have self as the first parameter.</span>
+<span class="r-gray"># When you CALL it — my_car.describe() — you do NOT pass self.</span>
+<span class="r-gray"># Python passes it automatically.</span>
+</pre></div></div></div></div></div></div></div>
+<div class="step-wrap"><div class="step-line"><div class="num" style="background:var(--red-light);color:var(--red)">④</div><div class="vline"></div></div><div class="step-box"><div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><div class="step-title" style="color:var(--red);margin:0">🔒 Encapsulation — Private Attributes</div><span style="font-size:10.5px;font-weight:800;background:var(--red-light);color:var(--red);border:1.5px solid;border-radius:999px;padding:2px 9px;white-space:nowrap">Encapsulation / __private</span></div><div class="step-desc"><strong>Encapsulation</strong> = hiding data inside the object so outside code cannot accidentally break it.<br>Add <code>__</code> (double underscore) before an attribute name to make it <strong>private</strong>.</div>
+<div class="oop-vis">
+  <div class="oop-vis-title">🎨 Visual — Encapsulation: Public vs Private</div>
+  <div style="display:flex;gap:16px;flex-wrap:wrap;justify-content:center;align-items:flex-start">
+
+    <!-- Without encapsulation -->
+    <div style="min-width:185px">
+      <div style="font-size:11px;font-weight:700;color:#DC2626;margin-bottom:6px">❌ WITHOUT encapsulation</div>
+      <div style="border:2px solid #FCA5A5;border-radius:14px;padding:12px 14px;background:#FEF2F2">
+        <div style="font-size:11px;color:#1e293b;margin-bottom:6px;font-family:monospace">a.name = "Luna"</div>
+        <div style="font-size:11px;color:#1e293b;margin-bottom:6px;font-family:monospace">a.name = ""&nbsp;&nbsp;&nbsp;<span style="color:#DC2626">← anyone can break it!</span></div>
+        <div style="font-size:11px;color:#1e293b;font-family:monospace">a.age = -999 <span style="color:#DC2626">← invalid!</span></div>
+      </div>
+      <div style="margin-top:6px;font-size:11px;color:#DC2626;font-weight:600">No protection — data can be corrupted</div>
+    </div>
+
+    <!-- With encapsulation -->
+    <div style="min-width:200px">
+      <div style="font-size:11px;font-weight:700;color:#059669;margin-bottom:6px">✅ WITH encapsulation</div>
+      <div style="border:2px solid #6EE7B7;border-radius:14px;overflow:hidden">
+        <!-- Public layer -->
+        <div style="background:#ECFDF5;padding:10px 12px;border-bottom:1px dashed #6EE7B7">
+          <div style="font-size:10px;font-weight:800;color:#059669;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">Public (accessible)</div>
+          <div id="v4g" onclick="v4access('get')" class="v4btn" style="background:#fff;border:1.5px solid #6EE7B7;color:#059669">get_name() →</div>
+          <div id="v4s" onclick="v4access('set')" class="v4btn" style="background:#fff;border:1.5px solid #6EE7B7;color:#059669">set_name(v) →</div>
+        </div>
+        <!-- Private layer -->
+        <div style="background:#F5F3FF;padding:10px 12px">
+          <div style="font-size:10px;font-weight:800;color:#7C3AED;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">🔒 Private (locked)</div>
+          <div id="v4n" style="font-family:monospace;font-size:12px;color:#7C3AED;padding:5px 8px;background:#fff;border-radius:6px;margin-bottom:4px;border:1.5px solid #DDD6FE;transition:all .3s">__name = "Luna"</div>
+          <div style="font-family:monospace;font-size:12px;color:#7C3AED;padding:5px 8px;background:#fff;border-radius:6px;border:1.5px solid #DDD6FE">__age = 3</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Result panel -->
+    <div id="v4result" style="min-width:160px;background:#fff;border:1.5px solid #e2e8f0;border-radius:12px;padding:12px 14px;font-size:12px;color:#94a3b8;min-height:80px;display:flex;align-items:center;justify-content:center;text-align:center;transition:all .3s">
+      Click a method to see<br>what happens
+    </div>
+  </div>
+</div><div class="r-console"><div class="r-topbar"><div class="r-dots"><div class="r-dot" style="background:#ef4444"></div><div class="r-dot" style="background:#f59e0b"></div><div class="r-dot" style="background:#22c55e"></div></div><div class="r-title">Step 4 — Private attributes</div></div><div class="r-body"><pre style="margin:0;white-space:pre-wrap;word-break:break-word"><span class="r-gray"># Step 4: Encapsulation — making attributes PRIVATE</span>
+<span class="r-gray"># Use double underscore (__) to hide data from outside</span>
+
+<span class="r-green">class</span> <span class="r-cyan">Animal</span>:
+    <span class="r-green">def</span> <span class="r-cyan">__init__</span>(self, name, age):
+        self.__name = name    <span class="r-gray"># private — double underscore</span>
+        self.__age  = age     <span class="r-gray"># private</span>
+
+a = Animal(<span class="r-string">&quot;Luna&quot;</span>, <span class="r-yellow">3</span>)
+
+<span class="r-gray"># Try to access directly — this FAILS:</span>
+<span class="r-gray"># print(a.__name)    # AttributeError!</span>
+
+<span class="r-gray"># Python &quot;mangles&quot; the name internally to _Animal__name</span>
+<span class="r-gray"># Accessing it directly from outside is bad practice</span>
+<span class="r-yellow">print</span>(a._Animal__name)   <span class="r-gray"># Luna — works, but never do this!</span>
+</pre></div></div><div class="practice-hint" style="margin-top:10px">⚠️ <code>a.__name</code> from outside the class raises <code>AttributeError</code>. This is intentional — it protects your data.</div><div class="mini-practice" style="border-left:3px solid var(--red)"><div style="font-size:10.5px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--red);margin-bottom:6px">✏️ Quick Practice — Step 4 — Predict the error</div><div style="font-size:13px;color:var(--ink2);line-height:1.8;margin-bottom:8px">Change <code>brand</code> and <code>year</code> to private in <code>Car</code>. What output do you expect when you run the last line? Then run it to confirm.</div><div class="r-console"><div class="r-topbar"><div class="r-dots"><div class="r-dot" style="background:#ef4444"></div><div class="r-dot" style="background:#f59e0b"></div><div class="r-dot" style="background:#22c55e"></div></div><div class="r-title">Your turn</div></div><div class="r-body"><pre style="margin:0;white-space:pre-wrap;word-break:break-word"><span class="r-gray"># Change brand and year to private attributes.</span>
+<span class="r-gray"># Then predict: what happens when you run line 9?</span>
+
+<span class="r-green">class</span> <span class="r-cyan">Car</span>:
+    <span class="r-green">def</span> <span class="r-cyan">__init__</span>(self, brand, year):
+        self.__brand = brand   <span class="r-gray"># private</span>
+        self.__year  = year    <span class="r-gray"># private</span>
+
+my_car = Car(<span class="r-string">&quot;Toyota&quot;</span>, <span class="r-yellow">2020</span>)
+<span class="r-yellow">print</span>(my_car.__brand)   <span class="r-gray"># ← what output do you expect?</span>
+</pre></div></div><div class="practice-answer"><button class="show-answer-btn" onclick="toggleAns('mp4_ans')">▶ Show Answer</button><div class="answer-content" id="mp4_ans"><div class="r-console" style="margin-top:8px"><div class="r-topbar"><div class="r-dots"><div class="r-dot" style="background:#ef4444"></div><div class="r-dot" style="background:#f59e0b"></div><div class="r-dot" style="background:#22c55e"></div></div><div class="r-title">trace / answer</div></div><div class="r-body"><pre style="margin:0;white-space:pre-wrap;word-break:break-word;font-family:monospace">Expected output:
+  AttributeError: &#x27;Car&#x27; object has no attribute &#x27;__brand&#x27;
+
+Why?
+  Outside the class, Python cannot find __brand.
+  Python renamed it internally to _Car__brand (name mangling).
+
+  my_car.__brand        → AttributeError  ✗ (blocked)
+  my_car._Car__brand    → &quot;Toyota&quot;        ✓ (works, but bad practice)
+
+Rule: private attributes (__ prefix) should ONLY be
+accessed through getters and setters inside the class.
+</pre></div></div></div></div></div></div></div>
+<div class="step-wrap"><div class="step-line"><div class="num" style="background:var(--amber-light);color:var(--amber)">⑤</div><div class="vline"></div></div><div class="step-box"><div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><div class="step-title" style="color:var(--amber);margin:0">🔑 Getter &amp; Setter</div><span style="font-size:10.5px;font-weight:800;background:var(--amber-light);color:var(--amber);border:1.5px solid;border-radius:999px;padding:2px 9px;white-space:nowrap">Getter / Setter</span></div><div class="step-desc">If data is private, how do we read or change it?<br>Answer: <strong>getters</strong> (read-only access) and <strong>setters</strong> (write with validation).<br>The setter acts as a <em>gatekeeper</em> — it can reject bad values before they reach the private attribute.</div>
+<div class="oop-vis">
+  <div class="oop-vis-title">🎨 Visual — Getter reads, Setter validates then writes</div>
+  <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;align-items:flex-start">
+
+    <!-- Getter side -->
+    <div style="min-width:170px">
+      <div style="font-size:11px;font-weight:700;color:#059669;margin-bottom:6px;text-align:center">📖 Getter (READ)</div>
+      <div style="background:#ECFDF5;border:2px solid #6EE7B7;border-radius:12px;padding:12px;text-align:center">
+        <div style="font-size:11px;color:#475569;margin-bottom:8px">Outside code calls:</div>
+        <code style="font-size:12px;color:#059669">a.get_name()</code>
+        <div style="font-size:20px;color:#6EE7B7;margin:6px 0">↓</div>
+        <div style="background:#fff;border-radius:8px;padding:6px 10px;font-size:11px;color:#059669;font-weight:600">returns "Luna" ✅</div>
+        <div style="margin-top:6px;font-size:10px;color:#64748b">Read-only — cannot change data</div>
+      </div>
+    </div>
+
+    <!-- Setter side -->
+    <div style="min-width:200px">
+      <div style="font-size:11px;font-weight:700;color:#D97706;margin-bottom:6px;text-align:center">🚪 Setter (WRITE with validation)</div>
+      <div style="background:#FFFBEB;border:2px solid #FCD34D;border-radius:12px;padding:12px">
+        <div style="font-size:11px;color:#475569;margin-bottom:8px;text-align:center">Try setting a new name:</div>
+        <div style="display:flex;gap:6px;margin-bottom:8px">
+          <button onclick="v5set('Mochi')" style="flex:1;background:#D97706;color:#fff;border:none;border-radius:8px;padding:6px;font-size:11px;font-weight:700;cursor:pointer">set_name("Mochi")</button>
+          <button onclick="v5set('')" style="flex:1;background:#DC2626;color:#fff;border:none;border-radius:8px;padding:6px;font-size:11px;font-weight:700;cursor:pointer">set_name("")</button>
+        </div>
+        <!-- Validation gate -->
+        <div style="background:#fff;border-radius:8px;padding:8px 10px;border:1px solid #FCD34D">
+          <div style="font-size:10px;font-weight:800;color:#D97706;text-transform:uppercase;margin-bottom:4px">Validation gate</div>
+          <div style="font-family:monospace;font-size:11px;color:#475569">if len(new_name) &gt; 0:</div>
+          <div id="v5gate" style="margin-top:6px;font-size:12px;color:#94a3b8;font-weight:600;text-align:center;padding:5px;border-radius:6px;transition:all .3s">
+            (click a button above)
+          </div>
+        </div>
+        <div style="margin-top:6px;text-align:center;font-size:11px;font-weight:700;color:#92400E" id="v5cur">Current: __name = "Luna"</div>
+      </div>
+    </div>
+  </div>
+</div><div class="r-console"><div class="r-topbar"><div class="r-dots"><div class="r-dot" style="background:#ef4444"></div><div class="r-dot" style="background:#f59e0b"></div><div class="r-dot" style="background:#22c55e"></div></div><div class="r-title">Step 5 — Getter &amp;amp; Setter</div></div><div class="r-body"><pre style="margin:0;white-space:pre-wrap;word-break:break-word"><span class="r-gray"># Step 5: Getter and Setter — safe access to private data</span>
+
+<span class="r-green">class</span> <span class="r-cyan">Animal</span>:
+    <span class="r-green">def</span> <span class="r-cyan">__init__</span>(self, name, age):
+        self.__name = name
+        self.__age  = age
+
+    <span class="r-green">def</span> <span class="r-cyan">get_name</span>(self):           <span class="r-gray"># getter — READ the value</span>
+        <span class="r-green">return</span> self.__name
+
+    <span class="r-green">def</span> <span class="r-cyan">set_name</span>(self, new_name): <span class="r-gray"># setter — CHANGE with validation</span>
+        <span class="r-green">if</span> <span class="r-yellow">len</span>(new_name) &gt; <span class="r-yellow">0</span>:
+            self.__name = new_name
+        <span class="r-green">else</span>:
+            <span class="r-yellow">print</span>(<span class="r-string">&quot;Name cannot be empty!&quot;</span>)
+
+    <span class="r-green">def</span> <span class="r-cyan">get_age</span>(self):
+        <span class="r-green">return</span> self.__age
+
+a = Animal(<span class="r-string">&quot;Luna&quot;</span>, <span class="r-yellow">3</span>)
+<span class="r-yellow">print</span>(a.get_name())    <span class="r-gray"># Luna</span>
+
+a.set_name(<span class="r-string">&quot;Mochi&quot;</span>)
+<span class="r-yellow">print</span>(a.get_name())    <span class="r-gray"># Mochi</span>
+
+a.set_name(<span class="r-string">&quot;&quot;</span>)         <span class="r-gray"># Name cannot be empty!</span>
+<span class="r-yellow">print</span>(a.get_name())    <span class="r-gray"># Mochi (unchanged)</span>
+</pre></div></div><div class="practice-hint" style="margin-top:10px">💡 Naming convention: <code>get_x()</code> for getters, <code>set_x()</code> for setters. Setters can validate — rejecting empty strings, negative numbers, etc.</div><div class="mini-practice" style="border-left:3px solid var(--amber)"><div style="font-size:10.5px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--amber);margin-bottom:6px">✏️ Quick Practice — Step 5 — Getter &amp; Setter</div><div style="font-size:13px;color:var(--ink2);line-height:1.8;margin-bottom:8px">Add <code>get_brand()</code> and <code>set_year()</code> to <code>Car</code>. The setter must reject years before 2000. Fill in the four blanks.</div><div class="r-console"><div class="r-topbar"><div class="r-dots"><div class="r-dot" style="background:#ef4444"></div><div class="r-dot" style="background:#f59e0b"></div><div class="r-dot" style="background:#22c55e"></div></div><div class="r-title">Your turn</div></div><div class="r-body"><pre style="margin:0;white-space:pre-wrap;word-break:break-word"><span class="r-gray"># Add get_brand() getter and set_year() setter to Car.</span>
+<span class="r-gray"># The setter must reject years before 2000.</span>
+<span class="r-gray"># Fill in the four blanks.</span>
+
+<span class="r-green">class</span> <span class="r-cyan">Car</span>:
+    <span class="r-green">def</span> <span class="r-cyan">__init__</span>(self, brand, year):
+        self.__brand = brand
+        self.__year  = year
+
+    <span class="r-green">def</span> <span class="r-cyan">get_brand</span>(self):
+        <span class="r-green">return</span> ___              <span class="r-gray"># return the private brand</span>
+
+    <span class="r-green">def</span> <span class="r-cyan">get_year</span>(self):
+        <span class="r-green">return</span> self.__year
+
+    <span class="r-green">def</span> <span class="r-cyan">set_year</span>(self, new_year):
+        <span class="r-green">if</span> new_year &gt; ___:      <span class="r-gray"># only accept years after 2000</span>
+            self.__year = ___   <span class="r-gray"># update the private attribute</span>
+        <span class="r-green">else</span>:
+            <span class="r-yellow">print</span>(<span class="r-string">&quot;Invalid year!&quot;</span>)
+
+my_car = Car(<span class="r-string">&quot;Toyota&quot;</span>, <span class="r-yellow">2020</span>)
+<span class="r-yellow">print</span>(my_car.get_brand())       <span class="r-gray"># Toyota</span>
+my_car.set_year(<span class="r-yellow">2023</span>)
+<span class="r-yellow">print</span>(my_car.get_year())        <span class="r-gray"># 2023</span>
+my_car.set_year(<span class="r-yellow">1990</span>)           <span class="r-gray"># Invalid year!</span>
+</pre></div></div><div class="practice-answer"><button class="show-answer-btn" onclick="toggleAns('mp5_ans')">▶ Show Answer</button><div class="answer-content" id="mp5_ans"><div class="r-console" style="margin-top:8px"><div class="r-topbar"><div class="r-dots"><div class="r-dot" style="background:#ef4444"></div><div class="r-dot" style="background:#f59e0b"></div><div class="r-dot" style="background:#22c55e"></div></div><div class="r-title">answer.py</div></div><div class="r-body"><pre style="margin:0;white-space:pre-wrap;word-break:break-word"><span class="r-green">class</span> <span class="r-cyan">Car</span>:
+    <span class="r-green">def</span> <span class="r-cyan">__init__</span>(self, brand, year):
+        self.__brand = brand
+        self.__year  = year
+
+    <span class="r-green">def</span> <span class="r-cyan">get_brand</span>(self):
+        <span class="r-green">return</span> self.__brand     <span class="r-gray"># getter: read-only access</span>
+
+    <span class="r-green">def</span> <span class="r-cyan">get_year</span>(self):
+        <span class="r-green">return</span> self.__year
+
+    <span class="r-green">def</span> <span class="r-cyan">set_year</span>(self, new_year):
+        <span class="r-green">if</span> new_year &gt; <span class="r-yellow">2000</span>:     <span class="r-gray"># validation: reject old years</span>
+            self.__year = new_year
+        <span class="r-green">else</span>:
+            <span class="r-yellow">print</span>(<span class="r-string">&quot;Invalid year!&quot;</span>)
+
+my_car = Car(<span class="r-string">&quot;Toyota&quot;</span>, <span class="r-yellow">2020</span>)
+<span class="r-yellow">print</span>(my_car.get_brand())   <span class="r-gray"># Toyota</span>
+my_car.set_year(<span class="r-yellow">2023</span>)
+<span class="r-yellow">print</span>(my_car.get_year())    <span class="r-gray"># 2023</span>
+my_car.set_year(<span class="r-yellow">1990</span>)       <span class="r-gray"># Invalid year!</span>
+</pre></div></div></div></div></div></div></div>
+<div class="step-wrap"><div class="step-line"><div class="num" style="background:var(--purple-light);color:var(--purple)">⑥</div><div class="vline"></div></div><div class="step-box"><div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><div class="step-title" style="color:var(--purple);margin:0">👨‍👧 Inheritance</div><span style="font-size:10.5px;font-weight:800;background:var(--purple-light);color:var(--purple);border:1.5px solid;border-radius:999px;padding:2px 9px;white-space:nowrap">Inheritance / super()</span></div><div class="step-desc"><strong>Inheritance</strong> lets a child class automatically get all attributes and methods from its parent.<br><code>class Dog(Animal)</code> = Dog is a <em>child</em> (subclass) of Animal.<br><code>super().__init__(...)</code> calls the parent's constructor first — so the parent's attributes are set up correctly.</div>
+<div class="oop-vis">
+  <div class="oop-vis-title">🎨 Visual — Inheritance Tree: Child gets everything from Parent</div>
+  <div style="text-align:center">
+    <!-- Tree SVG -->
+    <svg viewBox="0 0 520 220" style="width:100%;max-width:520px;height:auto;overflow:visible">
+      <!-- Lines -->
+      <line x1="260" y1="72" x2="100" y2="138" stroke="#C5CAF6" stroke-width="2" stroke-dasharray="5,3"/>
+      <line x1="260" y1="72" x2="260" y2="138" stroke="#C5CAF6" stroke-width="2" stroke-dasharray="5,3"/>
+      <line x1="260" y1="72" x2="420" y2="138" stroke="#C5CAF6" stroke-width="2" stroke-dasharray="5,3"/>
+
+      <!-- Animal (parent) -->
+      <rect x="165" y="10" width="190" height="62" rx="12" fill="#EEF0FF" stroke="#5865F2" stroke-width="2"/>
+      <text x="260" y="30" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="700" fill="#5865F2">class Animal</text>
+      <text x="260" y="47" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#475569">__name, __age</text>
+      <text x="260" y="62" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#475569">get_name(), speak()</text>
+
+      <!-- Dog -->
+      <rect x="25" y="138" width="150" height="70" rx="12" fill="#ECFDF5" stroke="#059669" stroke-width="2"/>
+      <text x="100" y="158" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="12" font-weight="700" fill="#059669">class Dog</text>
+      <text x="100" y="174" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9.5" fill="#5865F2">↑ __name, __age</text>
+      <text x="100" y="188" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9.5" fill="#5865F2">↑ get_name(), speak()</text>
+      <text x="100" y="202" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9.5" fill="#059669">+ __breed, get_breed()</text>
+
+      <!-- Cat -->
+      <rect x="185" y="138" width="150" height="70" rx="12" fill="#F5F3FF" stroke="#7C3AED" stroke-width="2"/>
+      <text x="260" y="158" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="12" font-weight="700" fill="#7C3AED">class Cat</text>
+      <text x="260" y="174" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9.5" fill="#5865F2">↑ __name, __age</text>
+      <text x="260" y="188" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9.5" fill="#5865F2">↑ get_name(), speak()</text>
+      <text x="260" y="202" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9.5" fill="#7C3AED">+ __indoor, is_indoor()</text>
+
+      <!-- Bird -->
+      <rect x="345" y="138" width="150" height="70" rx="12" fill="#FFF7ED" stroke="#EA580C" stroke-width="2"/>
+      <text x="420" y="158" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="12" font-weight="700" fill="#EA580C">class Bird</text>
+      <text x="420" y="174" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9.5" fill="#5865F2">↑ __name, __age</text>
+      <text x="420" y="188" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9.5" fill="#5865F2">↑ get_name(), speak()</text>
+      <text x="420" y="202" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9.5" fill="#EA580C">+ __wing_span</text>
+    </svg>
+
+    <!-- Legend -->
+    <div style="display:inline-flex;gap:16px;margin-top:8px;flex-wrap:wrap;justify-content:center">
+      <span style="font-size:11px;color:#5865F2;font-weight:700">↑ blue = inherited from Animal</span>
+      <span style="font-size:11px;color:#059669;font-weight:700">+ green = Dog's own</span>
+      <span style="font-size:11px;color:#7C3AED;font-weight:700">+ purple = Cat's own</span>
+    </div>
+    <div style="margin-top:8px;font-size:12px;color:#475569;background:#fff;border-radius:10px;padding:8px 12px;border:1px solid #e2e8f0;display:inline-block">
+      💡 <code>super().__init__()</code> runs Animal's constructor first — so Dog/Cat/Bird all get <code>__name</code> and <code>__age</code> automatically.
+    </div>
+  </div>
+</div><div class="r-console"><div class="r-topbar"><div class="r-dots"><div class="r-dot" style="background:#ef4444"></div><div class="r-dot" style="background:#f59e0b"></div><div class="r-dot" style="background:#22c55e"></div></div><div class="r-title">Step 6 — Inheritance</div></div><div class="r-body"><pre style="margin:0;white-space:pre-wrap;word-break:break-word"><span class="r-gray"># Step 6: Inheritance — Dog gets everything Animal has</span>
+
+<span class="r-green">class</span> <span class="r-cyan">Animal</span>:
+    <span class="r-green">def</span> <span class="r-cyan">__init__</span>(self, name, age):
+        self.__name = name
+        self.__age  = age
+
+    <span class="r-green">def</span> <span class="r-cyan">get_name</span>(self):
+        <span class="r-green">return</span> self.__name
+
+    <span class="r-green">def</span> <span class="r-cyan">get_age</span>(self):
+        <span class="r-green">return</span> self.__age
+
+    <span class="r-green">def</span> <span class="r-cyan">speak</span>(self):
+        <span class="r-green">return</span> <span class="r-string">&quot;...&quot;</span>
+
+<span class="r-green">class</span> <span class="r-cyan">Dog</span>(Animal):                      <span class="r-gray"># Dog INHERITS from Animal</span>
+    <span class="r-green">def</span> <span class="r-cyan">__init__</span>(self, name, age, breed):
+        <span class="r-yellow">super</span>().__init__(name, age)     <span class="r-gray"># call Animal&#x27;s __init__ first</span>
+        self.__breed = breed            <span class="r-gray"># Dog&#x27;s own extra attribute</span>
+
+    <span class="r-green">def</span> <span class="r-cyan">get_breed</span>(self):
+        <span class="r-green">return</span> self.__breed
+
+rex = Dog(<span class="r-string">&quot;Rex&quot;</span>, <span class="r-yellow">2</span>, <span class="r-string">&quot;Labrador&quot;</span>)
+
+<span class="r-yellow">print</span>(rex.get_name())    <span class="r-gray"># Rex      — inherited from Animal</span>
+<span class="r-yellow">print</span>(rex.get_age())     <span class="r-gray"># 2        — inherited from Animal</span>
+<span class="r-yellow">print</span>(rex.get_breed())   <span class="r-gray"># Labrador — Dog&#x27;s own method</span>
+<span class="r-yellow">print</span>(rex.speak())       <span class="r-gray"># ...      — inherited from Animal</span>
+</pre></div></div><div class="practice-hint" style="margin-top:10px">💡 Think of it as a family tree. Dog <em>is-a</em> Animal. Everything Animal can do, Dog can do too — plus its own extra methods.</div><div class="mini-practice" style="border-left:3px solid var(--purple)"><div style="font-size:10.5px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--purple);margin-bottom:6px">✏️ Quick Practice — Step 6 — Inheritance</div><div style="font-size:13px;color:var(--ink2);line-height:1.8;margin-bottom:8px">Create <code>ElectricCar</code> that inherits from <code>Car</code> and adds <code>battery_kw</code>. Fill in the four blanks.</div><div class="r-console"><div class="r-topbar"><div class="r-dots"><div class="r-dot" style="background:#ef4444"></div><div class="r-dot" style="background:#f59e0b"></div><div class="r-dot" style="background:#22c55e"></div></div><div class="r-title">Your turn</div></div><div class="r-body"><pre style="margin:0;white-space:pre-wrap;word-break:break-word"><span class="r-gray"># Create ElectricCar that inherits from Car.</span>
+<span class="r-gray"># It adds a battery_kw attribute.</span>
+<span class="r-gray"># Fill in the four blanks.</span>
+
+<span class="r-green">class</span> <span class="r-cyan">Car</span>:
+    <span class="r-green">def</span> <span class="r-cyan">__init__</span>(self, brand, year):
+        self.__brand = brand
+        self.__year  = year
+
+    <span class="r-green">def</span> <span class="r-cyan">get_brand</span>(self):
+        <span class="r-green">return</span> self.__brand
+
+    <span class="r-green">def</span> <span class="r-cyan">get_year</span>(self):
+        <span class="r-green">return</span> self.__year
+
+<span class="r-green">class</span> <span class="r-cyan">ElectricCar</span>(___):              <span class="r-gray"># inherit from Car</span>
+    <span class="r-green">def</span> <span class="r-cyan">__init__</span>(self, brand, year, battery_kw):
+        ___.__init__(brand, year)    <span class="r-gray"># call Car&#x27;s __init__</span>
+        self.__battery_kw = ___      <span class="r-gray"># store the new attribute</span>
+
+    <span class="r-green">def</span> <span class="r-cyan">get_battery</span>(self):
+        <span class="r-green">return</span> self.___              <span class="r-gray"># return battery_kw</span>
+
+tesla = ElectricCar(<span class="r-string">&quot;Tesla&quot;</span>, <span class="r-yellow">2023</span>, <span class="r-yellow">100</span>)
+<span class="r-yellow">print</span>(tesla.get_brand())     <span class="r-gray"># Tesla   — inherited from Car</span>
+<span class="r-yellow">print</span>(tesla.get_year())      <span class="r-gray"># 2023    — inherited from Car</span>
+<span class="r-yellow">print</span>(tesla.get_battery())   <span class="r-gray"># 100     — ElectricCar&#x27;s own method</span>
+</pre></div></div><div class="practice-answer"><button class="show-answer-btn" onclick="toggleAns('mp6_ans')">▶ Show Answer</button><div class="answer-content" id="mp6_ans"><div class="r-console" style="margin-top:8px"><div class="r-topbar"><div class="r-dots"><div class="r-dot" style="background:#ef4444"></div><div class="r-dot" style="background:#f59e0b"></div><div class="r-dot" style="background:#22c55e"></div></div><div class="r-title">answer.py</div></div><div class="r-body"><pre style="margin:0;white-space:pre-wrap;word-break:break-word"><span class="r-green">class</span> <span class="r-cyan">Car</span>:
+    <span class="r-green">def</span> <span class="r-cyan">__init__</span>(self, brand, year):
+        self.__brand = brand
+        self.__year  = year
+
+    <span class="r-green">def</span> <span class="r-cyan">get_brand</span>(self):
+        <span class="r-green">return</span> self.__brand
+
+    <span class="r-green">def</span> <span class="r-cyan">get_year</span>(self):
+        <span class="r-green">return</span> self.__year
+
+<span class="r-green">class</span> <span class="r-cyan">ElectricCar</span>(Car):              <span class="r-gray"># inherit from Car</span>
+    <span class="r-green">def</span> <span class="r-cyan">__init__</span>(self, brand, year, battery_kw):
+        <span class="r-yellow">super</span>().__init__(brand, year)    <span class="r-gray"># call Car&#x27;s __init__</span>
+        self.__battery_kw = battery_kw
+
+    <span class="r-green">def</span> <span class="r-cyan">get_battery</span>(self):
+        <span class="r-green">return</span> self.__battery_kw
+
+tesla = ElectricCar(<span class="r-string">&quot;Tesla&quot;</span>, <span class="r-yellow">2023</span>, <span class="r-yellow">100</span>)
+<span class="r-yellow">print</span>(tesla.get_brand())     <span class="r-gray"># Tesla</span>
+<span class="r-yellow">print</span>(tesla.get_year())      <span class="r-gray"># 2023</span>
+<span class="r-yellow">print</span>(tesla.get_battery())   <span class="r-gray"># 100</span>
+</pre></div></div></div></div></div></div></div>
+<div class="step-wrap"><div class="step-line"><div class="num" style="background:var(--pink-light);color:var(--pink)">⑦</div><div class="vline"></div></div><div class="step-box"><div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><div class="step-title" style="color:var(--pink);margin:0">🎭 Polymorphism</div><span style="font-size:10.5px;font-weight:800;background:var(--pink-light);color:var(--pink);border:1.5px solid;border-radius:999px;padding:2px 9px;white-space:nowrap">Polymorphism / Override</span></div><div class="step-desc"><strong>Polymorphism</strong> = "many forms".<br>When a child class replaces a parent method with its own version, that's called <strong>overriding</strong>.<br>You can call the <em>same method name</em> on different objects and get different results — without needing to know which specific class you're dealing with.</div>
+<div class="oop-vis">
+  <div class="oop-vis-title">🎨 Visual — Polymorphism: Same Method Name, Different Behaviour</div>
+
+  <!-- Animal cards -->
+  <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-bottom:12px">
+    <div onclick="v7speak(this,'dog','Rex says: Woof! 🐕','#ECFDF5','#6EE7B7','#059669')" class="v7card" style="background:#ECFDF5;border-color:#6EE7B7">
+      <div style="font-size:22px;margin-bottom:4px">🐕</div>
+      <div style="font-size:11px;font-weight:800;color:#059669">Dog("Rex")</div>
+      <div class="v7method">.speak()</div>
+    </div>
+    <div onclick="v7speak(this,'cat','Luna says: Meow! 🐈','#F5F3FF','#DDD6FE','#7C3AED')" class="v7card" style="background:#F5F3FF;border-color:#DDD6FE">
+      <div style="font-size:22px;margin-bottom:4px">🐈</div>
+      <div style="font-size:11px;font-weight:800;color:#7C3AED">Cat("Luna")</div>
+      <div class="v7method">.speak()</div>
+    </div>
+    <div onclick="v7speak(this,'bird','Tweety says: Tweet! 🐦','#FFF7ED','#FED7AA','#EA580C')" class="v7card" style="background:#FFF7ED;border-color:#FED7AA">
+      <div style="font-size:22px;margin-bottom:4px">🐦</div>
+      <div style="font-size:11px;font-weight:800;color:#EA580C">Bird("Tweety")</div>
+      <div class="v7method">.speak()</div>
+    </div>
+    <div onclick="v7speak(this,'fish','Nemo says: Blub! 🐟','#EFF6FF','#BFDBFE','#2563EB')" class="v7card" style="background:#EFF6FF;border-color:#BFDBFE">
+      <div style="font-size:22px;margin-bottom:4px">🐟</div>
+      <div style="font-size:11px;font-weight:800;color:#2563EB">Fish("Nemo")</div>
+      <div class="v7method">.speak()</div>
+    </div>
+  </div>
+
+  <!-- Output terminal -->
+  <div style="background:#0f172a;border-radius:12px;padding:12px 16px;font-family:monospace;font-size:12.5px;min-height:52px;transition:all .3s">
+    <div style="color:#94a3b8;margin-bottom:6px;font-size:11px"># Output:</div>
+    <div id="v7out" style="color:#86efac">(click an animal above)</div>
+  </div>
+
+  <!-- Loop demo -->
+  <div style="margin-top:10px;background:#fff;border-radius:10px;padding:10px 14px;border:1px solid #e2e8f0">
+    <div style="font-size:11px;font-weight:700;color:#475569;margin-bottom:6px">The power of polymorphism — one loop handles ALL classes:</div>
+    <div style="font-family:monospace;font-size:11.5px;color:#1e293b;background:#f8fafc;border-radius:8px;padding:8px 12px">
+      animals = [Dog("Rex"), Cat("Luna"), Bird("Tweety"), Fish("Nemo")]<br>
+      <span style="color:#5865F2;font-weight:700">for</span> a <span style="color:#5865F2;font-weight:700">in</span> animals:<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;print(a.speak())  <span style="color:#64748b"># ← same call, different result!</span>
+    </div>
+    <button onclick="v7loop()" style="margin-top:8px;background:#5865F2;color:#fff;border:none;border-radius:8px;padding:7px 14px;font-size:12px;font-weight:700;cursor:pointer">▶ Run Loop</button>
+    <div id="v7loop" style="display:none;margin-top:8px;background:#0f172a;border-radius:10px;padding:10px 14px;font-family:monospace;font-size:12px">
+      <div id="v7l1" style="color:#94a3b8;transition:color .2s"></div>
+      <div id="v7l2" style="color:#94a3b8;transition:color .2s"></div>
+      <div id="v7l3" style="color:#94a3b8;transition:color .2s"></div>
+      <div id="v7l4" style="color:#94a3b8;transition:color .2s"></div>
+    </div>
+  </div>
+</div><div class="r-console"><div class="r-topbar"><div class="r-dots"><div class="r-dot" style="background:#ef4444"></div><div class="r-dot" style="background:#f59e0b"></div><div class="r-dot" style="background:#22c55e"></div></div><div class="r-title">Step 7 — Polymorphism</div></div><div class="r-body"><pre style="margin:0;white-space:pre-wrap;word-break:break-word"><span class="r-gray"># Step 7: Polymorphism — same method name, different behaviour</span>
+
+<span class="r-green">class</span> <span class="r-cyan">Animal</span>:
+    <span class="r-green">def</span> <span class="r-cyan">__init__</span>(self, name, age):
+        self.__name = name
+        self.__age  = age
+
+    <span class="r-green">def</span> <span class="r-cyan">get_name</span>(self):
+        <span class="r-green">return</span> self.__name
+
+    <span class="r-green">def</span> <span class="r-cyan">speak</span>(self):
+        <span class="r-green">return</span> <span class="r-string">&quot;...&quot;</span>
+
+<span class="r-green">class</span> <span class="r-cyan">Dog</span>(Animal):
+    <span class="r-green">def</span> <span class="r-cyan">speak</span>(self):                        <span class="r-gray"># OVERRIDE Animal.speak</span>
+        <span class="r-green">return</span> <span class="r-string">f&quot;{self.get_name()} says: Woof!&quot;</span>
+
+<span class="r-green">class</span> <span class="r-cyan">Cat</span>(Animal):
+    <span class="r-green">def</span> <span class="r-cyan">speak</span>(self):                        <span class="r-gray"># OVERRIDE Animal.speak</span>
+        <span class="r-green">return</span> <span class="r-string">f&quot;{self.get_name()} says: Meow!&quot;</span>
+
+<span class="r-green">class</span> <span class="r-cyan">Bird</span>(Animal):
+    <span class="r-green">def</span> <span class="r-cyan">speak</span>(self):                        <span class="r-gray"># OVERRIDE Animal.speak</span>
+        <span class="r-green">return</span> <span class="r-string">f&quot;{self.get_name()} says: Tweet!&quot;</span>
+
+<span class="r-gray"># Polymorphism: same .speak() call → different result each time</span>
+animals = [Dog(<span class="r-string">&quot;Rex&quot;</span>, <span class="r-yellow">2</span>), Cat(<span class="r-string">&quot;Luna&quot;</span>, <span class="r-yellow">3</span>), Bird(<span class="r-string">&quot;Tweety&quot;</span>, <span class="r-yellow">1</span>)]
+
+<span class="r-green">for</span> a <span class="r-green">in</span> animals:
+    <span class="r-yellow">print</span>(a.speak())
+
+<span class="r-gray"># Output:</span>
+<span class="r-gray"># Rex says: Woof!</span>
+<span class="r-gray"># Luna says: Meow!</span>
+<span class="r-gray"># Tweety says: Tweet!</span>
+</pre></div></div><div class="practice-hint" style="margin-top:10px">💡 The <code>for</code> loop calls <code>.speak()</code> on every object. Python automatically picks the right version based on the actual class of each object.</div><div class="mini-practice" style="border-left:3px solid var(--pink)"><div style="font-size:10.5px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--pink);margin-bottom:6px">✏️ Quick Practice — Step 7 — Polymorphism</div><div style="font-size:13px;color:var(--ink2);line-height:1.8;margin-bottom:8px">Add a <code>Fish</code> class that overrides <code>speak()</code> → <code>"Blub!"</code>. Add it to the animals list. Fill in the three blanks.</div><div class="r-console"><div class="r-topbar"><div class="r-dots"><div class="r-dot" style="background:#ef4444"></div><div class="r-dot" style="background:#f59e0b"></div><div class="r-dot" style="background:#22c55e"></div></div><div class="r-title">Your turn</div></div><div class="r-body"><pre style="margin:0;white-space:pre-wrap;word-break:break-word"><span class="r-gray"># Add a Fish class to the animals list.</span>
+<span class="r-gray"># Fish overrides speak() to return &quot;Blub!&quot;</span>
+<span class="r-gray"># Fill in the three blanks.</span>
+
+<span class="r-green">class</span> <span class="r-cyan">Animal</span>:
+    <span class="r-green">def</span> <span class="r-cyan">__init__</span>(self, name, age):
+        self.__name = name
+        self.__age  = age
+
+    <span class="r-green">def</span> <span class="r-cyan">get_name</span>(self):
+        <span class="r-green">return</span> self.__name
+
+<span class="r-green">class</span> <span class="r-cyan">Dog</span>(Animal):
+    <span class="r-green">def</span> <span class="r-cyan">speak</span>(self):
+        <span class="r-green">return</span> <span class="r-string">f&quot;{self.get_name()} says: Woof!&quot;</span>
+
+<span class="r-green">class</span> <span class="r-cyan">Cat</span>(Animal):
+    <span class="r-green">def</span> <span class="r-cyan">speak</span>(self):
+        <span class="r-green">return</span> <span class="r-string">f&quot;{self.get_name()} says: Meow!&quot;</span>
+
+<span class="r-green">class</span> <span class="r-cyan">___</span>(Animal):               <span class="r-gray"># create Fish class</span>
+    <span class="r-green">def</span> <span class="r-cyan">speak</span>(self):
+        <span class="r-green">return</span> ___               <span class="r-gray"># what does a fish say?</span>
+
+animals = [Dog(<span class="r-string">&quot;Rex&quot;</span>, <span class="r-yellow">2</span>), Cat(<span class="r-string">&quot;Luna&quot;</span>, <span class="r-yellow">3</span>), ___(<span class="r-string">&quot;Nemo&quot;</span>, <span class="r-yellow">1</span>)]
+<span class="r-green">for</span> a <span class="r-green">in</span> animals:
+    <span class="r-yellow">print</span>(a.speak())
+
+<span class="r-gray"># Expected:</span>
+<span class="r-gray"># Rex says: Woof!</span>
+<span class="r-gray"># Luna says: Meow!</span>
+<span class="r-gray"># Nemo says: Blub!</span>
+</pre></div></div><div class="practice-answer"><button class="show-answer-btn" onclick="toggleAns('mp7_ans')">▶ Show Answer</button><div class="answer-content" id="mp7_ans"><div class="r-console" style="margin-top:8px"><div class="r-topbar"><div class="r-dots"><div class="r-dot" style="background:#ef4444"></div><div class="r-dot" style="background:#f59e0b"></div><div class="r-dot" style="background:#22c55e"></div></div><div class="r-title">answer.py</div></div><div class="r-body"><pre style="margin:0;white-space:pre-wrap;word-break:break-word"><span class="r-green">class</span> <span class="r-cyan">Animal</span>:
+    <span class="r-green">def</span> <span class="r-cyan">__init__</span>(self, name, age):
+        self.__name = name
+        self.__age  = age
+
+    <span class="r-green">def</span> <span class="r-cyan">get_name</span>(self):
+        <span class="r-green">return</span> self.__name
+
+<span class="r-green">class</span> <span class="r-cyan">Dog</span>(Animal):
+    <span class="r-green">def</span> <span class="r-cyan">speak</span>(self):
+        <span class="r-green">return</span> <span class="r-string">f&quot;{self.get_name()} says: Woof!&quot;</span>
+
+<span class="r-green">class</span> <span class="r-cyan">Cat</span>(Animal):
+    <span class="r-green">def</span> <span class="r-cyan">speak</span>(self):
+        <span class="r-green">return</span> <span class="r-string">f&quot;{self.get_name()} says: Meow!&quot;</span>
+
+<span class="r-green">class</span> <span class="r-cyan">Fish</span>(Animal):
+    <span class="r-green">def</span> <span class="r-cyan">speak</span>(self):
+        <span class="r-green">return</span> <span class="r-string">f&quot;{self.get_name()} says: Blub!&quot;</span>
+
+animals = [Dog(<span class="r-string">&quot;Rex&quot;</span>, <span class="r-yellow">2</span>), Cat(<span class="r-string">&quot;Luna&quot;</span>, <span class="r-yellow">3</span>), Fish(<span class="r-string">&quot;Nemo&quot;</span>, <span class="r-yellow">1</span>)]
+<span class="r-green">for</span> a <span class="r-green">in</span> animals:
+    <span class="r-yellow">print</span>(a.speak())
+<span class="r-gray"># Rex says: Woof!</span>
+<span class="r-gray"># Luna says: Meow!</span>
+<span class="r-gray"># Nemo says: Blub!</span>
+</pre></div></div></div></div></div></div></div>
+<div class="step-wrap"><div class="step-line"><div class="num" style="background:var(--blue-light);color:var(--blue)">⑧</div></div><div class="step-box"><div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><div class="step-title" style="color:var(--blue);margin:0">🏆 Full OOP Example — Everything Together</div><span style="font-size:10.5px;font-weight:800;background:var(--blue-light);color:var(--blue);border:1.5px solid;border-radius:999px;padding:2px 9px;white-space:nowrap">All 4 Pillars</span></div><div class="step-desc">Combining all four pillars in one clean program:<br><strong>Encapsulation</strong> → <strong>Getter/Setter</strong> → <strong>Inheritance</strong> → <strong>Polymorphism</strong></div><div class="r-console"><div class="r-topbar"><div class="r-dots"><div class="r-dot" style="background:#ef4444"></div><div class="r-dot" style="background:#f59e0b"></div><div class="r-dot" style="background:#22c55e"></div></div><div class="r-title">Step 8 — Complete example</div></div><div class="r-body"><pre style="margin:0;white-space:pre-wrap;word-break:break-word"><span class="r-gray"># Step 8: Everything together — full OOP example</span>
+
+<span class="r-green">class</span> <span class="r-cyan">Animal</span>:                              <span class="r-gray"># BASE CLASS (parent)</span>
+    <span class="r-green">def</span> <span class="r-cyan">__init__</span>(self, name, age):
+        self.__name = name                 <span class="r-gray"># ENCAPSULATION (private)</span>
+        self.__age  = age
+
+    <span class="r-green">def</span> <span class="r-cyan">get_name</span>(self):                    <span class="r-gray"># GETTER</span>
+        <span class="r-green">return</span> self.__name
+
+    <span class="r-green">def</span> <span class="r-cyan">set_name</span>(self, new_name):          <span class="r-gray"># SETTER (with validation)</span>
+        <span class="r-green">if</span> <span class="r-yellow">len</span>(new_name) &gt; <span class="r-yellow">0</span>:
+            self.__name = new_name
+
+    <span class="r-green">def</span> <span class="r-cyan">get_age</span>(self):
+        <span class="r-green">return</span> self.__age
+
+    <span class="r-green">def</span> <span class="r-cyan">describe</span>(self):
+        <span class="r-green">return</span> <span class="r-string">f&quot;Name: {self.__name}, Age: {self.__age}&quot;</span>
+
+    <span class="r-green">def</span> <span class="r-cyan">speak</span>(self):
+        <span class="r-green">return</span> <span class="r-string">&quot;...&quot;</span>
+
+
+<span class="r-green">class</span> <span class="r-cyan">Dog</span>(Animal):                         <span class="r-gray"># INHERITANCE (child)</span>
+    <span class="r-green">def</span> <span class="r-cyan">__init__</span>(self, name, age, breed):
+        <span class="r-yellow">super</span>().__init__(name, age)        <span class="r-gray"># call parent __init__</span>
+        self.__breed = breed
+
+    <span class="r-green">def</span> <span class="r-cyan">get_breed</span>(self):
+        <span class="r-green">return</span> self.__breed
+
+    <span class="r-green">def</span> <span class="r-cyan">speak</span>(self):                       <span class="r-gray"># POLYMORPHISM (override)</span>
+        <span class="r-green">return</span> <span class="r-string">f&quot;{self.get_name()} says: Woof!&quot;</span>
+
+    <span class="r-green">def</span> <span class="r-cyan">describe</span>(self):
+        <span class="r-green">return</span> <span class="r-string">f&quot;{super().describe()}, Breed: {self.__breed}&quot;</span>
+
+
+<span class="r-green">class</span> <span class="r-cyan">Cat</span>(Animal):
+    <span class="r-green">def</span> <span class="r-cyan">__init__</span>(self, name, age, indoor):
+        <span class="r-yellow">super</span>().__init__(name, age)
+        self.__indoor = indoor
+
+    <span class="r-green">def</span> <span class="r-cyan">is_indoor</span>(self):
+        <span class="r-green">return</span> self.__indoor
+
+    <span class="r-green">def</span> <span class="r-cyan">speak</span>(self):
+        <span class="r-green">return</span> <span class="r-string">f&quot;{self.get_name()} says: Meow!&quot;</span>
+
+
+<span class="r-gray"># Create objects</span>
+rex  = Dog(<span class="r-string">&quot;Rex&quot;</span>, <span class="r-yellow">2</span>, <span class="r-string">&quot;Labrador&quot;</span>)
+luna = Cat(<span class="r-string">&quot;Luna&quot;</span>, <span class="r-yellow">3</span>, <span class="r-green">True</span>)
+
+<span class="r-yellow">print</span>(rex.describe())     <span class="r-gray"># Name: Rex, Age: 2, Breed: Labrador</span>
+<span class="r-yellow">print</span>(luna.describe())    <span class="r-gray"># Name: Luna, Age: 3</span>
+
+<span class="r-yellow">print</span>(rex.speak())        <span class="r-gray"># Rex says: Woof!</span>
+<span class="r-yellow">print</span>(luna.speak())       <span class="r-gray"># Luna says: Meow!</span>
+
+rex.set_name(<span class="r-string">&quot;Max&quot;</span>)
+<span class="r-yellow">print</span>(rex.get_name())     <span class="r-gray"># Max  (changed via setter)</span>
+</pre></div></div><div class="practice-hint" style="margin-top:10px">✅ This is the pattern to use in the exam. The comments identify each OOP concept explicitly.</div></div></div>
+
+
+        <div class="step-box" style="border-color:var(--blue-mid);background:var(--blue-light)">
+          <div class="step-title" style="color:var(--blue)">📋 OOP Concept Summary</div>
+          <table class="compare-table">
+            <tr><th>Concept</th><th>What it means</th><th>Python syntax</th><th>Step</th></tr>
+            <tr><td><strong>Class</strong></td><td>Blueprint for objects</td><td class="mono">class Animal:</td><td>①</td></tr>
+            <tr><td><strong>Object</strong></td><td>Instance created from a class</td><td class="mono">cat = Animal("Luna")</td><td>①</td></tr>
+            <tr><td><strong>Constructor</strong></td><td>Runs when object is created</td><td class="mono">def __init__(self, ...):</td><td>②</td></tr>
+            <tr><td><strong>Attribute</strong></td><td>Data stored in the object</td><td class="mono">self.name = name</td><td>②</td></tr>
+            <tr><td><strong>Method</strong></td><td>Function belonging to a class</td><td class="mono">def speak(self):</td><td>③</td></tr>
+            <tr><td><strong>Encapsulation</strong></td><td>Hide data with private attributes</td><td class="mono">self.__name</td><td>④</td></tr>
+            <tr><td><strong>Getter</strong></td><td>Read a private attribute</td><td class="mono">def get_name(self):</td><td>⑤</td></tr>
+            <tr><td><strong>Setter</strong></td><td>Change a private attribute safely</td><td class="mono">def set_name(self, v):</td><td>⑤</td></tr>
+            <tr><td><strong>Inheritance</strong></td><td>Child gets parent's methods</td><td class="mono">class Dog(Animal):</td><td>⑥</td></tr>
+            <tr><td><strong>super()</strong></td><td>Call the parent class</td><td class="mono">super().__init__(...)</td><td>⑥</td></tr>
+            <tr><td><strong>Override</strong></td><td>Replace a parent method in the child</td><td class="mono">def speak(self): ...</td><td>⑦</td></tr>
+            <tr><td><strong>Polymorphism</strong></td><td>Same method → different behaviour</td><td class="mono">for a in animals: a.speak()</td><td>⑦</td></tr>
+          </table>
+        </div>
+
+</div>
+
+
+    <div class="practice-block" style="margin-top:24px">
+      <div class="practice-header" style="background:var(--purple)">
+        <span class="practice-header-title">✏️ EXTENDED PRACTICE — OOP (4 Levels)</span>
+      </div>
+      <div class="practice-body">
+
+        <div class="practice-panel" id="oop-l1">
+          <div class="level-badge l1-badge">✅ L1 — Trace &amp; Predict</div>
+          <p class="practice-goal">
+            Look at Step 2: <code>cat = Animal("Luna", 3)</code><br>
+            Trace step-by-step what Python does. What is stored where in memory?
+          </p>
+          <div class="practice-answer"><button class="show-answer-btn" onclick="this.nextElementSibling.classList.toggle('visible');this.textContent=this.nextElementSibling.classList.contains('visible')?'Hide Trace':'Show Trace'">Show Trace</button><div class="answer-content"><div class="r-console"><div class="r-topbar"><div class="r-dots"><div class="r-dot" style="background:#ef4444"></div><div class="r-dot" style="background:#f59e0b"></div><div class="r-dot" style="background:#22c55e"></div></div><div class="r-title">trace</div></div><div class="r-body"><pre style="margin:0;white-space:pre-wrap;word-break:break-word;font-family:monospace">Trace: Animal(&quot;Luna&quot;, 3) is created
+
+1. Python calls Animal.__init__(self, &quot;Luna&quot;, 3)
+2. self.name = &quot;Luna&quot;   → stored inside the cat object
+3. self.age  = 3        → stored inside the cat object
+
+Object in memory:
+  cat ──► Animal object
+              ├── name = &quot;Luna&quot;
+              └── age  = 3
+
+print(cat.name)  → &quot;Luna&quot;
+print(cat.age)   → 3
+print(cat)       → &lt;__main__.Animal object at 0x...&gt;
+
+Key: every object gets its OWN copy of the attributes.
+cat.name and dog.name live in separate memory locations.
+</pre></div></div></div></div>
+        </div>
+
+        <div class="practice-panel" id="oop-l2">
+          <div class="level-badge l2-badge">📝 L2 — Fill in the Blanks</div>
+          <p class="practice-goal">Complete the <code>BankAccount</code> class. Fill in the six blanks (<code>___</code>).</p>
+          <div class="r-console"><div class="r-topbar"><div class="r-dots"><div class="r-dot" style="background:#ef4444"></div><div class="r-dot" style="background:#f59e0b"></div><div class="r-dot" style="background:#22c55e"></div></div><div class="r-title">Fill in the blanks — BankAccount</div></div><div class="r-body"><pre style="margin:0;white-space:pre-wrap;word-break:break-word"><span class="r-green">class</span> <span class="r-cyan">BankAccount</span>:
+    <span class="r-green">def</span> <span class="r-cyan">__init__</span>(self, owner, balance):
+        self.___ = owner         <span class="r-gray"># private attribute</span>
+        self.___ = balance       <span class="r-gray"># private attribute</span>
+
+    <span class="r-green">def</span> <span class="r-cyan">deposit</span>(self, amount):
+        ___ += amount            <span class="r-gray"># add to balance</span>
+
+    <span class="r-green">def</span> <span class="r-cyan">withdraw</span>(self, amount):
+        <span class="r-green">if</span> amount ___ self.__balance:
+            self.__balance -= amount
+        <span class="r-green">else</span>:
+            <span class="r-yellow">print</span>(<span class="r-string">&quot;Insufficient funds&quot;</span>)
+
+    <span class="r-green">def</span> <span class="r-cyan">get_balance</span>(self):
+        <span class="r-green">return</span> ___               <span class="r-gray"># return private balance</span>
+
+
+<span class="r-green">class</span> <span class="r-cyan">SavingsAccount</span>(___):       <span class="r-gray"># inherit from BankAccount</span>
+    <span class="r-green">def</span> <span class="r-cyan">add_interest</span>(self, rate):
+        interest = self.get_balance() * rate
+        self.deposit(___)        <span class="r-gray"># deposit the interest</span>
+</pre></div></div>
+          <div class="practice-answer"><button class="show-answer-btn" onclick="this.nextElementSibling.classList.toggle('visible');this.textContent=this.nextElementSibling.classList.contains('visible')?'Hide Answer':'Show Answer'">Show Answer</button><div class="answer-content"><div class="r-console"><div class="r-topbar"><div class="r-dots"><div class="r-dot" style="background:#ef4444"></div><div class="r-dot" style="background:#f59e0b"></div><div class="r-dot" style="background:#22c55e"></div></div><div class="r-title">answer.py</div></div><div class="r-body"><pre style="margin:0;white-space:pre-wrap;word-break:break-word"><span class="r-green">class</span> <span class="r-cyan">BankAccount</span>:
+    <span class="r-green">def</span> <span class="r-cyan">__init__</span>(self, owner, balance):
+        self.__owner   = owner
+        self.__balance = balance
+
+    <span class="r-green">def</span> <span class="r-cyan">deposit</span>(self, amount):
+        self.__balance += amount
+
+    <span class="r-green">def</span> <span class="r-cyan">withdraw</span>(self, amount):
+        <span class="r-green">if</span> amount &lt;= self.__balance:
+            self.__balance -= amount
+        <span class="r-green">else</span>:
+            <span class="r-yellow">print</span>(<span class="r-string">&quot;Insufficient funds&quot;</span>)
+
+    <span class="r-green">def</span> <span class="r-cyan">get_balance</span>(self):
+        <span class="r-green">return</span> self.__balance
+
+    <span class="r-green">def</span> <span class="r-cyan">get_owner</span>(self):
+        <span class="r-green">return</span> self.__owner
+
+
+<span class="r-green">class</span> <span class="r-cyan">SavingsAccount</span>(BankAccount):
+    <span class="r-green">def</span> <span class="r-cyan">add_interest</span>(self, rate):
+        interest = self.get_balance() * rate
+        self.deposit(interest)
+
+
+<span class="r-gray"># Test</span>
+acc = SavingsAccount(<span class="r-string">&quot;Alice&quot;</span>, <span class="r-yellow">1000</span>)
+acc.deposit(<span class="r-yellow">500</span>)
+acc.add_interest(<span class="r-yellow">0.05</span>)
+<span class="r-yellow">print</span>(acc.get_balance())   <span class="r-gray"># 1575.0</span>
+</pre></div></div></div></div>
+        </div>
+
+        <div class="practice-panel" id="oop-l3">
+          <div class="level-badge l3-badge">🆓 L3 — Free Style: Shape Hierarchy</div>
+          <p class="practice-goal">
+            Design a <code>Shape</code> class hierarchy.<br>
+            Base: <code>Shape</code> — defines <code>area()</code> and <code>perimeter()</code>.<br>
+            Subclasses: <code>Circle</code>, <code>Rectangle</code>, <code>Triangle</code> — each overrides both methods.
+          </p>
+          <div class="practice-hint">💡 Hint: <code>import math</code> for <code>math.pi</code> and <code>math.sqrt()</code>. Use <code>raise NotImplementedError</code> in the base class.</div>
+          <div class="practice-answer"><button class="show-answer-btn" onclick="this.nextElementSibling.classList.toggle('visible');this.textContent=this.nextElementSibling.classList.contains('visible')?'Hide Answer':'Show Answer'">Show Answer</button><div class="answer-content"><div class="r-console"><div class="r-topbar"><div class="r-dots"><div class="r-dot" style="background:#ef4444"></div><div class="r-dot" style="background:#f59e0b"></div><div class="r-dot" style="background:#22c55e"></div></div><div class="r-title">answer.py</div></div><div class="r-body"><pre style="margin:0;white-space:pre-wrap;word-break:break-word"><span class="r-green">import</span> math
+
+<span class="r-green">class</span> <span class="r-cyan">Shape</span>:
+    <span class="r-green">def</span> <span class="r-cyan">area</span>(self):
+        <span class="r-green">raise</span> NotImplementedError(<span class="r-string">&quot;Subclass must implement area()&quot;</span>)
+
+    <span class="r-green">def</span> <span class="r-cyan">perimeter</span>(self):
+        <span class="r-green">raise</span> NotImplementedError(<span class="r-string">&quot;Subclass must implement perimeter()&quot;</span>)
+
+    <span class="r-green">def</span> <span class="r-cyan">describe</span>(self):
+        <span class="r-green">return</span> (<span class="r-string">f&quot;{type(self).__name__}: &quot;</span>
+                <span class="r-string">f&quot;area={self.area()}, &quot;</span>
+                <span class="r-string">f&quot;perimeter={self.perimeter()}&quot;</span>)
+
+
+<span class="r-green">class</span> <span class="r-cyan">Circle</span>(Shape):
+    <span class="r-green">def</span> <span class="r-cyan">__init__</span>(self, radius):
+        self.__radius = radius
+
+    <span class="r-green">def</span> <span class="r-cyan">area</span>(self):
+        <span class="r-green">return</span> <span class="r-yellow">round</span>(math.pi * self.__radius ** <span class="r-yellow">2</span>, <span class="r-yellow">2</span>)
+
+    <span class="r-green">def</span> <span class="r-cyan">perimeter</span>(self):
+        <span class="r-green">return</span> <span class="r-yellow">round</span>(<span class="r-yellow">2</span> * math.pi * self.__radius, <span class="r-yellow">2</span>)
+
+
+<span class="r-green">class</span> <span class="r-cyan">Rectangle</span>(Shape):
+    <span class="r-green">def</span> <span class="r-cyan">__init__</span>(self, width, height):
+        self.__width  = width
+        self.__height = height
+
+    <span class="r-green">def</span> <span class="r-cyan">area</span>(self):
+        <span class="r-green">return</span> self.__width * self.__height
+
+    <span class="r-green">def</span> <span class="r-cyan">perimeter</span>(self):
+        <span class="r-green">return</span> <span class="r-yellow">2</span> * (self.__width + self.__height)
+
+
+<span class="r-green">class</span> <span class="r-cyan">Triangle</span>(Shape):
+    <span class="r-green">def</span> <span class="r-cyan">__init__</span>(self, a, b, c):
+        self.__a = a
+        self.__b = b
+        self.__c = c
+
+    <span class="r-green">def</span> <span class="r-cyan">area</span>(self):
+        s = (self.__a + self.__b + self.__c) / <span class="r-yellow">2</span>
+        <span class="r-green">return</span> <span class="r-yellow">round</span>(math.sqrt(s * (s-self.__a) * (s-self.__b) * (s-self.__c)), <span class="r-yellow">2</span>)
+
+    <span class="r-green">def</span> <span class="r-cyan">perimeter</span>(self):
+        <span class="r-green">return</span> self.__a + self.__b + self.__c
+
+
+shapes = [Circle(<span class="r-yellow">5</span>), Rectangle(<span class="r-yellow">4</span>, <span class="r-yellow">6</span>), Triangle(<span class="r-yellow">3</span>, <span class="r-yellow">4</span>, <span class="r-yellow">5</span>)]
+<span class="r-green">for</span> s <span class="r-green">in</span> shapes:
+    <span class="r-yellow">print</span>(s.describe())
+<span class="r-gray"># Circle: area=78.54, perimeter=31.42</span>
+<span class="r-gray"># Rectangle: area=24, perimeter=20</span>
+<span class="r-gray"># Triangle: area=6.0, perimeter=12</span>
+</pre></div></div></div></div>
+        </div>
+
+        <div class="practice-panel" id="oop-l4">
+          <div class="level-badge l4-badge">🎯 L4 — Scenario: School System</div>
+          <div class="scenario-box">
+            <div class="scenario-label">Situation</div>
+            <div class="scenario-text">
+              Design a school management system.<br>
+              <strong>Base:</strong> <code>Person</code> — private <code>name</code> and <code>age</code>, getters/setters, <code>get_info()</code>.<br>
+              <strong>Child 1:</strong> <code>Student</code> — adds <code>grade</code> and <code>subjects</code>, overrides <code>get_info()</code>.<br>
+              <strong>Child 2:</strong> <code>Teacher</code> — adds <code>subject</code> and <code>salary</code>, overrides <code>get_info()</code>.
+            </div>
+          </div>
+          <ul class="task-list">
+            <li>All attributes must be <strong>private</strong> (encapsulation)</li>
+            <li>Use getters/setters for <code>name</code> and <code>age</code></li>
+            <li>Override <code>get_info()</code> differently per subclass (polymorphism)</li>
+            <li>Create 3 students and 2 teachers; call <code>get_info()</code> on each</li>
+            <li>Add comments identifying: inheritance, encapsulation, polymorphism</li>
+          </ul>
+          <div class="practice-answer"><button class="show-answer-btn" onclick="this.nextElementSibling.classList.toggle('visible');this.textContent=this.nextElementSibling.classList.contains('visible')?'Hide Answer':'Show Answer'">Show Answer</button><div class="answer-content"><div class="r-console"><div class="r-topbar"><div class="r-dots"><div class="r-dot" style="background:#ef4444"></div><div class="r-dot" style="background:#f59e0b"></div><div class="r-dot" style="background:#22c55e"></div></div><div class="r-title">answer.py</div></div><div class="r-body"><pre style="margin:0;white-space:pre-wrap;word-break:break-word"><span class="r-green">class</span> <span class="r-cyan">Person</span>:
+    <span class="r-green">def</span> <span class="r-cyan">__init__</span>(self, name, age):
+        self.__name = name           <span class="r-gray"># encapsulation</span>
+        self.__age  = age
+
+    <span class="r-green">def</span> <span class="r-cyan">get_name</span>(self):
+        <span class="r-green">return</span> self.__name
+
+    <span class="r-green">def</span> <span class="r-cyan">get_age</span>(self):
+        <span class="r-green">return</span> self.__age
+
+    <span class="r-green">def</span> <span class="r-cyan">set_name</span>(self, new_name):
+        <span class="r-green">if</span> <span class="r-yellow">len</span>(new_name) &gt; <span class="r-yellow">0</span>:
+            self.__name = new_name
+
+    <span class="r-green">def</span> <span class="r-cyan">get_info</span>(self):
+        <span class="r-green">return</span> <span class="r-string">f&quot;Name: {self.__name}, Age: {self.__age}&quot;</span>
+
+
+<span class="r-green">class</span> <span class="r-cyan">Student</span>(Person):               <span class="r-gray"># inheritance</span>
+    <span class="r-green">def</span> <span class="r-cyan">__init__</span>(self, name, age, grade, subjects):
+        <span class="r-yellow">super</span>().__init__(name, age)
+        self.__grade    = grade
+        self.__subjects = subjects
+
+    <span class="r-green">def</span> <span class="r-cyan">get_grade</span>(self):
+        <span class="r-green">return</span> self.__grade
+
+    <span class="r-green">def</span> <span class="r-cyan">get_info</span>(self):              <span class="r-gray"># polymorphism (override)</span>
+        base = <span class="r-yellow">super</span>().get_info()
+        <span class="r-green">return</span> (<span class="r-string">f&quot;[Student] {base}, &quot;</span>
+                <span class="r-string">f&quot;Grade: {self.__grade}, &quot;</span>
+                <span class="r-string">f&quot;Subjects: {&#x27;, &#x27;.join(self.__subjects)}&quot;</span>)
+
+
+<span class="r-green">class</span> <span class="r-cyan">Teacher</span>(Person):               <span class="r-gray"># inheritance</span>
+    <span class="r-green">def</span> <span class="r-cyan">__init__</span>(self, name, age, subject, salary):
+        <span class="r-yellow">super</span>().__init__(name, age)
+        self.__subject = subject
+        self.__salary  = salary
+
+    <span class="r-green">def</span> <span class="r-cyan">get_info</span>(self):              <span class="r-gray"># polymorphism (override)</span>
+        base = <span class="r-yellow">super</span>().get_info()
+        <span class="r-green">return</span> (<span class="r-string">f&quot;[Teacher] {base}, &quot;</span>
+                <span class="r-string">f&quot;Teaches: {self.__subject}, &quot;</span>
+                <span class="r-string">f&quot;Salary: ${self.__salary:,}&quot;</span>)
+
+
+people = [
+    Student(<span class="r-string">&quot;Alice&quot;</span>, <span class="r-yellow">15</span>, <span class="r-string">&quot;10A&quot;</span>, [<span class="r-string">&quot;Math&quot;</span>, <span class="r-string">&quot;CS&quot;</span>, <span class="r-string">&quot;Physics&quot;</span>]),
+    Student(<span class="r-string">&quot;Bob&quot;</span>,   <span class="r-yellow">14</span>, <span class="r-string">&quot;9B&quot;</span>,  [<span class="r-string">&quot;English&quot;</span>, <span class="r-string">&quot;Art&quot;</span>]),
+    Student(<span class="r-string">&quot;Carol&quot;</span>, <span class="r-yellow">16</span>, <span class="r-string">&quot;11A&quot;</span>, [<span class="r-string">&quot;CS&quot;</span>, <span class="r-string">&quot;Biology&quot;</span>]),
+    Teacher(<span class="r-string">&quot;Mr. Smith&quot;</span>, <span class="r-yellow">40</span>, <span class="r-string">&quot;Computer Science&quot;</span>, <span class="r-yellow">45000</span>),
+    Teacher(<span class="r-string">&quot;Ms. Lee&quot;</span>,   <span class="r-yellow">35</span>, <span class="r-string">&quot;Mathematics&quot;</span>,      <span class="r-yellow">42000</span>),
+]
+
+<span class="r-green">for</span> p <span class="r-green">in</span> people:
+    <span class="r-yellow">print</span>(p.get_info())
+<span class="r-gray"># Encapsulation  → __name, __age, __grade, __salary are private</span>
+<span class="r-gray"># Inheritance    → Student/Teacher inherit from Person</span>
+<span class="r-gray"># Polymorphism   → get_info() works differently per class</span>
+</pre></div></div></div></div>
+        </div>
+
+      </div>
+    </div>
+
+
+
+    <div style="margin-top:24px;background:linear-gradient(135deg,#5865F2,#7C3AED);border-radius:20px;padding:24px 28px;color:#fff;box-shadow:0 8px 30px rgba(88,101,242,.35)">
+      <div style="font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;opacity:.7;margin-bottom:6px">Next Step</div>
+      <div style="font-size:20px;font-weight:800;margin-bottom:8px">🎮 Ready to practise with real projects?</div>
+      <div style="font-size:13.5px;opacity:.9;line-height:1.8;margin-bottom:18px">
+        Apply OOP to three mini-projects:<br>
+        <strong>Student Report Card</strong> · <strong>Number Guessing Game</strong> · <strong>RPG Battle System</strong>
+      </div>
+      <a href="oop-games.html" style="display:inline-flex;align-items:center;gap:8px;background:#fff;color:#5865F2;font-weight:800;font-size:13px;border-radius:999px;padding:10px 22px;text-decoration:none;box-shadow:0 2px 10px rgba(0,0,0,.15);transition:transform .2s" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
+        Go to OOP Games 🎮 →
+      </a>
+    </div>
+
+
+<div class="footer">9618 A Level — Object-Oriented Programming · Cambridge International AS &amp; A Level Computer Science</div>
+
+<script>
+
+// ── toggleAns (mini-practice answers) ──────────────────────────
+function toggleAns(id) {
+  const el = document.getElementById(id);
+  const btn = el.previousElementSibling;
+  if (el.classList.contains('visible')) {
+    el.classList.remove('visible');
+    btn.textContent = '▶ Show Answer';
+  } else {
+    el.classList.add('visible');
+    btn.textContent = '▼ Hide Answer';
+  }
+}
+
+// ── V1: Class → Objects ─────────────────────────────────────────
+function v1run(btn) {
+  const a = document.getElementById('v1a');
+  const b = document.getElementById('v1b');
+  const note = document.getElementById('v1note');
+  if (a.style.opacity === '1') {
+    a.style.opacity = '0'; a.style.transform = 'scale(.85)';
+    b.style.opacity = '0'; b.style.transform = 'scale(.85)';
+    note.style.display = 'none';
+    btn.textContent = '▶ Create Objects';
+  } else {
+    a.style.opacity = '1'; a.style.transform = 'scale(1)';
+    setTimeout(() => { b.style.opacity = '1'; b.style.transform = 'scale(1)'; }, 200);
+    setTimeout(() => { note.style.display = 'block'; }, 450);
+    btn.textContent = '🔄 Reset';
+  }
+}
+
+// ── V2: Constructor fills object ────────────────────────────────
+var v2state = 0;
+function v2step(n) {
+  const steps = [
+    document.getElementById('v2s1'),
+    document.getElementById('v2s2'),
+    document.getElementById('v2s3')
+  ];
+  steps.forEach((s, i) => {
+    s.style.borderColor = i < n ? '#5865F2' : '#94a3b8';
+    s.style.background  = i < n ? '#EEF0FF' : '';
+    s.style.color       = i < n ? '#3730a3' : '';
+  });
+  const r1 = document.getElementById('v2r1');
+  const r2 = document.getElementById('v2r2');
+  const note = document.getElementById('v2note');
+  if (n >= 2) {
+    r1.style.color = '#1e293b';
+    r1.innerHTML = '<span>name</span><span style="color:#059669;font-weight:700">"Luna"</span>';
+  } else {
+    r1.style.color = '#94a3b8';
+    r1.innerHTML = '<span>name</span><span>—</span>';
+  }
+  if (n >= 3) {
+    r2.style.color = '#1e293b';
+    r2.innerHTML = '<span>age</span><span style="color:#059669;font-weight:700">3</span>';
+    note.style.display = 'block';
+  } else {
+    r2.style.color = '#94a3b8';
+    r2.innerHTML = '<span>age</span><span>—</span>';
+    note.style.display = 'none';
+  }
+}
+
+// ── V3: Method call ─────────────────────────────────────────────
+function v3run() {
+  const arr  = document.getElementById('v3arr');
+  const arr2 = document.getElementById('v3arr2');
+  const m2   = document.getElementById('v3m2');
+  const out  = document.getElementById('v3out');
+  const note = document.getElementById('v3note');
+  arr.style.color  = '#5865F2';
+  setTimeout(() => {
+    m2.style.background = '#EEF0FF';
+    m2.style.borderColor = '#5865F2';
+    m2.style.color = '#3730a3';
+  }, 300);
+  setTimeout(() => { arr2.style.color = '#5865F2'; }, 600);
+  setTimeout(() => {
+    out.style.color = '#86efac';
+    out.innerHTML = '<span>Luna is 3 years old.</span>';
+    note.style.display = 'block';
+  }, 900);
+  setTimeout(() => {
+    arr.style.color  = '#e2e8f0';
+    arr2.style.color = '#e2e8f0';
+    m2.style.background  = '#f8fafc';
+    m2.style.borderColor = '#e2e8f0';
+    m2.style.color = '';
+    out.style.color = '#94a3b8';
+    out.innerHTML = '<span>...</span>';
+    note.style.display = 'none';
+  }, 3500);
+}
+
+// ── V4: Encapsulation ───────────────────────────────────────────
+function v4access(type) {
+  const result = document.getElementById('v4result');
+  const nameBox = document.getElementById('v4n');
+  const g = document.getElementById('v4g');
+  const s = document.getElementById('v4s');
+  if (type === 'get') {
+    g.style.background = '#059669'; g.style.color = '#fff';
+    s.style.background = '#fff';    s.style.color = '#059669';
+    nameBox.style.background = '#ECFDF5'; nameBox.style.borderColor = '#6EE7B7';
+    result.style.borderColor = '#6EE7B7';
+    result.innerHTML = '<span style="color:#059669;font-size:20px">✅</span><br><code style="font-size:12px">get_name()</code><br><strong style="color:#059669">"Luna"</strong>';
+  } else {
+    s.style.background = '#059669'; s.style.color = '#fff';
+    g.style.background = '#fff';    g.style.color = '#059669';
+    nameBox.style.background = '#FFFBEB'; nameBox.style.borderColor = '#FCD34D';
+    result.style.borderColor = '#FCD34D';
+    result.innerHTML = '<span style="font-size:18px">🚪</span><br><code style="font-size:12px">set_name("Max")</code><br><strong style="color:#D97706">__name → "Max"</strong>';
+  }
+  setTimeout(() => {
+    g.style.background = '#fff'; g.style.color = '#059669';
+    s.style.background = '#fff'; s.style.color = '#059669';
+    nameBox.style.background = '#fff'; nameBox.style.borderColor = '#DDD6FE';
+    result.style.borderColor = '#e2e8f0';
+    result.innerHTML = 'Click a method to see what happens';
+    result.style.color = '#94a3b8';
+    result.style.fontSize = '12px';
+  }, 2800);
+}
+
+// ── V5: Setter validation ───────────────────────────────────────
+var v5name = "Luna";
+function v5set(val) {
+  const gate = document.getElementById('v5gate');
+  const cur  = document.getElementById('v5cur');
+  if (val === '') {
+    gate.style.background = '#FEF2F2';
+    gate.style.color = '#DC2626';
+    gate.textContent = '❌ len("") = 0 → REJECTED! __name unchanged';
+  } else {
+    gate.style.background = '#ECFDF5';
+    gate.style.color = '#059669';
+    gate.textContent = '✅ len("' + val + '") > 0 → accepted! __name updated';
+    v5name = val;
+    cur.textContent = 'Current: __name = "' + v5name + '"';
+  }
+  setTimeout(() => {
+    gate.style.background = '';
+    gate.style.color = '#94a3b8';
+    gate.textContent = '(click a button above)';
+  }, 2500);
+}
+
+// ── V7: Polymorphism ────────────────────────────────────────────
+function v7speak(card, cls, text, bg, border, col) {
+  document.querySelectorAll('.v7card').forEach(c => {
+    c.style.transform = '';
+    c.querySelector('.v7method').style.background = 'transparent';
+  });
+  card.style.transform = 'scale(1.06)';
+  card.querySelector('.v7method').style.background = col;
+  card.querySelector('.v7method').style.color = '#fff';
+  document.getElementById('v7out').style.color = col === '#059669' ? '#86efac' :
+    col === '#7C3AED' ? '#c4b5fd' : col === '#EA580C' ? '#fdba74' : '#93c5fd';
+  document.getElementById('v7out').textContent = text;
+}
+
+function v7loop() {
+  const loopDiv = document.getElementById('v7loop');
+  const lines = [
+    document.getElementById('v7l1'),
+    document.getElementById('v7l2'),
+    document.getElementById('v7l3'),
+    document.getElementById('v7l4'),
+  ];
+  const texts = [
+    'Rex says: Woof! 🐕',
+    'Luna says: Meow! 🐈',
+    'Tweety says: Tweet! 🐦',
+    'Nemo says: Blub! 🐟',
+  ];
+  loopDiv.style.display = 'block';
+  lines.forEach(l => { l.style.color = '#374151'; l.textContent = ''; });
+  texts.forEach((t, i) => {
+    setTimeout(() => {
+      lines[i].textContent = t;
+      lines[i].style.color = '#86efac';
+    }, i * 350);
+  });
+}
+
+</script>
+</body>
+</html>
